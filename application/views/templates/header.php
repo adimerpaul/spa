@@ -52,7 +52,7 @@
                     <ul class="metismenu" id="menu">
                         <li>
                             <a href="<?=base_url()?>Paciente" aria-expanded="true">
-                                <i class="ti-dashboard"></i><span>Atenciòn a clientes </span>
+                                <i class="ti-dashboard"></i><span>Atención a clientes </span>
                             </a>
                         </li>
                         <li>

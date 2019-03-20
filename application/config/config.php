@@ -23,8 +23,8 @@ date_default_timezone_set('America/La_Paz');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/span';
-//$config['base_url'] = 'http://192.168.1.8/span';
+//$config['base_url'] = 'http://localhost/spa';
+$config['base_url'] = 'http://192.168.1.8/spa';
 
 /*
 |--------------------------------------------------------------------------

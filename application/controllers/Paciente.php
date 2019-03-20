@@ -117,6 +117,8 @@ VALUES ('$ci','$nombres', '$apellidos', '$zona', '$direccion', '$fechanac', '$ce
         $piel=$_POST['piel'];
         $biotipo=$_POST['biotipo'];
         $arrugas=$_POST['arrugas'];
+        $referencia=$_POST['referencia'];
+        $unas=$_POST['unas'];
 
         $this->db->query("INSERT INTO historial (idpaciente,
  consulta,
@@ -170,7 +172,9 @@ alopecia,
 depilacion,
 piel,
 biotipo,
-arrugas) VALUES (
+arrugas,
+referencia,
+unas) VALUES (
 '$idpaciente',
 '$consulta',
 '$pa',
@@ -223,9 +227,11 @@ arrugas) VALUES (
 '$depilacion',
 '$piel',
 '$biotipo',
-'$arrugas'
+'$arrugas',
+'$referencia',
+'$unas'
 );");
-
+/*
 if($query){
         $data['title']='Atencion a pacientes';
         $data['css']="<link rel='stylesheet' href='".base_url()."assets/css/jquery.dataTables.min.css'>
@@ -245,7 +251,10 @@ if($query){
 <script src='".base_url()."assets/js/buttons.print.min.js'></script>
 <script src='".base_url()."assets/js/paciente.js'></script>";
         $this->load->view('templates/footer',$data);
+
 }
+*/
+        header("Location: ".base_url()."Paciente");
     }
     function cotizacion($idpaciente){
         if ($_SESSION['tipo']==""){

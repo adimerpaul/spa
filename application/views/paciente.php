@@ -195,6 +195,7 @@
                             </div>
                             <div class="form-group col-md-2 sinespacio" >
                                 <label for="fuma" class="sinespacio">fuma</label>
+                                <br>
                                 <!--input type="text"  class="form-control sinespaciotexto" id="fuma" placeholder="fuma" name="fuma" -->
                                 <input type="radio"  class="sinespaciotexto" id="fuma" placeholder="fuma" name="fuma" value="si" >Si
                                 <input type="radio" checked  class="sinespaciotexto" id="fuma" placeholder="fuma" name="fuma" value="no" >No
@@ -202,6 +203,7 @@
                             </div>
                             <div class="form-group col-md-2 sinespacio" >
                                 <label for="bebe" class="sinespacio">bebe</label>
+                                <br>
                                 <!--input type="text"  class="form-control sinespaciotexto" id="bebe" placeholder="bebe" name="bebe" -->
                                 <input type="radio"  class="sinespaciotexto" id="bebe" placeholder="bebe" name="bebe" value="si" >Si
                                 <input type="radio" checked  class="sinespaciotexto" id="bebe" placeholder="bebe" name="bebe" value="no" >No
@@ -209,6 +211,7 @@
                             </div>
                             <div class="form-group col-md-2 sinespacio" >
                                 <label for="actividadfisica" class="sinespacio">Actividad Fisica</label>
+                                <br>
                                 <!--input type="text"  class="form-control sinespaciotexto" id="actividadfisica" placeholder="actividadfisica" name="actividadfisica" -->
                                 <input type="radio"  class="sinespaciotexto" id="actividadfisica" placeholder="actividadfisica" name="actividadfisica" value="si" >Si
                                 <input type="radio" checked  class="sinespaciotexto" id="actividadfisica" placeholder="actividadfisica" name="actividadfisica" value="no" >No
@@ -288,6 +291,7 @@
                             </div>
                             <div class="form-group col-md-2 sinespacio" >
                                 <label for="lactancia" class="sinespacio">lactancia</label>
+                                <br>
                                 <!--input type="text"  class="form-control sinespaciotexto" id="lactancia" placeholder="lactancia" name="lactancia" -->
                                 <input type="radio"  class="sinespaciotexto" id="lactancia" placeholder="lactancia" name="lactancia" value="si" >Si
                                 <input type="radio" checked  class="sinespaciotexto" id="lactancia" placeholder="lactancia" name="lactancia" value="no" >No
@@ -299,6 +303,7 @@
                             </div>
                             <div class="form-group col-md-2 sinespacio" >
                                 <label for="menopausia" class="sinespacio">menopausia</label>
+                                <br>
                                 <!--input type="text"  class="form-control sinespaciotexto" id="menopausia" placeholder="menopausia" name="menopausia" -->
                                 <input type="radio"  class="sinespaciotexto" id="menopausia" placeholder="menopausia" name="menopausia" value="si" >Si
                                 <input type="radio" checked  class="sinespaciotexto" id="menopausia" placeholder="menopausia" name="menopausia" value="no" >No
