@@ -24,9 +24,29 @@ class PDF extends FPDF
     function espacio(){
         $this->Ln();
     }
+    // Simple table
+    function BasicTable($header, $data)
+    {
+        // Header
+        foreach($header as $col)
+            $this->Cell(40,7,$col,1);
+        $this->Ln();
+        // Data
+        foreach($data as $row)
+        {
+            foreach($row as $col)
+                $this->Cell(40,6,$col,1);
+            $this->Ln();
+        }
+    }
 }
 
 class Paciente extends CI_Controller {
+    /*public function __construct()
+    {
+        //$this->load->model('Mmedidas');
+    }*/
+
     function index(){
         if ($_SESSION['tipo']==""){
             header("Location: ".base_url());
@@ -49,6 +69,13 @@ class Paciente extends CI_Controller {
 <script src='".base_url()."assets/js/buttons.print.min.js'></script>
 <script src='".base_url()."assets/js/paciente.js'></script>";
         $this->load->view('templates/footer',$data);
+    }
+    function medidas(){
+        //echo $_POST['papada'];
+$this->load->model('Mmedidas');
+$this->Mmedidas->insert();
+header("Location: ".base_url()."Paciente");
+
     }
     function insert(){
         if ($_SESSION['tipo']==""){
@@ -679,7 +706,7 @@ VALUES('$idcotizacion','".$row->idtratamiento."','$n','$tiempo','$costo')");
         $pdf->espacio();
         $pdf->subtitulo("BIOTIPO DE LA PIEL:");
         $pdf->texto("$biotipo ");
-        $pdf->subtitulo("ARRUGA LUGAR Y GRADO DEL I-II:");
+        $pdf->subtitulo("TIPO Y LUGAR DE ARRUGAS:");
         $pdf->texto("$arrugas ");
         /*
         $pdf->SetFont('Times','B',8);
@@ -693,6 +720,71 @@ VALUES('$idcotizacion','".$row->idtratamiento."','$n','$tiempo','$costo')");
         $pdf->SetFont('Times','B',8);
         $pdf->Cell(18,5,utf8_decode('FUMA:'));
         */
+        $pdf->Ln();
+        $pdf->titulo("MEDIDAS A REDUCIR:",0);
+        $pdf->Ln();
+        $pdf->SetFont('Times','',9);
+        $medida = array("PAPADA", "BRAZOS D-1", "ESPALDA ALTA", "ESPALDA BAJA", "CINTURA", "OMBLIGO", "A 2 CM DEL OMBLIGO", "A 4 CM DEL OMBLIGO","CADERA","MUSLO D-1");
+        $query=$this->db->query("SELECT papada FROM medida WHERE idpaciente=$idpaciente  ");
+        $pdf->Ln();
+        $pdf->Cell(35,6,'PAPADA',1,0);
+        foreach ($query->result() as $row){
+           $pdf->Cell(18,6,$row->papada,1,0,'C');
+        }
+        $query=$this->db->query("SELECT brazosd1 FROM medida WHERE idpaciente=$idpaciente  ");
+        $pdf->Ln();
+        $pdf->Cell(35,6,'BRAZOS D-1',1,0);
+        foreach ($query->result() as $row){
+            $pdf->Cell(18,6,$row->brazosd1,1,0,'C');
+        }
+        $query=$this->db->query("SELECT espaldaalta FROM medida WHERE idpaciente=$idpaciente  ");
+        $pdf->Ln();
+        $pdf->Cell(35,6,'ESPALDA ALTA',1,0);
+        foreach ($query->result() as $row){
+            $pdf->Cell(18,6,$row->espaldaalta,1,0,'C');
+        }
+        $query=$this->db->query("SELECT espaldabaja FROM medida WHERE idpaciente=$idpaciente  ");
+        $pdf->Ln();
+        $pdf->Cell(35,6,'ESPALDA BAJA',1,0);
+        foreach ($query->result() as $row){
+            $pdf->Cell(18,6,$row->espaldabaja,1,0,'C');
+        }
+        $query=$this->db->query("SELECT cintura FROM medida WHERE idpaciente=$idpaciente  ");
+        $pdf->Ln();
+        $pdf->Cell(35,6,'CINTURA',1,0);
+        foreach ($query->result() as $row){
+            $pdf->Cell(18,6,$row->cintura,1,0,'C');
+        }
+        $query=$this->db->query("SELECT ombligo FROM medida WHERE idpaciente=$idpaciente  ");
+        $pdf->Ln();
+        $pdf->Cell(35,6,'PAPADA',1,0);
+        foreach ($query->result() as $row){
+            $pdf->Cell(18,6,$row->ombligo,1,0,'C');
+        }
+        $query=$this->db->query("SELECT cm2 FROM medida WHERE idpaciente=$idpaciente  ");
+        $pdf->Ln();
+        $pdf->Cell(35,6,'A 2 CM DEL OMBLIGO',1,0);
+        foreach ($query->result() as $row){
+            $pdf->Cell(18,6,$row->cm2,1,0,'C');
+        }
+        $query=$this->db->query("SELECT cm4 FROM medida WHERE idpaciente=$idpaciente  ");
+        $pdf->Ln();
+        $pdf->Cell(35,6,'A 4 CM DEL OMBLIGO',1,0);
+        foreach ($query->result() as $row){
+            $pdf->Cell(18,6,$row->cm4,1,0,'C');
+        }
+        $query=$this->db->query("SELECT cadera FROM medida WHERE idpaciente=$idpaciente  ");
+        $pdf->Ln();
+        $pdf->Cell(35,6,'CADERA',1,0);
+        foreach ($query->result() as $row){
+            $pdf->Cell(18,6,$row->cadera,1,0,'C');
+        }
+        $query=$this->db->query("SELECT muslo FROM medida WHERE idpaciente=$idpaciente  ");
+        $pdf->Ln();
+        $pdf->Cell(35,6,'MUSLO D-1',1,0);
+        foreach ($query->result() as $row){
+            $pdf->Cell(18,6,$row->muslo,1,0,'C');
+        }
 
         $pdf->Output();
     }

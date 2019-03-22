@@ -20,3 +20,9 @@ $('#laboratorios').on('show.bs.modal', function (event) {
     $('#uidpaciente2').val(button.data('idpaciente'));
 
 })
+$('#medidas').on('show.bs.modal', function (event) {
+    console.log('asda');
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    $('#idpacientem').val(button.data('idpaciente'));
+
+})

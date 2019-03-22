@@ -10,8 +10,8 @@
         border: 0px;
     }
     .sinespaciotexto{
-        padding: 0px;
-        margin: 0px;
+        padding: 2px;
+        margin: 2px;
     }
     label::first-letter {
         text-transform: uppercase;
@@ -50,6 +50,7 @@
             <td> 
             <a href='".base_url()."Paciente/historial/".$row->idpaciente."' class='btn btn-sm btn-warning text-white sinespaciotexto' ><i class='fa fa-file-archive-o'></i> Historial</a>
             <a href='".base_url()."Paciente/cotizacion/".$row->idpaciente."' class='btn btn-sm btn-info sinespaciotexto' ><i class='fa fa-ambulance'></i> Tratamientos</a>
+           <button type='button' class='btn btn-primary btn-sm sinespaciotexto' data-toggle='modal' data-target='#medidas' data-idpaciente='".$row->idpaciente."'>Medias</button>
             </td>
         </tr>";
     }
@@ -459,6 +460,88 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             ...
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="medidas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar medidas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="<?=base_url()?>Paciente/medidas">
+                    <div class="form-group row">
+                        <label for="papada" class="col-sm-2 col-form-label">Papada</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="idpacientem" name="idpaciente" hidden>
+                            <input type="text" class="form-control" name="papada" id="papada" placeholder="papada">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="brazosd1" class="col-sm-2 col-form-label">Brazos d-1</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="brazosd1" id="brazosd1" placeholder="brazosd1">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="espaldaalta" class="col-sm-2 col-form-label">Espalda alta</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="espaldaalta" id="espaldaalta" placeholder="espaldaalta">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="espaldabaja" class="col-sm-2 col-form-label">Espalda baja</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="espaldabaja" id="espaldabaja" placeholder="espaldabaja">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="cintura" class="col-sm-2 col-form-label">Cintura</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="cintura" id="cintura" placeholder="cintura">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="ombligo" class="col-sm-2 col-form-label">Ombligo</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="ombligo" id="ombligo" placeholder="ombligo">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="cm2" class="col-sm-2 col-form-label">A 2 cm del ombligo</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="cm2" id="cm2" placeholder="cm2">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="cm4" class="col-sm-2 col-form-label">A 4 cm del ombligo</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="cm4" id="cm4" placeholder="cm4">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="cadera" class="col-sm-2 col-form-label">Cadera</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="cadera" id="cadera" placeholder="cadera">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="muslo" class="col-sm-2 col-form-label">Muslo</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="muslo" id="muslo" placeholder="muslo">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Agregar</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
