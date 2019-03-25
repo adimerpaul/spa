@@ -20,7 +20,7 @@
     <thead>
     <tr>
         <th>Idcotizacion</th>
-        <th>Fecha y hora</th>
+        <th>Fecha</th>
         <th style="width: 150px">Tratamientos </th>
         <th>Consentimientos</th>
         <th>Opciones</th>
@@ -28,8 +28,11 @@
     </thead>
     <tbody>
     <?php
-    $query=$this->db->query("SELECT c.idcotizacion,c.fecha,p.nombres,p.apellidos,count(*) as cantidad FROM paciente p INNER JOIN cotizacion c ON p.idpaciente=c.idpaciente
- INNER JOIN cotizaciontratamiento ct ON ct.idcotizacion=c.idcotizacion WHERE p.idpaciente='$idpaciente' GROUP BY c.idcotizacion");
+    $query=$this->db->query("SELECT c.idcotizacion,c.fecha,p.nombres,p.apellidos,count(*) as cantidad 
+FROM paciente p 
+INNER JOIN cotizacion c ON p.idpaciente=c.idpaciente
+INNER JOIN cotizaciontratamiento ct ON ct.idcotizacion=c.idcotizacion WHERE 
+p.idpaciente='$idpaciente' GROUP BY c.idcotizacion");
     foreach ($query->result() as $row){
         $query2=$this->db->query("SELECT * FROM cotizaciontratamiento c INNER JOIN tratamiento t ON c.idtratamiento=t.idtratamiento 
 WHERE c.idcotizacion='".$row->idcotizacion."'");
@@ -55,9 +58,9 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
         echo "
         <tr>
             <td>".$row->idcotizacion."</td>
-            <td style='font-size: 7px'>".$row->fecha."</td>
-            <td style='border: 0;padding: 0;margin: 0;font-size: 10px'>".$tratamientos."</td>
-            <td style='border: 0;padding: 0;margin: 0;font-size: 7px'>$consentimientos</td>
+            <td>".substr($row->fecha,0,10)."</td>
+            <td style='border: 0;padding: 0;margin: 0;font-size: 12px'>".$tratamientos."</td>
+            <td style='border: 0;padding: 0;margin: 0;font-size: 10px'>$consentimientos</td>
 
             <td> 
             <a href='".base_url()."Paciente/fotografia/".$row->idcotizacion."'  class='btn btn-sm btn-warning btn-sm text-white sin'><i class='fa fa-photo'></i> Fotografias</a>
@@ -86,23 +89,25 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
 </table>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Registrar Paciente</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Registrar Tratamientos</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+
             <div class="modal-body">
                 <form method="post" action="<?=base_url()?>paciente/insertcotizacion">
                     <input type="text" value="<?=$idpaciente?>" hidden name="idpaciente">
                     <div class="form-group">
-                        <table class="table">
+                        <center>
+                        <table  >
                             <thead style='border: 0;padding: 0;margin: 0'>
                                 <tr style='border: 0;padding: 0;margin: 0'>
                                     <th class='sin' >Tratamientos</th>
-                                    <th class='sin'>Selecionar</th>
+                                    <!--th class='sin'>Selecionar</th-->
                                     <th class='sin'>N</th>
                                     <th class='sin'>Tiempo</th>
                                     <th class='sin'>Costo/Sesion</th>
@@ -113,18 +118,20 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
                                     $query=$this->db->query("SELECT * FROM tratamiento");
                                     foreach ($query->result() as $row){
                                         echo "<tr style='border: 0;padding: 0;margin: 0'>
-                                                    <td style='border: 0;padding: 0;margin: 0'>".$row->nombre."</td>
-                                                    <td style='border: 0;padding: 0;margin: 0'><input style='border: 0;padding: 0;margin: 0' type='checkbox' name='t".$row->idtratamiento."' id=''> Seleccionar</td>
+                                                    <td style='border-bottom: solid black 1px;padding: 0;margin: 0'>".$row->nombre."</td>
+                                                    <!--td style='border: 0;padding: 0;margin: 0'><input style='border: 0;padding: 0;margin: 0' type='checkbox' name='t".$row->idtratamiento."' id=''> Seleccionar</td-->
                                                     <td style='border: 0;padding: 0;margin: 0'><input style='padding: 0;margin: 0;width: 50px' type='text' name='n".$row->idtratamiento."' id=''> </td>
                                                     <td style='border: 0;padding: 0;margin: 0'><input style='padding: 0;margin: 0;width: 50px' type='text' name='ti".$row->idtratamiento."' id=''> </td>
-                                                    <td style='border: 0;padding: 0;margin: 0'><input style='padding: 0;margin: 0;width: 50px' type='text' name='c".$row->idtratamiento."' id=''> </td>
+                                                    <td style='border: 0;padding: 0;margin: 0'><input type='number' class='sum' value='0' style='padding: 0;margin: 0;width: 50px' type='text' name='c".$row->idtratamiento."' id=''> </td>
                                                 </tr>";
                                     }
                                 ?>
 
                             </tboby>
-                            
+                            <h2>TOTAL <span id="total">0</span></h2>
+
                         </table>
+                        </center>
                     </div>
 
                     <div class="modal-footer">

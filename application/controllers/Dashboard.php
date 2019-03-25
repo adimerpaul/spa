@@ -9,9 +9,10 @@
 class Dashboard extends CI_Controller
 {
     function index(){
-        if ($_SESSION['tipo']==""){
+        /*if ($_SESSION['tipo']==""){
             header("Location: ".base_url());
-        }
+        }*/
+
         $data['css']="";
         $data['title']='Menu principal';
         $this->load->view('templates/header',$data);
@@ -20,5 +21,7 @@ class Dashboard extends CI_Controller
         $data['msg']="Bienvenido al sistema";
         $data['js']="";
         $this->load->view('templates/footer',$data);
+
+        //echo $_SESSION['nombre'];
     }
 }

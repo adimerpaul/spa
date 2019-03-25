@@ -26,18 +26,28 @@ class Welcome extends CI_Controller {
 	    $email=$_POST['email'];
         $password=$_POST['password'];
         $query=$this->db->query("SELECT * FROM usuario WHERE email='$email' AND password='$password'");
-        //echo $query->num_rows();
+        echo $query->num_rows();
         if($query->num_rows()==1){
-            header("Location: ".base_url()."Dashboard");
+
             $row=$query->row();
+            /*
             $_SESSION['email']=$row->email;
             $_SESSION['tipo']=$row->tipo;
             $_SESSION['idusuario']=$row->idusuario;
-            $_SESSION['nombre']=$row->nombre;
+            $_SESSION['nombre']=$row->nombre; echo $_SESSION['nombre'];
+            */
+            $newdata = array(
+                'tipo'  => 'johndoe',
+                'email'     => 'johndoe@some-site.com',
+                'nombre' => 'asd'
+            );
+
+            $this->session->set_userdata($newdata);
+            header("Location: ".base_url()."Dashboard");
         }else{
             $data['tipo']='error';
             $data['msg']='Error en nombre o contraseña';
-            $this->load->view('welcome_message',$data);
+            header("Location: ".base_url());
         }
     }
     function logout(){

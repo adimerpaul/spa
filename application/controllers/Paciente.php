@@ -48,9 +48,9 @@ class Paciente extends CI_Controller {
     }*/
 
     function index(){
-        if ($_SESSION['tipo']==""){
+        /*if ($_SESSION['tipo']==""){
             header("Location: ".base_url());
-        }
+        }*/
         $data['title']='Atencion a pacientes';
         $data['css']="<link rel='stylesheet' href='".base_url()."assets/css/jquery.dataTables.min.css'>
         <link rel='stylesheet' href='".base_url()."assets/css/buttons.dataTables.min.css'>";
@@ -284,9 +284,9 @@ if($query){
         header("Location: ".base_url()."Paciente");
     }
     function cotizacion($idpaciente){
-        if ($_SESSION['tipo']==""){
+        /*if ($_SESSION['tipo']==""){
             header("Location: ".base_url());
-        }
+        }*/
         $data['title']='Cotizacion de tratamientos';
         $data['idpaciente']=$idpaciente;
         $data['css']="<link rel='stylesheet' href='".base_url()."assets/css/jquery.dataTables.min.css'>
@@ -304,7 +304,7 @@ if($query){
 <script src='".base_url()."assets/js/vfs_fonts.js'></script>
 <script src='".base_url()."assets/js/buttons.html5.min.js'></script>
 <script src='".base_url()."assets/js/buttons.print.min.js'></script>
-<script src='".base_url()."assets/js/paciente.js'></script>";
+<script src='".base_url()."assets/js/cotizacion.js'></script>";
         $this->load->view('templates/footer',$data);
     }
     function insertcotizacion(){
@@ -312,11 +312,12 @@ if($query){
             header("Location: ".base_url());
         }
         $idpaciente=$_POST['idpaciente'];
+
         $this->db->query("INSERT INTO cotizacion(idpaciente) VALUES('$idpaciente')");
         $idcotizacion=$this->db->insert_id();
         $query=$this->db->query("SELECT * FROM tratamiento");
         foreach ($query->result() as $row){
-            if (isset($_POST['t'.$row->idtratamiento])){
+            if ($_POST['c'.$row->idtratamiento]!="" AND $_POST['c'.$row->idtratamiento]!="0" ){
                 if (isset($_POST['n'.$row->idtratamiento])){
                     $n=$_POST['n'.$row->idtratamiento];
                 }else{
@@ -339,9 +340,9 @@ VALUES('$idcotizacion','".$row->idtratamiento."','$n','$tiempo','$costo')");
         header("Location: ".base_url()."Paciente/cotizacion/".$idpaciente);
     }
     function fotografia($idcotizacion){
-        if ($_SESSION['tipo']==""){
+        /*if ($_SESSION['tipo']==""){
             header("Location: ".base_url());
-        }
+        }*/
         $data['title']='Gestinar fotografias';
         $data['idcotizacion']=$idcotizacion;
         $data['idpaciente']=$this->User->consulta('idpaciente','cotizacion','idcotizacion',$idcotizacion);
@@ -723,10 +724,16 @@ VALUES('$idcotizacion','".$row->idtratamiento."','$n','$tiempo','$costo')");
         $pdf->Ln();
         $pdf->titulo("MEDIDAS A REDUCIR:",0);
         $pdf->Ln();
-        $pdf->SetFont('Times','',9);
-        $medida = array("PAPADA", "BRAZOS D-1", "ESPALDA ALTA", "ESPALDA BAJA", "CINTURA", "OMBLIGO", "A 2 CM DEL OMBLIGO", "A 4 CM DEL OMBLIGO","CADERA","MUSLO D-1");
-        $query=$this->db->query("SELECT papada FROM medida WHERE idpaciente=$idpaciente  ");
+        $query=$this->db->query("SELECT fecha FROM medida WHERE idpaciente=$idpaciente  ");
         $pdf->Ln();
+        $pdf->SetFont('Times','B',8);
+        $pdf->Cell(35,6,'FECHA DE MEDICION',1,0);
+        foreach ($query->result() as $row){
+            $pdf->Cell(18,6, substr($row->fecha,0,10),1,0,'C');
+        }
+        $pdf->SetFont('Times','',8);
+        $pdf->Ln();
+        $query=$this->db->query("SELECT papada FROM medida WHERE idpaciente=$idpaciente  ");
         $pdf->Cell(35,6,'PAPADA',1,0);
         foreach ($query->result() as $row){
            $pdf->Cell(18,6,$row->papada,1,0,'C');
