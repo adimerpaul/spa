@@ -18,7 +18,7 @@
     </thead>
     <tbody>
     <?php
-    $idpaciente=$this->User->consulta('idpaciente','cotizacion','idcotizacion',$idcotizacion);
+    $idpaciente=$this->User->consulta('idpaciente','historial','idhistorial',$this->User->consulta('idhistorial','cotizacion','idcotizacion',$idcotizacion));
     $nombre=$this->User->consulta('nombres','paciente','idpaciente',$idpaciente).' '.$this->User->consulta('apellidos','paciente','idpaciente',$idpaciente);
     $mi_archivo = 'foto';
     $carpeta = 'assets/img/'.$idpaciente.' '.$nombre;

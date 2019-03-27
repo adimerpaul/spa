@@ -19,41 +19,35 @@
 </style>
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg">
-    <i class="fa fa-file"></i> Registrar Paciente
+    <i class="fa fa-file"></i> Registrar SOAP
 </button>
+<a href="<?=base_url()?>Soap/imprimir/<?=$idcotizacion?>" class="btn btn-warning btn-sm " >
+    <i class="fa fa-print"></i> Imprimir SOAP
+</a>
 <div class="mt-1"></div>
 <table id="example" class="display nowrap" style="width:100%">
     <thead>
     <tr>
-        <th>Idpaciente</th>
-        <th>Nombre</th>
-        <th>Direccion</th>
-        <th>Edad</th>
-        <th>Telefono</th>
-        <th>Opciones</th>
+        <th>Fecha</th>
+        <th>Subjetivo</th>
+        <th>Objetivo</th>
+        <th>Analisis</th>
+        <th>Plan</th>
+        <th>Doctor</th>
     </tr>
     </thead>
     <tbody>
     <?php
-    $query=$this->db->query("SELECT * FROM paciente");
+    $query=$this->db->query("SELECT * FROM soap WHERE idcotizacion='$idcotizacion'");
     foreach ($query->result() as $row){
-        $cumpleanos = new DateTime($row->fechanac);
-        $hoy = new DateTime();
-        $annos = $hoy->diff($cumpleanos);
         echo "
         <tr>
-            <td>".$row->idpaciente."</td>
-            <td>".$row->nombres." ".$row->apellidos."</td>
-            <td>".$row->direccion."</td>
-            <td>".$annos->y."</td>
-            <td>".$row->celular."</td>
-            <td> 
-            <a href='".base_url()."Paciente/reghistorial/".$row->idpaciente."' class='btn btn-sm btn-success text-white sinespaciotexto' ><i class='fa fa-file-archive-o'></i> Reg. Historial</a>
-            <button type=\"button\" class=\"btn btn-warning text-white btn-sm sinespaciotexto\" data-toggle=\"modal\" data-idpaciente='".$row->idpaciente."' data-target=\"#historial\"> <i class=\"fa fa-align-justify\"></i>Historial</button>
-
-            <!--a href='".base_url()."Paciente/cotizacion/".$row->idpaciente."' class='btn btn-sm btn-info sinespaciotexto' ><i class='fa fa-ambulance'></i> Tratamientos</a>
-           <button type='button' class='btn btn-primary btn-sm sinespaciotexto' data-toggle='modal' data-target='#medidas' data-idpaciente='".$row->idpaciente."'>Medias</button-->
-            </td>
+            <td>".substr($row->fecha,0,10)."</td>
+            <td > <div style='width: 140px;white-space: pre-wrap;'>".$row->subjetivo."</div></td>
+            <td><div style='width: 140px;white-space: pre-wrap;'>".$row->objetivo."</div></td>
+            <td><div style='width: 140px;white-space: pre-wrap;'>".$row->analisis."</div></td>
+            <td><div style='width: 140px;white-space: pre-wrap;'>".$row->plan."</div></td>
+            <td>".$this->User->consulta('nombre','usuario','idusuario',$row->idusuario)."</td>
         </tr>";
     }
     ?>
@@ -65,61 +59,33 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Registrar Historia clinica</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Registrar </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" action="<?=base_url()?>paciente/insert" style="padding: 0px;margin: 0px;border: 0px">
+                <form method="post" action="<?=base_url()?>soap/insert" style="padding: 0px;margin: 0px;border: 0px">
                     <div class="form-row" style="padding: 0px;margin: 0px;border: 0px">
-                        <div class="form-group col-md-2" style="padding: 0px;margin: 0px;border: 0px" >
-                            <label for="nombres" style="padding: 0px;margin: 0px;border: 0px">nombres</label>
-                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="nombres" placeholder="nombres" name="nombres" required>
+                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px" >
+                            <label for="subjetivo" style="padding: 0px;margin: 0px;border: 0px">subjetivo</label>
+                            <input type="text" name="idcotizacion" value="<?=$idcotizacion?>" hidden>
+                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="subjetivo" placeholder="subjetivo" name="subjetivo" required>
                         </div>
-                        <div class="form-group col-md-2" style="padding: 0px;margin: 0px;border: 0px">
-                            <label for="apellidos" style="padding: 0px;margin: 0px;border: 0px">apellidos</label>
-                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="apellidos" placeholder="apellidos" name="apellidos" required>
+                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px" >
+                            <label for="objetivo" style="padding: 0px;margin: 0px;border: 0px">objetivo</label>
+                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="objetivo" placeholder="objetivo" name="objetivo" required>
                         </div>
-                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
-                            <label for="ci">ci</label>
-                            <input type="text" style="padding: 0px;margin: 0px" class="form-control" id="ci" placeholder="ci" name="ci">
+                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px" >
+                            <label for="analisis" style="padding: 0px;margin: 0px;border: 0px">analisis</label>
+                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="analisis" placeholder="analisis" name="analisis" required>
                         </div>
-                        <div class="form-group col-md-2" style="padding: 0px;margin: 0px;border: 0px">
-                            <label for="zona">zona</label>
-                            <input type="text" style="padding: 0px;margin: 0px" class="form-control" id="zona" placeholder="zona" name="zona">
-                        </div>
-                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
-                            <label for="direccion">direccion</label>
-                            <input type="text" style="padding: 0px;margin: 0px"  class="form-control" id="direccion" placeholder="1234 Main St" name="direccion">
+                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px" >
+                            <label for="plan" style="padding: 0px;margin: 0px;border: 0px">plan</label>
+                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="plan" placeholder="plan" name="plan" required>
                         </div>
                     </div>
-                    <div class="form-row" style="padding: 0px;margin: 0px;border: 0px">
-                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
-                            <label for="fechanac">fechanac</label>
-                            <input type="date" style="padding: 0px;margin: 0px" class="form-control" id="fechanac" placeholder="fechanac" name="fechanac" value="<?=date("Y-m-d")?>" required>
-                        </div>
-                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
-                            <label for="celular">celular</label>
-                            <input type="number" style="padding: 0px;margin: 0px" class="form-control" id="celular" placeholder="celular" name="celular" required>
-                        </div>
-                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
-                            <label for="telefono">telefono</label>
-                            <input type="number" style="padding: 0px;margin: 0px" class="form-control" id="telefono" placeholder="telefono" name="telefono">
-                        </div>
-                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
-                            <label for="referencia">referencia</label>
-                            <select name="referencia" id="referencia" required style="padding: 0px;margin: 0px" class="form-control">
-                                <option value="">Seleccionar..</option>
-                                <option value="Facebook">Facebook</option>
-                                <option value="Periódico">Periódico</option>
-                                <option value="Referido">Referido</option>
-                                <option value="Antiguo">Antiguo</option>
-                                <option value="Televisión">Televisión</option>
-                                <option value="Familiar">Familiar</option>
-                            </select>
-                        </div>
-                    </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-success">Guardar</button>

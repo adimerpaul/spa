@@ -26,3 +26,27 @@ $('#medidas').on('show.bs.modal', function (event) {
     $('#idpacientem').val(button.data('idpaciente'));
 
 })
+
+$('#historial').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    //$('#idpacientem').val(button.data('idpaciente'));
+    //console.log(button.data('idpaciente'))
+
+    var parametros = {
+        "idpaciente" : button.data('idpaciente')
+    };
+    $.ajax({
+        data:  parametros,
+        url:   'Paciente/datos',
+        type:  'post',
+        beforeSend: function () {
+            //$("#resultado").html("Procesando, espere por favor...");
+        },
+        success:  function (response) {
+            //$("#resultado").html(response);
+            //console.log(response);
+            $('#contenido').html(response);
+        }
+    });
+
+})

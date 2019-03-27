@@ -48,9 +48,9 @@ class Paciente extends CI_Controller {
     }*/
 
     function index(){
-        /*if ($_SESSION['tipo']==""){
+        if ($_SESSION['tipo']==""){
             header("Location: ".base_url());
-        }*/
+        }
         $data['title']='Atencion a pacientes';
         $data['css']="<link rel='stylesheet' href='".base_url()."assets/css/jquery.dataTables.min.css'>
         <link rel='stylesheet' href='".base_url()."assets/css/buttons.dataTables.min.css'>";
@@ -77,327 +77,14 @@ $this->Mmedidas->insert();
 header("Location: ".base_url()."Paciente");
 
     }
-    function insert(){
-        if ($_SESSION['tipo']==""){
-            header("Location: ".base_url());
-        }
-        $nombres= strtoupper( $_POST['nombres']);
-        $apellidos= strtoupper( $_POST['apellidos']);
-        $zona=$_POST['zona'];
-        $direccion=$_POST['direccion'];
-        $fechanac=$_POST['fechanac'];
-        $celular=$_POST['celular'];
-        $telefono=$_POST['telefono'];
-        $ci=$_POST['ci'];
-         $query=$this->db->query("INSERT INTO paciente(ci,nombres,apellidos,zona,direccion,fechanac,celular,telefono,idusuario) 
-VALUES ('$ci','$nombres', '$apellidos', '$zona', '$direccion', '$fechanac', '$celular','$telefono', '".$_SESSION['idusuario']."');");
-        $idpaciente=$this->db->insert_id();
-        $consulta=$_POST['consulta'];
-        $pa=$_POST['pa'];
-        $fc=$_POST['fc'];
-        $peso=$_POST['peso'];
-        $talla=$_POST['talla'];
-        $imc=$_POST['imc'];
-        $gc=$_POST['gc'];
-        $diabetes= isset($_POST['diabetes']);
-        $hta=isset($_POST['hta']);
-        $cardios=isset($_POST['cardios']);
-        $cancer=isset($_POST['cancer']);
-        $quefamilia=$_POST['quefamilia'];
-        $estadocivil=$_POST['estadocivil'];
-        $ocupacion=$_POST['ocupacion'];
-        $fuma=$_POST['fuma'];
-        $bebe=$_POST['bebe'];
-        $actividadfisica=$_POST['actividadfisica'];
-        $sueno=$_POST['sueno'];
-        $alimentos=$_POST['alimentos'];
-        $diuresis=$_POST['diuresis'];
-        $catarsis=$_POST['catarsis'];
-        $patologico=$_POST['patologico'];
-        $alergias=$_POST['alergias'];
-        $tratamientos=$_POST['tratamientos'];
-        $estadopsicologico=$_POST['estadopsicologico'];
-        $fum=$_POST['fum'];
-        $dias=$_POST['dias'];
-        $frecuencia=$_POST['frecuencia'];
-        $caracteristica=$_POST['caracteristica'];
-        $gestas=$_POST['gestas'];
-        $partos=$_POST['partos'];
-        $ab=$_POST['ab'];
-        $cesareas=$_POST['cesareas'];
-        $lactancia=$_POST['lactancia'];
-        $nhijos=$_POST['nhijos'];
-        $menopausia=$_POST['menopausia'];
-        $pap=$_POST['pap'];
-        $anticonceptivos=$_POST['anticonceptivos'];
-        $examenmamario=$_POST['examenmamario'];
-        $ptsimamaria=$_POST['ptsimamaria'];
-        $cremas=$_POST['cremas'];
-        $cutis=$_POST['cutis'];
-        $donde=$_POST['donde'];
-        $queutilizaron=$_POST['queutilizaron'];
-        $sol=$_POST['sol'];
-        $solar=$_POST['solar'];
-        $otros=$_POST['otros'];
-        $alopecia=$_POST['alopecia'];
-        $depilacion=$_POST['depilacion'];
-        $piel=$_POST['piel'];
-        $biotipo=$_POST['biotipo'];
-        $arrugas=$_POST['arrugas'];
-        $referencia=$_POST['referencia'];
-        $unas=$_POST['unas'];
-
-        $this->db->query("INSERT INTO historial (idpaciente,
- consulta,
-pa,
-fc,
-peso,
-talla,
-imc,
-gc,
-diabetes,
-hta,
-cardios,
-cancer,
-quefamilia,
-estadocivil,
-ocupacion,
-fuma,
-bebe,
-actividadfisica,
-sueno,
-alimentos,
-diuresis,
-catarsis,
-patologico,
-alergias,
-tratamientos,
-estadopsicologico,
-fum,
-dias,
-frecuencia,
-caracteristica,
-gestas,
-partos,
-ab,
-cesareas,
-lactancia,
-nhijos,
-menopausia,
-pap,
-anticonceptivos,
-examenmamario,
-ptsimamaria,
-cremas,
-cutis,
-donde,
-queutilizaron,
-sol,
-solar,
-otros,
-alopecia,
-depilacion,
-piel,
-biotipo,
-arrugas,
-referencia,
-unas) VALUES (
-'$idpaciente',
-'$consulta',
-'$pa',
-'$fc',
-'$peso',
-'$talla',
-'$imc',
-'$gc',
-'$diabetes',
-'$hta',
-'$cardios',
-'$cancer',
-'$quefamilia',
-'$estadocivil',
-'$ocupacion',
-'$fuma',
-'$bebe',
-'$actividadfisica',
-'$sueno',
-'$alimentos',
-'$diuresis',
-'$catarsis',
-'$patologico',
-'$alergias',
-'$tratamientos',
-'$estadopsicologico',
-'$fum',
-'$dias',
-'$frecuencia',
-'$caracteristica',
-'$gestas',
-'$partos',
-'$ab',
-'$cesareas',
-'$lactancia',
-'$nhijos',
-'$menopausia',
-'$pap',
-'$anticonceptivos',
-'$examenmamario',
-'$ptsimamaria',
-'$cremas',
-'$cutis',
-'$donde',
-'$queutilizaron',
-'$sol',
-'$solar',
-'$otros',
-'$alopecia',
-'$depilacion',
-'$piel',
-'$biotipo',
-'$arrugas',
-'$referencia',
-'$unas'
-);");
-/*
-if($query){
-        $data['title']='Atencion a pacientes';
-        $data['css']="<link rel='stylesheet' href='".base_url()."assets/css/jquery.dataTables.min.css'>
-        <link rel='stylesheet' href='".base_url()."assets/css/buttons.dataTables.min.css'>";
-        $this->load->view('templates/header',$data);
-        $this->load->view('paciente');
-        $data['tipo']="success";
-        $data['msg']="Paciente registrado";
-        $data['js']="<script src='".base_url()."assets/js/jquery-3.3.1.js'></script>
-<script src='".base_url()."assets/js/jquery.dataTables.min.js'></script>
-<script src='".base_url()."assets/js/dataTables.buttons.min.js'></script>
-<script src='".base_url()."assets/js/buttons.flash.min.js'></script>
-<script src='".base_url()."assets/js/jszip.min.js'></script>
-<script src='".base_url()."assets/js/pdfmake.min.js'></script>
-<script src='".base_url()."assets/js/vfs_fonts.js'></script>
-<script src='".base_url()."assets/js/buttons.html5.min.js'></script>
-<script src='".base_url()."assets/js/buttons.print.min.js'></script>
-<script src='".base_url()."assets/js/paciente.js'></script>";
-        $this->load->view('templates/footer',$data);
-
-}
-*/
-        header("Location: ".base_url()."Paciente");
-    }
-    function cotizacion($idpaciente){
-        /*if ($_SESSION['tipo']==""){
-            header("Location: ".base_url());
-        }*/
-        $data['title']='Cotizacion de tratamientos';
-        $data['idpaciente']=$idpaciente;
-        $data['css']="<link rel='stylesheet' href='".base_url()."assets/css/jquery.dataTables.min.css'>
-        <link rel='stylesheet' href='".base_url()."assets/css/buttons.dataTables.min.css'>";
-        $this->load->view('templates/header',$data);
-        $this->load->view('cotizacion');
-        $data['tipo']="info";
-        $data['msg']="Cotizaciones";
-        $data['js']="<script src='".base_url()."assets/js/jquery-3.3.1.js'></script>
-<script src='".base_url()."assets/js/jquery.dataTables.min.js'></script>
-<script src='".base_url()."assets/js/dataTables.buttons.min.js'></script>
-<script src='".base_url()."assets/js/buttons.flash.min.js'></script>
-<script src='".base_url()."assets/js/jszip.min.js'></script>
-<script src='".base_url()."assets/js/pdfmake.min.js'></script>
-<script src='".base_url()."assets/js/vfs_fonts.js'></script>
-<script src='".base_url()."assets/js/buttons.html5.min.js'></script>
-<script src='".base_url()."assets/js/buttons.print.min.js'></script>
-<script src='".base_url()."assets/js/cotizacion.js'></script>";
-        $this->load->view('templates/footer',$data);
-    }
-    function insertcotizacion(){
-        if ($_SESSION['tipo']==""){
-            header("Location: ".base_url());
-        }
+    function datos(){
         $idpaciente=$_POST['idpaciente'];
-
-        $this->db->query("INSERT INTO cotizacion(idpaciente) VALUES('$idpaciente')");
-        $idcotizacion=$this->db->insert_id();
-        $query=$this->db->query("SELECT * FROM tratamiento");
+        $query=$this->db->query("SELECT * FROM historial WHERE idpaciente='$idpaciente'");
         foreach ($query->result() as $row){
-            if ($_POST['c'.$row->idtratamiento]!="" AND $_POST['c'.$row->idtratamiento]!="0" ){
-                if (isset($_POST['n'.$row->idtratamiento])){
-                    $n=$_POST['n'.$row->idtratamiento];
-                }else{
-                    $n="";
-                }
-                if (isset($_POST['ti'.$row->idtratamiento])){
-                    $tiempo=$_POST['ti'.$row->idtratamiento];
-                }else{
-                    $tiempo="";
-                }
-                if (isset($_POST['c'.$row->idtratamiento])){
-                    $costo=$_POST['c'.$row->idtratamiento];
-                }else{
-                    $costo="";
-                }
-                $this->db->query("INSERT INTO cotizaciontratamiento(idcotizacion,idtratamiento,n,tiempo,costo) 
-VALUES('$idcotizacion','".$row->idtratamiento."','$n','$tiempo','$costo')");
-            }
+            echo "Fecha: <a href='paciente/historialver/".$row->idhistorial."/".$row->idpaciente."'>". substr($row->fecha,0,10)."</a> idhistorial: ".$row->idhistorial." <a href='".base_url()."Paciente/cotizacion/".$idpaciente."/".$row->idhistorial."' class='btn btn-sm btn-info sinespaciotexto' ><i class='fa fa-ambulance'></i> Tratamientos</a><br>";
         }
-        header("Location: ".base_url()."Paciente/cotizacion/".$idpaciente);
     }
-    function fotografia($idcotizacion){
-        /*if ($_SESSION['tipo']==""){
-            header("Location: ".base_url());
-        }*/
-        $data['title']='Gestinar fotografias';
-        $data['idcotizacion']=$idcotizacion;
-        $data['idpaciente']=$this->User->consulta('idpaciente','cotizacion','idcotizacion',$idcotizacion);
-        $data['css']="<link rel='stylesheet' href='".base_url()."assets/css/jquery.dataTables.min.css'>
-        <link rel='stylesheet' href='".base_url()."assets/css/buttons.dataTables.min.css'>";
-        $this->load->view('templates/header',$data);
-        $this->load->view('fotografia');
-        $data['tipo']="info";
-        $data['msg']="Fotografias";
-        $data['js']="<script src='".base_url()."assets/js/jquery-3.3.1.js'></script>
-<script src='".base_url()."assets/js/jquery.dataTables.min.js'></script>
-<script src='".base_url()."assets/js/dataTables.buttons.min.js'></script>
-<script src='".base_url()."assets/js/buttons.flash.min.js'></script>
-<script src='".base_url()."assets/js/jszip.min.js'></script>
-<script src='".base_url()."assets/js/pdfmake.min.js'></script>
-<script src='".base_url()."assets/js/vfs_fonts.js'></script>
-<script src='".base_url()."assets/js/buttons.html5.min.js'></script>
-<script src='".base_url()."assets/js/buttons.print.min.js'></script>
-<script src='".base_url()."assets/js/paciente.js'></script>";
-        $this->load->view('templates/footer',$data);
-    }
-    function insertfoto(){
-        $idcotizacion=$_POST['idcotizacion'];
-        //$idcotizzcion
-
-        $idpaciente=$this->User->consulta('idpaciente','cotizacion','idcotizacion',$idcotizacion);
-        $nombre=$this->User->consulta('nombres','paciente','idpaciente',$idpaciente).' '.$this->User->consulta('apellidos','paciente','idpaciente',$idpaciente);
-        $this->db->query("INSERT INTO foto(idcotizacion) VALUES('$idcotizacion')");
-        $idfoto=$this->db->insert_id();
-
-        $mi_archivo = 'foto';
-        $carpeta = 'assets/img/'.$idpaciente.' '.$nombre;
-        if (!file_exists($carpeta)) {
-            mkdir($carpeta, 0777, true);
-        }
-        $config['upload_path'] = $carpeta;
-        $config['file_name'] = $idfoto;
-        $config['allowed_types'] = "*";
-
-        $config['overwrite'] = true;
-
-        $this->load->library('upload', $config);
-
-        if (!$this->upload->do_upload($mi_archivo)) {
-            //*** ocurrio un error
-            $data['uploadError'] = $this->upload->display_errors();
-            echo $this->upload->display_errors();
-            return;
-        }
-
-        $data['uploadSuccess'] = $this->upload->data();
-
-        header("Location: ".base_url()."Paciente/fotografia/".$idcotizacion);
-    }
-    function historial($idpaciente=1){
+    function historialver($idhistorial='',$idpaciente=''){
         $query=$this->db->query("SELECT * FROM paciente WHERE idpaciente=$idpaciente");
         $row=$query->row();
 
@@ -408,8 +95,7 @@ VALUES('$idcotizacion','".$row->idtratamiento."','$n','$tiempo','$costo')");
         $fechanac=$row->fechanac;
         $celular=$row->celular;
         $telefono=$row->telefono;
-
-        $query=$this->db->query("SELECT * FROM historial WHERE idpaciente=$idpaciente");
+        $query=$this->db->query("SELECT * FROM historial WHERE idhistorial='$idhistorial'");
         $row=$query->row();
         $consulta=$row->consulta;
         $pa=$row->pa;
@@ -721,6 +407,7 @@ VALUES('$idcotizacion','".$row->idtratamiento."','$n','$tiempo','$costo')");
         $pdf->SetFont('Times','B',8);
         $pdf->Cell(18,5,utf8_decode('FUMA:'));
         */
+        /*
         $pdf->Ln();
         $pdf->titulo("MEDIDAS A REDUCIR:",0);
         $pdf->Ln();
@@ -736,7 +423,7 @@ VALUES('$idcotizacion','".$row->idtratamiento."','$n','$tiempo','$costo')");
         $query=$this->db->query("SELECT papada FROM medida WHERE idpaciente=$idpaciente  ");
         $pdf->Cell(35,6,'PAPADA',1,0);
         foreach ($query->result() as $row){
-           $pdf->Cell(18,6,$row->papada,1,0,'C');
+            $pdf->Cell(18,6,$row->papada,1,0,'C');
         }
         $query=$this->db->query("SELECT brazosd1 FROM medida WHERE idpaciente=$idpaciente  ");
         $pdf->Ln();
@@ -792,8 +479,361 @@ VALUES('$idcotizacion','".$row->idtratamiento."','$n','$tiempo','$costo')");
         foreach ($query->result() as $row){
             $pdf->Cell(18,6,$row->muslo,1,0,'C');
         }
-
+*/
         $pdf->Output();
+    }
+    function historialinsert(){
+        $idpaciente=$_POST['idpaciente'];
+        $consulta=$_POST['consulta'];
+        $pa=$_POST['pa'];
+        $fc=$_POST['fc'];
+        $peso=$_POST['peso'];
+        $talla=$_POST['talla'];
+        $imc=$_POST['imc'];
+        $gc=$_POST['gc'];
+        $diabetes= isset($_POST['diabetes']);
+        $hta=isset($_POST['hta']);
+        $cardios=isset($_POST['cardios']);
+        $cancer=isset($_POST['cancer']);
+        $quefamilia=$_POST['quefamilia'];
+        $estadocivil=$_POST['estadocivil'];
+        $ocupacion=$_POST['ocupacion'];
+        if (isset($_POST['fuma'])){
+            $fuma=$_POST['fuma'];
+        }else{
+            $fuma="";
+        }
+        if (isset($_POST['bebe'])){
+            $bebe=$_POST['bebe'];
+        }else{
+            $bebe="";
+        }
+        if (isset($_POST['actividadfisica'])){
+            $actividadfisica=$_POST['actividadfisica'];
+        }else{
+            $actividadfisica="";
+        }
+        $sueno=$_POST['sueno'];
+        $alimentos=$_POST['alimentos'];
+        $diuresis=$_POST['diuresis'];
+        $catarsis=$_POST['catarsis'];
+        $patologico=$_POST['patologico'];
+        $alergias=$_POST['alergias'];
+        $tratamientos=$_POST['tratamientos'];
+        $estadopsicologico=$_POST['estadopsicologico'];
+        $fum=$_POST['fum'];
+        $dias=$_POST['dias'];
+        $frecuencia=$_POST['frecuencia'];
+        $caracteristica=$_POST['caracteristica'];
+        $gestas=$_POST['gestas'];
+        $partos=$_POST['partos'];
+        $ab=$_POST['ab'];
+        $cesareas=$_POST['cesareas'];
+        $lactancia=$_POST['lactancia'];
+        $nhijos=$_POST['nhijos'];
+        $menopausia=$_POST['menopausia'];
+        $pap=$_POST['pap'];
+        $anticonceptivos=$_POST['anticonceptivos'];
+        $examenmamario=$_POST['examenmamario'];
+        $ptsimamaria=$_POST['ptsimamaria'];
+        $cremas=$_POST['cremas'];
+        $cutis=$_POST['cutis'];
+        $donde=$_POST['donde'];
+        $queutilizaron=$_POST['queutilizaron'];
+        $sol=$_POST['sol'];
+        $solar=$_POST['solar'];
+        $otros=$_POST['otros'];
+        $alopecia=$_POST['alopecia'];
+        $depilacion=$_POST['depilacion'];
+        if (isset($_POST['piel'])){
+            $piel=$_POST['piel'];
+        }else{
+            $piel="";
+        }
+        $biotipo=$_POST['biotipo'];
+        $arrugas=$_POST['arrugas'];
+        $referencia=$_POST['referencia'];
+        $unas=$_POST['unas'];
+
+        $this->db->query("INSERT INTO historial (idpaciente,
+ consulta,
+pa,
+fc,
+peso,
+talla,
+imc,
+gc,
+diabetes,
+hta,
+cardios,
+cancer,
+quefamilia,
+estadocivil,
+ocupacion,
+fuma,
+bebe,
+actividadfisica,
+sueno,
+alimentos,
+diuresis,
+catarsis,
+patologico,
+alergias,
+tratamientos,
+estadopsicologico,
+fum,
+dias,
+frecuencia,
+caracteristica,
+gestas,
+partos,
+ab,
+cesareas,
+lactancia,
+nhijos,
+menopausia,
+pap,
+anticonceptivos,
+examenmamario,
+ptsimamaria,
+cremas,
+cutis,
+donde,
+queutilizaron,
+sol,
+solar,
+otros,
+alopecia,
+depilacion,
+piel,
+biotipo,
+arrugas,
+referencia,
+unas) VALUES (
+'$idpaciente',
+'$consulta',
+'$pa',
+'$fc',
+'$peso',
+'$talla',
+'$imc',
+'$gc',
+'$diabetes',
+'$hta',
+'$cardios',
+'$cancer',
+'$quefamilia',
+'$estadocivil',
+'$ocupacion',
+'$fuma',
+'$bebe',
+'$actividadfisica',
+'$sueno',
+'$alimentos',
+'$diuresis',
+'$catarsis',
+'$patologico',
+'$alergias',
+'$tratamientos',
+'$estadopsicologico',
+'$fum',
+'$dias',
+'$frecuencia',
+'$caracteristica',
+'$gestas',
+'$partos',
+'$ab',
+'$cesareas',
+'$lactancia',
+'$nhijos',
+'$menopausia',
+'$pap',
+'$anticonceptivos',
+'$examenmamario',
+'$ptsimamaria',
+'$cremas',
+'$cutis',
+'$donde',
+'$queutilizaron',
+'$sol',
+'$solar',
+'$otros',
+'$alopecia',
+'$depilacion',
+'$piel',
+'$biotipo',
+'$arrugas',
+'$referencia',
+'$unas'
+);");
+        header("Location: ".base_url()."Paciente");
+    }
+    function insert(){
+        if ($_SESSION['tipo']==""){
+            header("Location: ".base_url());
+        }
+        $nombres= strtoupper( $_POST['nombres']);
+        $apellidos= strtoupper( $_POST['apellidos']);
+        $zona=$_POST['zona'];
+        $direccion=$_POST['direccion'];
+        $fechanac=$_POST['fechanac'];
+        $celular=$_POST['celular'];
+        $telefono=$_POST['telefono'];
+        $ci=$_POST['ci'];
+         $query=$this->db->query("INSERT INTO paciente(ci,nombres,apellidos,zona,direccion,fechanac,celular,telefono,idusuario) 
+VALUES ('$ci','$nombres', '$apellidos', '$zona', '$direccion', '$fechanac', '$celular','$telefono', '".$_SESSION['idusuario']."');");
+
+
+/*
+if($query){
+        $data['title']='Atencion a pacientes';
+        $data['css']="<link rel='stylesheet' href='".base_url()."assets/css/jquery.dataTables.min.css'>
+        <link rel='stylesheet' href='".base_url()."assets/css/buttons.dataTables.min.css'>";
+        $this->load->view('templates/header',$data);
+        $this->load->view('paciente');
+        $data['tipo']="success";
+        $data['msg']="Paciente registrado";
+        $data['js']="<script src='".base_url()."assets/js/jquery-3.3.1.js'></script>
+<script src='".base_url()."assets/js/jquery.dataTables.min.js'></script>
+<script src='".base_url()."assets/js/dataTables.buttons.min.js'></script>
+<script src='".base_url()."assets/js/buttons.flash.min.js'></script>
+<script src='".base_url()."assets/js/jszip.min.js'></script>
+<script src='".base_url()."assets/js/pdfmake.min.js'></script>
+<script src='".base_url()."assets/js/vfs_fonts.js'></script>
+<script src='".base_url()."assets/js/buttons.html5.min.js'></script>
+<script src='".base_url()."assets/js/buttons.print.min.js'></script>
+<script src='".base_url()."assets/js/paciente.js'></script>";
+        $this->load->view('templates/footer',$data);
+
+}
+*/
+        header("Location: ".base_url()."Paciente");
+    }
+    function cotizacion($idpaciente,$idhistorial=""){
+        /*if ($_SESSION['tipo']==""){
+            header("Location: ".base_url());
+        }*/
+        $data['title']='Cotizacion de tratamientos';
+        $data['idpaciente']=$idpaciente;
+        $data['idhistorial']=$idhistorial;
+        $data['css']="<link rel='stylesheet' href='".base_url()."assets/css/jquery.dataTables.min.css'>
+        <link rel='stylesheet' href='".base_url()."assets/css/buttons.dataTables.min.css'>";
+        $this->load->view('templates/header',$data);
+        $this->load->view('cotizacion');
+        $data['tipo']="info";
+        $data['msg']="Cotizaciones";
+        $data['js']="<script src='".base_url()."assets/js/jquery-3.3.1.js'></script>
+<script src='".base_url()."assets/js/jquery.dataTables.min.js'></script>
+<script src='".base_url()."assets/js/dataTables.buttons.min.js'></script>
+<script src='".base_url()."assets/js/buttons.flash.min.js'></script>
+<script src='".base_url()."assets/js/jszip.min.js'></script>
+<script src='".base_url()."assets/js/pdfmake.min.js'></script>
+<script src='".base_url()."assets/js/vfs_fonts.js'></script>
+<script src='".base_url()."assets/js/buttons.html5.min.js'></script>
+<script src='".base_url()."assets/js/buttons.print.min.js'></script>
+<script src='".base_url()."assets/js/cotizacion.js'></script>";
+        $this->load->view('templates/footer',$data);
+    }
+    function insertcotizacion(){
+        if ($_SESSION['tipo']==""){
+            header("Location: ".base_url());
+        }
+        $idpaciente=$_POST['idpaciente'];
+        $idhistorial=$_POST['idhistorial'];
+        $diagnostico=$_POST['diagnostico'];
+        $programa=$_POST['programa'];
+        $adelanto=$_POST['adelanto'];
+        $this->db->query("INSERT INTO cotizacion(idhistorial,diagnostico,programa,adelanto) VALUES('$idhistorial','$diagnostico','$programa','$adelanto')");
+
+        $idcotizacion=$this->db->insert_id();
+        $query=$this->db->query("SELECT * FROM tratamiento");
+        foreach ($query->result() as $row){
+            if ($_POST['c'.$row->idtratamiento]!="" AND $_POST['c'.$row->idtratamiento]!="0" ){
+                if (isset($_POST['n'.$row->idtratamiento])){
+                    $n=$_POST['n'.$row->idtratamiento];
+                }else{
+                    $n="";
+                }
+                if (isset($_POST['ti'.$row->idtratamiento])){
+                    $tiempo=$_POST['ti'.$row->idtratamiento];
+                }else{
+                    $tiempo="";
+                }
+                if (isset($_POST['c'.$row->idtratamiento])){
+                    $costo=$_POST['c'.$row->idtratamiento];
+                }else{
+                    $costo="";
+                }
+                $this->db->query("INSERT INTO cotizaciontratamiento(idcotizacion,idtratamiento,n,tiempo,costo) 
+VALUES('$idcotizacion','".$row->idtratamiento."','$n','$tiempo','$costo')");
+            }
+        }
+
+
+        header("Location: ".base_url()."Paciente/cotizacion/".$idpaciente."/".$idhistorial);
+    }
+    function fotografia($idcotizacion){
+        /*if ($_SESSION['tipo']==""){
+            header("Location: ".base_url());
+        }*/
+        $data['title']='Gestinar fotografias';
+        $data['idcotizacion']=$idcotizacion;
+        $data['idpaciente']=$this->User->consulta('idpaciente','historial','idhistorial',$this->User->consulta('idhistorial','cotizacion','idcotizacion',$idcotizacion));
+        $data['css']="<link rel='stylesheet' href='".base_url()."assets/css/jquery.dataTables.min.css'>
+        <link rel='stylesheet' href='".base_url()."assets/css/buttons.dataTables.min.css'>";
+        $this->load->view('templates/header',$data);
+        $this->load->view('fotografia');
+        $data['tipo']="info";
+        $data['msg']="Fotografias";
+        $data['js']="<script src='".base_url()."assets/js/jquery-3.3.1.js'></script>
+<script src='".base_url()."assets/js/jquery.dataTables.min.js'></script>
+<script src='".base_url()."assets/js/dataTables.buttons.min.js'></script>
+<script src='".base_url()."assets/js/buttons.flash.min.js'></script>
+<script src='".base_url()."assets/js/jszip.min.js'></script>
+<script src='".base_url()."assets/js/pdfmake.min.js'></script>
+<script src='".base_url()."assets/js/vfs_fonts.js'></script>
+<script src='".base_url()."assets/js/buttons.html5.min.js'></script>
+<script src='".base_url()."assets/js/buttons.print.min.js'></script>
+<script src='".base_url()."assets/js/paciente.js'></script>";
+        $this->load->view('templates/footer',$data);
+    }
+    function insertfoto(){
+        $idcotizacion=$_POST['idcotizacion'];
+        //$idcotizzcion
+
+        $idpaciente=$this->User->consulta('idpaciente','historial','idhistorial',$this->User->consulta('idhistorial','cotizacion','idcotizacion',$idcotizacion));
+        $nombre=$this->User->consulta('nombres','paciente','idpaciente',$idpaciente).' '.$this->User->consulta('apellidos','paciente','idpaciente',$idpaciente);
+        $this->db->query("INSERT INTO foto(idcotizacion) VALUES('$idcotizacion')");
+        $idfoto=$this->db->insert_id();
+
+        $mi_archivo = 'foto';
+        $carpeta = 'assets/img/'.$idpaciente.' '.$nombre;
+        if (!file_exists($carpeta)) {
+            mkdir($carpeta, 0777, true);
+        }
+        $config['upload_path'] = $carpeta;
+        $config['file_name'] = $idfoto;
+        $config['allowed_types'] = "*";
+
+        $config['overwrite'] = true;
+
+        $this->load->library('upload', $config);
+
+        if (!$this->upload->do_upload($mi_archivo)) {
+            //*** ocurrio un error
+            $data['uploadError'] = $this->upload->display_errors();
+            echo $this->upload->display_errors();
+            return;
+        }
+
+        $data['uploadSuccess'] = $this->upload->data();
+
+        header("Location: ".base_url()."Paciente/fotografia/".$idcotizacion);
+    }
+    function elicotizacion($idcotizacion="",$idpaciente,$idhistorial){
+        $query=$this->db->query("DELETE FROM cotizaciontratamiento WHERE idcotizacion='$idcotizacion'");
+        $query=$this->db->query("DELETE FROM cotizacion WHERE idcotizacion='$idcotizacion'");
+        header("Location: ".base_url()."Paciente/cotizacion/$idpaciente/$idhistorial");
     }
     function consentimientoinsert(){
         $pdf = new FPDF('P','mm','Letter');
@@ -1153,5 +1193,28 @@ function laboratorioinsert(){
     $pdf->Ln();
     $pdf->Output();
 }
-
+    function reghistorial($idpaciente=""){
+        if ($_SESSION['tipo']==""){
+            header("Location: ".base_url());
+        }
+        $data['idpaciente']=$idpaciente;
+        $data['title']='Registrar historial';
+        $data['css']="<link rel='stylesheet' href='".base_url()."assets/css/jquery.dataTables.min.css'>
+            <link rel='stylesheet' href='".base_url()."assets/css/buttons.dataTables.min.css'>";
+        $this->load->view('templates/header',$data);
+        $this->load->view('reghistorial',$data);
+        $data['tipo']="info";
+        $data['msg']="Atencion a pacientes";
+        $data['js']="<script src='".base_url()."assets/js/jquery-3.3.1.js'></script>
+    <script src='".base_url()."assets/js/jquery.dataTables.min.js'></script>
+    <script src='".base_url()."assets/js/dataTables.buttons.min.js'></script>
+    <script src='".base_url()."assets/js/buttons.flash.min.js'></script>
+    <script src='".base_url()."assets/js/jszip.min.js'></script>
+    <script src='".base_url()."assets/js/pdfmake.min.js'></script>
+    <script src='".base_url()."assets/js/vfs_fonts.js'></script>
+    <script src='".base_url()."assets/js/buttons.html5.min.js'></script>
+    <script src='".base_url()."assets/js/buttons.print.min.js'></script>
+    <script src='".base_url()."assets/js/paciente.js'></script>";
+        $this->load->view('templates/footer',$data);
+    }
 }
