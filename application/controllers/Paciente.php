@@ -6,8 +6,16 @@
  * Time: 22:29
  */
 require('fpdf.php');
+
 class PDF extends FPDF
 {
+    var $B=0;
+    var $I=0;
+    var $U=0;
+    var $HREF='';
+    var $ALIGN='';
+
+
     function titulo($title,$a=0){
         $this->SetFont('Times','B',10);
         $this->Cell( strlen($title)*2.4 +$a,5,utf8_decode($title),'B');
@@ -17,6 +25,8 @@ class PDF extends FPDF
         $this->Cell(strlen($title)*2.2+$a,5,utf8_decode($title));
 
     }
+
+
     function texto($title,$a=0){
         $this->SetFont('Times','',8);
         $this->Cell( strlen($title)*2.1+$a ,5,utf8_decode($title));
@@ -39,6 +49,107 @@ class PDF extends FPDF
             $this->Ln();
         }
     }
+
+    function WriteHTML($html)
+    {
+        //HTML parser
+        $html=str_replace("\n",' ',$html);
+        $a=preg_split('/<(.*)>/U',$html,-1,PREG_SPLIT_DELIM_CAPTURE);
+        foreach($a as $i=>$e)
+        {
+            if($i%2==0)
+            {
+                //Text
+                if($this->HREF)
+                    $this->PutLink($this->HREF,$e);
+                elseif($this->ALIGN=='center')
+                    $this->Cell(0,5,$e,0,1,'C');
+                else
+                    $this->Write(5,$e);
+            }
+            else
+            {
+                //Tag
+                if($e[0]=='/')
+                    $this->CloseTag(strtoupper(substr($e,1)));
+                else
+                {
+                    //Extract properties
+                    $a2=explode(' ',$e);
+                    $tag=strtoupper(array_shift($a2));
+                    $prop=array();
+                    foreach($a2 as $v)
+                    {
+                        if(preg_match('/([^=]*)=["\']?([^"\']*)/',$v,$a3))
+                            $prop[strtoupper($a3[1])]=$a3[2];
+                    }
+                    $this->OpenTag($tag,$prop);
+                }
+            }
+        }
+    }
+
+    function OpenTag($tag,$prop)
+    {
+        //Opening tag
+        if($tag=='B' || $tag=='I' || $tag=='U')
+            $this->SetStyle($tag,true);
+        if($tag=='A')
+            $this->HREF=$prop['HREF'];
+        if($tag=='BR')
+            $this->Ln(5);
+        if($tag=='P')
+            $this->ALIGN=$prop['ALIGN'];
+        if($tag=='HR')
+        {
+            if( !empty($prop['WIDTH']) )
+                $Width = $prop['WIDTH'];
+            else
+                $Width = $this->w - $this->lMargin-$this->rMargin;
+            $this->Ln(2);
+            $x = $this->GetX();
+            $y = $this->GetY();
+            $this->SetLineWidth(0.4);
+            $this->Line($x,$y,$x+$Width,$y);
+            $this->SetLineWidth(0.2);
+            $this->Ln(2);
+        }
+    }
+
+    function CloseTag($tag)
+    {
+        //Closing tag
+        if($tag=='B' || $tag=='I' || $tag=='U')
+            $this->SetStyle($tag,false);
+        if($tag=='A')
+            $this->HREF='';
+        if($tag=='P')
+            $this->ALIGN='';
+    }
+
+    function SetStyle($tag,$enable)
+    {
+        //Modify style and select corresponding font
+        $this->$tag+=($enable ? 1 : -1);
+        $style='';
+        foreach(array('B','I','U') as $s)
+            if($this->$s>0)
+                $style.=$s;
+        $this->SetFont('',$style);
+    }
+
+    function PutLink($URL,$txt)
+    {
+        //Put a hyperlink
+        $this->SetTextColor(0,0,255);
+        $this->SetStyle('U',true);
+        $this->Write(5,$txt,$URL);
+        $this->SetStyle('U',false);
+        $this->SetTextColor(0);
+    }
+
+
+
 }
 
 class Paciente extends CI_Controller {
@@ -47,8 +158,37 @@ class Paciente extends CI_Controller {
         //$this->load->model('Mmedidas');
     }*/
 
+    function regtratamiento($idpaciente="",$idhistorial="",$idcotizacion=""){
+        if ($_SESSION['nombre']=="" ){
+            header("Location: ".base_url());
+        }
+        $data['title']='Reg tratamiento';
+        $data['css']="<link rel='stylesheet' href='".base_url()."assets/css/jquery.dataTables.min.css'>
+        <link rel='stylesheet' href='".base_url()."assets/css/buttons.dataTables.min.css'>";
+        $this->load->view('templates/header',$data);
+        $data['idpaciente']=$idpaciente;
+
+        $data['idhistorial']=$idhistorial;
+        $data['idcotizacion']=$idcotizacion;
+
+        $this->load->view('regtratamiento',$data);
+        $data['tipo']="info";
+        $data['msg']="Registrar tratamiento";
+        $data['js']="<script src='".base_url()."assets/js/jquery-3.3.1.js'></script>
+<script src='".base_url()."assets/js/jquery.dataTables.min.js'></script>
+<script src='".base_url()."assets/js/dataTables.buttons.min.js'></script>
+<script src='".base_url()."assets/js/buttons.flash.min.js'></script>
+<script src='".base_url()."assets/js/jszip.min.js'></script>
+<script src='".base_url()."assets/js/pdfmake.min.js'></script>
+<script src='".base_url()."assets/js/vfs_fonts.js'></script>
+<script src='".base_url()."assets/js/buttons.html5.min.js'></script>
+<script src='".base_url()."assets/js/buttons.print.min.js'></script>
+<script src='".base_url()."assets/js/paciente.js'></script>";
+        $this->load->view('templates/footer',$data);
+    }
+
     function index(){
-        if ($_SESSION['tipo']==""){
+        if ($_SESSION['nombre']=="" ){
             header("Location: ".base_url());
         }
         $data['title']='Atencion a pacientes';
@@ -74,7 +214,11 @@ class Paciente extends CI_Controller {
         //echo $_POST['papada'];
 $this->load->model('Mmedidas');
 $this->Mmedidas->insert();
-header("Location: ".base_url()."Paciente");
+        $idcotizacion=$_POST['idcotizacion'];
+        $idhistorial=$this->User->consulta('idhistorial','cotizacion','idcotizacion',$idcotizacion);
+        $idpaciente=$this->User->consulta('idpaciente','historial','idhistorial',$idhistorial);
+
+header("Location: ".base_url()."Paciente/cotizacion/$idpaciente/$idhistorial");
 
     }
     function datos(){
@@ -482,6 +626,10 @@ header("Location: ".base_url()."Paciente");
 */
         $pdf->Output();
     }
+    function eliconcentimiento($idcotizacion="",$idtratamiento="",$idpaciente="",$idhistorial=""){
+        $this->db->query("DELETE FROM cotizacionconsetimeinto WHERE idconsetimiento = $idcotizacion AND idcotizacion = $idtratamiento");
+        header("Location: ".base_url()."Paciente/cotizacion/$idpaciente/$idhistorial");
+    }
     function historialinsert(){
         $idpaciente=$_POST['idpaciente'];
         $consulta=$_POST['consulta'];
@@ -710,9 +858,9 @@ if($query){
         header("Location: ".base_url()."Paciente");
     }
     function cotizacion($idpaciente,$idhistorial=""){
-        /*if ($_SESSION['tipo']==""){
+        if ($_SESSION['tipo']==""){
             header("Location: ".base_url());
-        }*/
+        }
         $data['title']='Cotizacion de tratamientos';
         $data['idpaciente']=$idpaciente;
         $data['idhistorial']=$idhistorial;
@@ -743,9 +891,17 @@ if($query){
         $diagnostico=$_POST['diagnostico'];
         $programa=$_POST['programa'];
         $adelanto=$_POST['adelanto'];
-        $this->db->query("INSERT INTO cotizacion(idhistorial,diagnostico,programa,adelanto) VALUES('$idhistorial','$diagnostico','$programa','$adelanto')");
-
+        $this->db->query("INSERT INTO cotizacion(idhistorial,diagnostico,programa) VALUES('$idhistorial','$diagnostico','$programa')");
         $idcotizacion=$this->db->insert_id();
+        //if($adelanto!=""){
+            $this->db->query("INSERT INTO montos(monto,idcotizacion) VALUES('$adelanto','$idcotizacion')");
+        $idmonto=$this->db->insert_id();
+        $motivo=$_POST['motivo'];
+        $cot=$_POST['cot'];
+        $ref=$_POST['ref'];
+        $this->db->query("INSERT INTO consulta(motivo,cot,ref,idmonto) VALUES('$motivo','$cot','$ref','$idmonto')");
+        //}
+
         $query=$this->db->query("SELECT * FROM tratamiento");
         foreach ($query->result() as $row){
             if ($_POST['c'.$row->idtratamiento]!="" AND $_POST['c'.$row->idtratamiento]!="0" ){
@@ -830,22 +986,62 @@ VALUES('$idcotizacion','".$row->idtratamiento."','$n','$tiempo','$costo')");
 
         header("Location: ".base_url()."Paciente/fotografia/".$idcotizacion);
     }
+    function agregartratamiento(){
+        $idtratamiento=$_POST['idtratamiento'];
+        $idcotizacion=$_POST['idcotizacion'];
+        $idpaciente=$_POST['idpaciente'];
+        $idhistorial=$_POST['idhistorial'];
+        $n=$_POST['n'];
+        $tiempo=$_POST['tiempo'];
+        $costo=$_POST['costo'];
+        $diagnostico=$_POST['diagnostico'];
+        $programa=$_POST['programa'];
+
+        $query=$this->db->query("INSERT INTO cotizaciontratamiento(idcotizacion,idtratamiento,n,tiempo,costo) VALUES('$idcotizacion','$idtratamiento','$n','$tiempo','$costo')");
+        $query=$this->db->query("UPDATE cotizacion SET diagnostico='$diagnostico',programa='$programa' WHERE idcotizacion='$idcotizacion' ");
+
+        header("Location: ".base_url()."Paciente/cotizacion/$idpaciente/$idhistorial");
+    }
+    function datoscotizacion(){
+        $idcotizacion=$_POST['idcotizacion'];
+        $query=$this->db->query("SELECT * FROM cotizacion WHERE idcotizacion='$idcotizacion'");
+        echo json_encode($query->result_array()[0]);
+
+    }
     function elicotizacion($idcotizacion="",$idpaciente,$idhistorial){
+
+        $query=$this->db->query("SELECT * FROM montos WHERE idcotizacion='$idcotizacion'");
+        foreach ($query->result() as $row){
+            $this->db->query("DELETE FROM consulta WHERE idmonto='$row->idmonto'");
+            $this->db->query("DELETE FROM facial WHERE idmonto='$row->idmonto'");
+            $this->db->query("DELETE FROM corporal WHERE idmonto='$row->idmonto'");
+        }
         $query=$this->db->query("DELETE FROM cotizaciontratamiento WHERE idcotizacion='$idcotizacion'");
+        $query=$this->db->query("DELETE FROM medida WHERE idcotizacion='$idcotizacion'");
+        $query=$this->db->query("DELETE FROM montos WHERE idcotizacion='$idcotizacion'");
+        $query=$this->db->query("DELETE FROM soap WHERE idcotizacion='$idcotizacion'");
+        $query=$this->db->query("DELETE FROM receta WHERE idcotizacion='$idcotizacion'");
+        $query=$this->db->query("DELETE FROM cotizacionconsetimeinto WHERE idcotizacion='$idcotizacion'");
         $query=$this->db->query("DELETE FROM cotizacion WHERE idcotizacion='$idcotizacion'");
         header("Location: ".base_url()."Paciente/cotizacion/$idpaciente/$idhistorial");
     }
     function consentimientoinsert(){
-        $pdf = new FPDF('P','mm','Letter');
+        $pdf = new PDF('P','mm','Letter');
         $idcotizacion=$_POST['idcotizacion'];
         $idpaciente=$_POST['idpaciente'];
         $idconsentimiento=$_POST['idconsentimiento'];
-        $this->db->query("INSERT INTO cotizacionconsetimeinto (idconsetimiento, idcotizacion) VALUES ('$idconsentimiento', '$idcotizacion');");
+        //$this->db->query("INSERT INTO cotizacionconsetimeinto (idconsetimiento, idcotizacion) VALUES ('$idconsentimiento', '$idcotizacion');");
         $query=$this->db->query("SELECT * FROM paciente WHERE idpaciente=$idpaciente");
         $row=$query->row();
         $nombres=$row->nombres;
         $apellidos=$row->apellidos;
         $ci=$row->ci;
+        $query=$this->db->query("SELECT * FROM consentimiento WHERE idconsentimiento=$idconsentimiento");
+        $row=$query->row();
+        $nombre=$row->nombre;
+        $contenido=$row->contenido;
+
+
 
         $pdf->AddPage();
         $pdf->Image('assets/img/spa.png',0,0,216);
@@ -853,7 +1049,7 @@ VALUES('$idcotizacion','".$row->idtratamiento."','$n','$tiempo','$costo')");
         if ($idconsentimiento==1){
         $pdf->SetFont('Times','B',10);
         $pdf->Cell(5);
-        $pdf->MultiCell(185,4,utf8_decode('CONSENTIMIENTO INFORMADO PARA TRATAMIENTO MEDIANTE PLASMA RICO EN PLAQUETAS - MEGADOSIS VITAMINA C '),'B','C' );
+        $pdf->MultiCell(185,4,utf8_decode($nombre),'B','C' );
         $pdf->SetFont('Times','',10);
         $pdf->Cell(0,4,utf8_decode('Idpaciente= '.$idpaciente ),0,0);
         $pdf->Ln();
@@ -862,7 +1058,10 @@ VALUES('$idcotizacion','".$row->idtratamiento."','$n','$tiempo','$costo')");
         $pdf->Ln();
         $pdf->MultiCell(0,4,utf8_decode("En forma libre y voluntaria yo, $nombres $apellidos
 Identificado(a) con la cédula de identidad número $ci manifiesto que:"));
-        $pdf->MultiCell(0,4,utf8_decode('Por el presente consiento que se me realice el procedimiento terapéutico indicado y aconsejado. Se me ha explicado la naturaleza y el objetivo del tratamiento, incluyendo riesgos leves y de gravedad en caso de no cuidarme y alternativas disponibles al tratamiento. Estoy satisfecho con esas explicaciones y las he comprendido.
+        $pdf->Ln();
+            $pdf->WriteHTML(utf8_decode($contenido));
+        $pdf->Ln();
+        /*$pdf->MultiCell(0,4,utf8_decode('Por el presente consiento que se me realice el procedimiento terapéutico indicado y aconsejado. Se me ha explicado la naturaleza y el objetivo del tratamiento, incluyendo riesgos leves y de gravedad en caso de no cuidarme y alternativas disponibles al tratamiento. Estoy satisfecho con esas explicaciones y las he comprendido.
 También consiento la realización de todo procedimiento o tratamiento adicional o alternativo que en opinión del Medico sean necesarios. Consiento la administración de aquellos anestésicos que puedan ser considerados necesarios o convenientes, comprendiendo que ello puede implicar ciertos riesgos de distinta envergadura. Además de consentir como la filmación o fotografía para fines comparativos.
 "ESCENCIA SPA MEDICO", me ha informado en qué consiste el tratamiento. Se me ha realizado una Historia Clínica para descartar patologías y riesgos, que impidan beneficiarme con éste tratamiento, confirmando que no padezco ninguna de las siguientes patologías motivo de contraindicación de la aplicación del tratamiento.
 *	Embarazo y  Lactancia 
@@ -892,13 +1091,15 @@ Se me ha informado que puedo sentir un ligero malestar, dependiendo de mi umbral
 *	Control Médico en 48 hrs.
 He comprendido, todas las explicaciones otorgadas en lenguaje sencillo y claro, el profesional que me ha atendido me han permitido realizar todas las observaciones y me aclaró dudas planteadas.
 Por ello manifiesto que estoy satisfecho(a) con la información recibida y que comprendo el alcance y riesgos del tratamiento libremente y en tales condiciones.'));
+*/
             $pdf->Ln(10);
             $pdf->Cell(75);
+
             $pdf->Cell(55,4," FIRMA PACIENTE   ",'T',0,'C');
-            /*$pdf->Ln();
-            $pdf->Cell(75);
-            $pdf->Cell(55,3," C.I.: $ci   ",0,0,'C');
-            */
+
+
+
+
         }elseif ($idconsentimiento==2){
             $pdf->SetFont('Times','B',10);
             $pdf->Cell(5);
@@ -911,6 +1112,7 @@ Por ello manifiesto que estoy satisfecho(a) con la información recibida y que c
             $pdf->Ln();
             $pdf->MultiCell(0,4,utf8_decode("En forma libre y voluntaria yo, $nombres $apellidos
 Identificado(a) con la cédula de identidad número $ci manifiesto que:"));
+
             $pdf->MultiCell(0,4,utf8_decode('Por el presente consiento que se me realice el procedimiento requerido, proceso terapéutico indicado y aconsejado de acuerdo a mi patología. Se me ha explicado la naturaleza y el objetivo de lo que se me propone, incluyendo riesgos mínimos o significativos si no me cuidara y alternativas disponibles de tratamientos. Estoy satisfecho con esas explicaciones y las he comprendido.
 También consiento la realización de todo procedimiento o tratamiento adicional o alternativo que en opinión del Médico sean necesarios. Además de consentir con la filmación o fotografías cuidando mi identidad, para motivos comparativos de antes y después.
 "ESCENCIA SPA MEDICO", me ha informado en que consiste el tratamiento .Se me ha realizado una Historia Clínica para descartar patologías y otros, que impidan beneficiarme con éste tratamiento, confirmando de que no padezco ninguna de las siguientes patologías motivo de contraindicación de la aplicación del tratamiento.

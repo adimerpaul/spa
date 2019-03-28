@@ -67,6 +67,11 @@
                                         <i class="ti-user"></i><span>Gestionar usuarios</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="<?= base_url() ?>Usuarios" aria-expanded="true">
+                                        <i class="ti-user"></i><span>Gestionar consentimiento</span>
+                                    </a>
+                                </li>
                                 <?php
                             }
                         ?>

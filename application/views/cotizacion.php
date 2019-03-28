@@ -28,28 +28,42 @@
     </thead>
     <tbody>
     <?php
-    $query=$this->db->query("SELECT c.idcotizacion,c.fecha,p.nombres,p.apellidos,count(*) as cantidad 
-FROM historial h 
-INNER JOIN paciente p ON p.idpaciente=h.idpaciente
-INNER JOIN cotizacion c ON h.idhistorial=c.idhistorial
-INNER JOIN cotizaciontratamiento ct ON ct.idcotizacion=c.idcotizacion
-WHERE p.idpaciente='$idpaciente' AND h.idhistorial='$idhistorial' 
-GROUP BY c.idcotizacion");
+    $query=$this->db->query("SELECT *
+    FROM cotizacion
+    WHERE idhistorial='$idhistorial'");
+
+
     foreach ($query->result() as $row){
-        $query2=$this->db->query("SELECT * FROM cotizaciontratamiento c INNER JOIN tratamiento t ON c.idtratamiento=t.idtratamiento 
+
+        $query2=$this->db->query("SELECT * FROM cotizaciontratamiento c 
+INNER JOIN tratamiento t ON c.idtratamiento=t.idtratamiento 
 WHERE c.idcotizacion='".$row->idcotizacion."'");
         $tratamientos="";
         $suma=0;
+        //echo $query2->num_rows();
+
         foreach ($query2->result() as $row2){
             $tratamientos=$tratamientos.$row2->nombre.' n:'.$row2->n.' t:'.$row2->tiempo.' cost:'.$row2->costo.'<br>';
-            $suma=$suma+$row2->costo;
+            //$suma=$suma+$row2->costo;
         }
-        $tratamientos=$tratamientos.'<b>Total '.$suma.'</b>';
-        $query2=$this->db->query("SELECT * FROM cotizacionconsetimeinto c INNER JOIN consentimiento con ON c.idconsetimiento=con.idconsentimiento 
+
+        $query2=$this->db->query("SELECT * FROM montos 
+WHERE idcotizacion='".$row->idcotizacion."'");
+        $montos="";
+        foreach ($query2->result() as $row2){
+            $montos=$montos."<b>Monto:</b> ".$row2->monto." <b>Bs.  Fecha:</b> ".substr($row2->fecha,0,10);
+
+        }
+
+        //$tratamientos=$tratamientos.'<b>Total '.$suma.'</b>';
+        $query2=$this->db->query("SELECT * FROM cotizacionconsetimeinto c 
+INNER JOIN consentimiento con ON c.idconsetimiento=con.idconsentimiento 
 WHERE c.idcotizacion='".$row->idcotizacion."'");
         $consentimientos="";
+        $cont=0;
         foreach ($query2->result() as $row2){
-            $consentimientos=$consentimientos.$row2->nombre."<br>";
+            $cont++;
+            $consentimientos=$consentimientos."<b>$cont.-</b> ".$row2->nombre."<a href='".base_url()."Paciente/eliconcentimiento/$row2->idconsetimiento/".$row->idcotizacion."/$idpaciente/$idhistorial' class='btn btn-danger btn-sm sint eli'> <i class='fa fa-close'></i></a><br>";
         }
         /*$query2=$this->db->query("SELECT * FROM cotizacionlaboratorio c INNER JOIN laboratorio con ON c.idlaboratorio=con.idlaboratorio
 WHERE c.idcotizacion='".$row->idcotizacion."'");
@@ -59,10 +73,10 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
         }*/
         echo "
         <tr>
-            <td>".$this->User->consulta('adelanto','cotizacion','idcotizacion',$row->idcotizacion)."</td>
+            <td>".$montos."</td>
             <td>".substr($row->fecha,0,10)."</td>
             <td style='border: 0;padding: 0;margin: 0;font-size: 12px'>".$tratamientos."</td>
-            <td style='border: 0;padding: 0;margin: 0;font-size: 10px'>$consentimientos</td>
+            <td style='border: 0;padding: 0;margin: 0;font-size: 10px;white-space: pre-wrap;width: 200px;'>$consentimientos </td>
             <td> 
             <a href='".base_url()."Paciente/fotografia/".$row->idcotizacion."'  class='btn btn-sm btn-warning btn-sm text-white sin'><i class='fa fa-photo'></i> Fotografias</a>
             <br>
@@ -89,13 +103,24 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
                <i class='fa fa-history'></i> SOAP
              </a>
              <br>
+             
+             <button type='button' class='btn btn-primary btn-sm sin' data-toggle='modal' data-target='#medidas' 
+             data-idcotizacion='".$row->idcotizacion."'> <i class='fa fa-medium'></i> Medias</button>
+             <br>
+             <a type='button' href='".base_url()."Paciente/regtratamiento/$idpaciente/$idhistorial/$row->idcotizacion' class='btn btn-success btn-sm sin'
+             data-idcotizacion='".$row->idcotizacion."'> <i class='fa fa-map-marker'></i> Agregar tratamiento</a>
+             <br>
+             <a href='".base_url()."Imprimir/index/$row->idcotizacion/$idpaciente/$idhistorial'
+               class='btn btn-sm btn-primary btn-sm sin text-white'>
+               <i class='fa fa-print'></i> Imprimir
+             </a>
+             <br>
              <a href='".base_url()."paciente/elicotizacion/$row->idcotizacion/$idpaciente/$idhistorial'
                data-idcotizacion='$row->idcotizacion'
                data-idpaciente='$idpaciente'
                class=' eli btn btn-sm btn-danger btn-sm sin text-white'>
                <i class='fa fa-history'></i> Eliminar
              </a>
-             
             </td>
         </tr>";
     }
@@ -172,9 +197,27 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
                             <textarea style="width: 100%" name="programa"   id="programa" ></textarea>
                         </div>
                     <div class="form-group row">
-                        <label for="adelanto" class="col-sm-3 col-form-label">Adelanto</label>
-                        <div class="col-sm-9">
-                            <input type="number" name="adelanto" style="width: 100%" id="adelanto" >
+                        <label for="adelanto" class="col-sm-4 col-form-label">Costo/Adelanto</label>
+                        <div class="col-sm-8">
+                            <input type="number" name="adelanto" style="width: 100%" value="100" id="adelanto" required >
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="motivo" class="col-sm-4 col-form-label">Motivo/DX</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="motivo" style="width: 100%" id="motivo"  >
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="cot" class="col-sm-4 col-form-label">COT/SUG TX</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="cot" style="width: 100%"  id="cot"  >
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="ref" class="col-sm-4 col-form-label">Referencia</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="ref" style="width: 100%"  id="ref"  >
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -276,6 +319,146 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                         <button type="submit" class="btn btn-success">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="medidas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar medidas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="<?=base_url()?>Paciente/medidas">
+                    <div class="sin form-group row">
+                        <label for="papada" class=" col-sm-4 col-form-label">Papada</label>
+                        <div class=" col-sm-8">
+                            <input type="text" id="uidcotizacion3" name="idcotizacion" hidden >
+                            <input type="text" class=" form-control" name="papada" id="papada" placeholder="papada">
+                        </div>
+                    </div>
+                    <div class="sin form-group row">
+                        <label for="brazosd1" class=" col-sm-4 col-form-label">Brazos d-1</label>
+                        <div class=" col-sm-8">
+                            <input type="text" class=" form-control" name="brazosd1" id="brazosd1" placeholder="brazosd1">
+                        </div>
+                    </div>
+                    <div class="sin form-group row">
+                        <label for="espaldaalta" class="col-sm-4 col-form-label">Espalda alta</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="espaldaalta" id="espaldaalta" placeholder="espaldaalta">
+                        </div>
+                    </div>
+                    <div class="sin form-group row">
+                        <label for="espaldabaja" class="col-sm-4 col-form-label">Espalda baja</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="espaldabaja" id="espaldabaja" placeholder="espaldabaja">
+                        </div>
+                    </div>
+                    <div class="sin form-group row">
+                        <label for="cintura" class="col-sm-4 col-form-label">Cintura</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="cintura" id="cintura" placeholder="cintura">
+                        </div>
+                    </div>
+                    <div class="sin form-group row">
+                        <label for="ombligo" class="col-sm-4 col-form-label">Ombligo</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="ombligo" id="ombligo" placeholder="ombligo">
+                        </div>
+                    </div>
+                    <div class="sin form-group row">
+                        <label for="cm2" class="col-sm-4 col-form-label">A 2 cm del ombligo</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="cm2" id="cm2" placeholder="cm2">
+                        </div>
+                    </div>
+                    <div class="sin form-group row">
+                        <label for="cm4" class="col-sm-4 col-form-label">A 4 cm del ombligo</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="cm4" id="cm4" placeholder="cm4">
+                        </div>
+                    </div>
+                    <div class="sin form-group row">
+                        <label for="cadera" class="col-sm-4 col-form-label">Cadera</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="cadera" id="cadera" placeholder="cadera">
+                        </div>
+                    </div>
+                    <div class="sin form-group row">
+                        <label for="muslo" class="col-sm-4 col-form-label">Muslo</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="muslo" id="muslo" placeholder="muslo">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Agregar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="agregar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar tratamiento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="<?=base_url()?>Paciente/agregartratamiento">
+                    <div class="sin form-group row">
+                        <label for="idtratamiento" class=" col-sm-4 col-form-label">Tratamiento</label>
+                        <div class=" col-sm-8">
+                            <input type="text" id="uidcotizacion4" name="idcotizacion" hidden >
+                            <input type="text" value="<?=$idpaciente?>" hidden name="idpaciente">
+                            <input type="text" value="<?=$idhistorial?>" hidden name="idhistorial">
+                            <select name="idtratamiento" id="idtratamiento" >
+                                <option value=''>Seleccionar..</option>
+                                <?php
+                                $query=$this->db->query("SELECT * FROM tratamiento");
+                                foreach ($query->result() as $row){
+                                    echo "<option value='".$row->idtratamiento."'>$row->nombre</option>";
+                                }
+
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="sin form-group row">
+                        <label for="n" class=" col-sm-4 col-form-label">N</label>
+                        <div class=" col-sm-8">
+                            <input type="text" class=" form-control" name="n" id="n" placeholder="sessiones">
+                        </div>
+                    </div>
+                    <div class="sin form-group row">
+                        <label for="tiempo" class="col-sm-4 col-form-label">Tiempo</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="tiempo" id="tiempo" placeholder="tiempo">
+                        </div>
+                    </div>
+                    <div class="sin form-group row">
+                        <label for="costo" class="col-sm-4 col-form-label">Costo</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="costo" id="costo" placeholder="costo">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Agregar</button>
                     </div>
                 </form>
             </div>

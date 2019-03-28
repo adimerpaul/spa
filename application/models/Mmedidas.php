@@ -8,7 +8,7 @@
 
 class Mmedidas extends CI_Model{
     function insert(){
-        $idpaciente=$_POST['idpaciente'];
+        $idcotizacion=$_POST['idcotizacion'];
         $papada=$_POST['papada'];
         $brazosd1=$_POST['brazosd1'];
         $espaldaalta=$_POST['espaldaalta'];
@@ -30,7 +30,7 @@ cm2,
 cm4,
 cadera,
 muslo,
-idpaciente
+idcotizacion
 ) VALUES (
 '$papada',
 '$brazosd1',
@@ -42,7 +42,7 @@ idpaciente
 '$cm4',
 '$cadera',
 '$muslo',
-'$idpaciente'
+'$idcotizacion'
 )");
     }
 }
