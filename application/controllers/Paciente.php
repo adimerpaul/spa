@@ -1072,7 +1072,7 @@ También consiento la realización de todo procedimiento o tratamiento adicional
 *	Ingesta de Aspirina o antiinflamatorios, o encontrarme con tratamiento antibiótico en la última semana previa al tratamiento
 *	Enfermedades del corazón,
 *	Cirugías recientes o próximas al tratamiento excepto para el caso de la megadosis de vitamina C'));
-        //$pdf->Cell(37,4,utf8_decode('PROCEDIMIENTO.- '),'B' );
+        //$pdf->Cell(37,4,utf8_decode(' PROCEDIMIENTO.- '),'B' );
         $pdf->Ln();
         $pdf->MultiCell(0,4,utf8_decode('PROCEDIMIENTO.- Técnica ambulatoria que consiste: paciente en decúbito dorsal se le aplica en la zona a tratar una crema anestésica dejándola que actúe unos minutos, tiempo en el que permanece tranquilamente relajado. Luego se extrae entre 5ml para el plasma superficial y entre 20 y 25ml de sangre venosa del mismo paciente para el caso del plasma profundo, la que se coloca en tubos estériles a una centrifugadora por medio de la cual se separa el plasma de los glóbulos rojos y blancos. Se activa la fracción de plasma a utilizar, al ser retirado el plasma de los tubos en jeringas pre cargadas con el activador. Una vez conseguido el plasma rico en factores de crecimiento se introduce en la dermis mediante inyecciones superficiales intradérmicas superficial o nappage, subcutánea se aplica  con una aguja hipodérmica, haciendo pequeños y múltiples micro inyecciones en la zona a tratar.
 Para el caso de la megadosis de vitamina C solamente me colocarán una vía endovenosa en el antebrazo por el lapso de media a una hora donde ingresará la vitamina c y el suero. Para el caso de células madre además deberé firmar un consentimiento adicional.

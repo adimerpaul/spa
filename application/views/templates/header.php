@@ -68,8 +68,8 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="<?= base_url() ?>Usuarios" aria-expanded="true">
-                                        <i class="ti-user"></i><span>Gestionar consentimiento</span>
+                                    <a href="<?= base_url() ?>Consentimientos" aria-expanded="true">
+                                        <i class="ti-files"></i><span>Gestionar consentimiento</span>
                                     </a>
                                 </li>
                                 <?php
