@@ -49,11 +49,8 @@
             <td>".$row->celular."</td>
             <td> 
             <a href='".base_url()."Paciente/reghistorial/".$row->idpaciente."' class='btn btn-sm btn-success text-white sinespaciotexto' ><i class='fa fa-file-archive-o'></i> Reg. Historial</a>
-            <button type=\"button\" class=\"btn btn-warning text-white btn-sm sinespaciotexto\" data-toggle=\"modal\" data-idpaciente='".$row->idpaciente."' data-target=\"#historial\"> <i class=\"fa fa-align-justify\"></i>Historial</button>
-
-            <!--a href='".base_url()."Paciente/cotizacion/".$row->idpaciente."' class='btn btn-sm btn-info sinespaciotexto' ><i class='fa fa-ambulance'></i> Tratamientos</a>
-           <button type='button' class='btn btn-primary btn-sm sinespaciotexto' data-toggle='modal' data-target='#medidas' data-idpaciente='".$row->idpaciente."'>Medias</button-->
-            </td>
+            <a type='button' class='btn btn-warning text-white btn-sm sinespaciotexto' href='".base_url()."Paciente/escoger/".$row->idpaciente."' > <i class=\"fa fa-align-justify\"></i>Historial</a>
+             </td>
         </tr>";
     }
     ?>
@@ -228,7 +225,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">HIstorial</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Historial</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

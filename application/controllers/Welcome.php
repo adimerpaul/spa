@@ -10,7 +10,7 @@ class Welcome extends CI_Controller {
 	public function login(){
 	    $email=$_POST['email'];
         $password=$_POST['password'];
-        $query=$this->db->query("SELECT * FROM usuario WHERE email='$email' AND password='$password'");
+        $query=$this->db->query("SELECT * FROM usuario WHERE email='$email' AND password='$password' AND estado='ACTIVO'");
         echo $query->num_rows();
         if($query->num_rows()==1){
 

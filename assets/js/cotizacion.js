@@ -13,6 +13,8 @@ var s=0;
 var sum=document.getElementsByClassName("sum");
 
 $('#consentimiento').on('show.bs.modal', function (event) {
+    //consoleasa
+    console.log('a');
     var button = $(event.relatedTarget) // Button that triggered the modal
     $('#uidcotizacion').val(button.data('idcotizacion'));
     $('#uidpaciente').val(button.data('idpaciente'));

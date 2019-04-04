@@ -12,13 +12,24 @@ class Reserva extends CI_Controller{
             header("Location: ".base_url());
         }
         $data['title']='Reserva de pacientes';
-        $data['css']="";
-        //$this->load->view('templates/header',$data);
-        $this->load->view('reserva');
+        $data['css']="
+<link href='".base_url()."assets/packages/core/main.css' rel='stylesheet' />
+<link href='".base_url()."assets/packages/daygrid/main.css' rel='stylesheet' />
+<link href='".base_url()."assets/packages/timegrid/main.css' rel='stylesheet' />
+<link href='".base_url()."assets/packages/list/main.css' rel='stylesheet' />";
+        $this->load->view('templates/header',$data);
+        $this->load->view('reservas');
         $data['tipo']="info";
-        $data['msg']="Reservas de pacientes";
-        $data['js']="";
-        //$this->load->view('templates/footer',$data);
+        $data['msg']="Reserva de pacientes";
+        $data['js']="
+<script src='".base_url()."assets/packages/core/main.js'></script>
+<script src='".base_url()."assets/packages/core/locales-all.js'></script>
+<script src='".base_url()."assets/packages/interaction/main.js'></script>
+<script src='".base_url()."assets/packages/daygrid/main.js'></script>
+<script src='".base_url()."assets/packages/timegrid/main.js'></script>
+<script src='".base_url()."assets/packages/list/main.js'></script>
+<script src='".base_url()."assets/js/moment.js'></script>";
+        $this->load->view('templates/footer',$data);
     }
     function insert()
     {
@@ -48,11 +59,6 @@ class Reserva extends CI_Controller{
         foreach ($query->result() as $row){
             $events[] = $row;
         }
-        //while($row = mysqli_fetch_assoc($result))
-        /*{
-            $events[] = $row;
-        }
-        */
         echo json_encode($events);
         exit;
     }

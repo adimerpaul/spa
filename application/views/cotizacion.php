@@ -244,8 +244,8 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
                 <form action="<?=base_url()?>Paciente/consentimientoinsert" method="post">
                     <div class="form-group">
                         <label for="idconsetimiento">Consentimiento</label>
-                        <input type="text" name="idcotizacion" id="uidcotizacion" hidden>
-                        <input type="text" name="idpaciente" id="uidpaciente" hidden>
+                        <input type="text" name="idcotizacion" id="uidcotizacion"  hidden>
+                        <input type="text" name="idpaciente" id="uidpaciente"  hidden>
                         <select style="padding: 0px;margin: 0px" required name="idconsentimiento" id="idconsetimiento" class="form-control">
                             <option style="padding: 0px;margin: 0px" value=''>Seleccionar..</option>
                             <?php
