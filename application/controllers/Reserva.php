@@ -36,26 +36,61 @@ class Reserva extends CI_Controller{
         if ($_SESSION['tipo'] == "") {
             header("Location: " . base_url());
         }
+        $start=$_POST['start'];
+        $end=$_POST['end'];
+        $descripcion=$_POST['descripcion'];
+        $idpaciente=$_POST['idpaciente'];
+
+        $title=$this->User->consulta('nombres','paciente','idpaciente',$idpaciente)." ".$this->User->consulta('apellidos','paciente','idpaciente',$idpaciente);
+
         $this->db->query("INSERT INTO `events` (
                     `title` ,
                     `start` ,
                     `end` ,
-                    `uid` 
+                    `idpaciente`,
+                    idusuario,
+                    descripcion 
                     )
                     VALUES (
-                    '".$_POST["title"]."',
+                    '".$title."',
                     '".date('Y-m-d H:i:s',strtotime($_POST["start"]))."',
                     '".date('Y-m-d H:i:s',strtotime($_POST["end"]))."',
-                    '".$_SESSION['idusuario']."'
+                    '".$_POST['idpaciente']."',
+                    '".$_SESSION['idusuario']."',
+                    '".$_POST['descripcion']."'
                     )");
-        header('Content-Type: application/json');
-        echo '{"id":"'.$this->db->insert_id().'"}';
-        exit;
+        header("Location: ".base_url()."Reserva");
+        //header('Content-Type: application/json');
+        //echo '{"id":"'.$this->db->insert_id().'"}';
+        //exit;
+    }
+    function update(){
+        if ($_SESSION['tipo'] == "") {
+            header("Location: " . base_url());
+        }
+        $start=$_POST['start'];
+        $end=$_POST['end'];
+        $descripcion=$_POST['descripcion'];
+        $idpaciente=$_POST['idpaciente'];
+        $id=$_POST['id'];
+
+        $title=$this->User->consulta('nombres','paciente','idpaciente',$idpaciente)." ".$this->User->consulta('apellidos','paciente','idpaciente',$idpaciente);
+
+        $this->db->query("UPDATE events SET
+            title ='$title',
+            start = '$start',
+            `end` ='$end',
+            idpaciente='$idpaciente',
+            idusuario='".$_SESSION['idusuario']."',
+            descripcion='$descripcion'
+            WHERE id='$id'
+        ");
+        header("Location: ".base_url()."Reserva");
     }
     function reservas(){
         header('Content-Type: application/json');
 
-        $query=$this->db->query("SELECT `id`, `start` ,`end` ,`title` FROM  events");
+        $query=$this->db->query("SELECT * FROM  events");
         foreach ($query->result() as $row){
             $events[] = $row;
         }

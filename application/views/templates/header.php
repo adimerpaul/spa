@@ -59,6 +59,11 @@
                                 <i class="ti-time"></i><span>Realizar reserva </span>
                             </a>
                         </li>
+                        <li>
+                            <a href="<?=base_url()?>Consulta" aria-expanded="true">
+                                <i class="ti-tag"></i><span>Consulta medica </span>
+                            </a>
+                        </li>
                         <?php
                             if ($_SESSION['tipo']=='ADMIN') {
                                 ?>
@@ -70,6 +75,16 @@
                                 <li>
                                     <a href="<?= base_url() ?>Consentimientos" aria-expanded="true">
                                         <i class="ti-files"></i><span>Gestionar consentimiento</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="<?= base_url() ?>Tratamientos" aria-expanded="true">
+                                        <i class="ti-rss"></i><span>Gestionar tratamientos</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="<?= base_url() ?>Export" aria-expanded="true">
+                                        <i class="ti-sharethis"></i><span>Exportar BD</span>
                                     </a>
                                 </li>
                                 <?php

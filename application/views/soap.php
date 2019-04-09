@@ -67,22 +67,48 @@
             <div class="modal-body">
                 <form method="post" action="<?=base_url()?>soap/insert" style="padding: 0px;margin: 0px;border: 0px">
                     <div class="form-row" style="padding: 0px;margin: 0px;border: 0px">
-                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px" >
+                        <div class="form-group col-md-12" style="padding: 0px;margin: 0px;border: 0px" >
                             <label for="subjetivo" style="padding: 0px;margin: 0px;border: 0px">subjetivo</label>
                             <input type="text" name="idcotizacion" value="<?=$idcotizacion?>" hidden>
                             <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="subjetivo" placeholder="subjetivo" name="subjetivo" required>
                         </div>
-                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px" >
+                        <div class="form-group col-md-12" style="padding: 0px;margin: 0px;border: 0px" >
                             <label for="objetivo" style="padding: 0px;margin: 0px;border: 0px">objetivo</label>
-                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="objetivo" placeholder="objetivo" name="objetivo" required>
+                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="objetivo" placeholder="objetivo" name="objetivo" >
                         </div>
-                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px" >
+                        <div class="form-group col-md-12" style="padding: 0px;margin: 0px;border: 0px" >
                             <label for="analisis" style="padding: 0px;margin: 0px;border: 0px">analisis</label>
-                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="analisis" placeholder="analisis" name="analisis" required>
+                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="analisis" placeholder="analisis" name="analisis" >
+                        </div>
+                        <div class="form-group col-md-12" style="padding: 0px;margin: 0px;border: 0px" >
+                            <label for="plan" style="padding: 0px;margin: 0px;border: 0px">plan</label>
+                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="plan" placeholder="plan" name="plan" >
                         </div>
                         <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px" >
-                            <label for="plan" style="padding: 0px;margin: 0px;border: 0px">plan</label>
-                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="plan" placeholder="plan" name="plan" required>
+                            <label for="monto" style="padding: 0px;margin: 0px;border: 0px">Monto Adelanto</label>
+                            <input type="number" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" placeholder="0" id="monto" value="0" name="monto" required>
+                        </div>
+                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px" >
+                            <label for="idtratamiento" style="padding: 0px;margin: 0px;border: 0px">Tratamiento</label>
+                            <select  style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="idtratamiento"  name="idtratamiento" required>
+                                <option value="">Seleccionar</option>
+                                <?php
+                                $query=$this->db->query("SELECT * FROM cotizaciontratamiento c
+INNER JOIN tratamiento t ON c.idtratamiento=t.idtratamiento
+ WHERE idcotizacion='$idcotizacion' ");
+                                foreach ($query->result() as $row ){
+                                    echo "<option value='$row->idtratamiento'>$row->nombre</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px" >
+                            <label for="obs" style="padding: 0px;margin: 0px;border: 0px">OBS/RES</label>
+                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" placeholder="" id="obs" name="obs" >
+                        </div>
+                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px" >
+                            <label for="cub" style="padding: 0px;margin: 0px;border: 0px">CUB/SES</label>
+                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" placeholder="" id="cub" name="cub" >
                         </div>
                     </div>
 
@@ -96,116 +122,4 @@
     </div>
 </div>
 
-
-<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            ...
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="medidas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar medidas</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="<?=base_url()?>Paciente/medidas">
-                    <div class="form-group row">
-                        <label for="papada" class="col-sm-2 col-form-label">Papada</label>
-                        <div class="col-sm-10">
-                            <input type="text" id="idpacientem" name="idpaciente" hidden>
-                            <input type="text" class="form-control" name="papada" id="papada" placeholder="papada">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="brazosd1" class="col-sm-2 col-form-label">Brazos d-1</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="brazosd1" id="brazosd1" placeholder="brazosd1">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="espaldaalta" class="col-sm-2 col-form-label">Espalda alta</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="espaldaalta" id="espaldaalta" placeholder="espaldaalta">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="espaldabaja" class="col-sm-2 col-form-label">Espalda baja</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="espaldabaja" id="espaldabaja" placeholder="espaldabaja">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="cintura" class="col-sm-2 col-form-label">Cintura</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="cintura" id="cintura" placeholder="cintura">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="ombligo" class="col-sm-2 col-form-label">Ombligo</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="ombligo" id="ombligo" placeholder="ombligo">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="cm2" class="col-sm-2 col-form-label">A 2 cm del ombligo</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="cm2" id="cm2" placeholder="cm2">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="cm4" class="col-sm-2 col-form-label">A 4 cm del ombligo</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="cm4" id="cm4" placeholder="cm4">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="cadera" class="col-sm-2 col-form-label">Cadera</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="cadera" id="cadera" placeholder="cadera">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="muslo" class="col-sm-2 col-form-label">Muslo</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="muslo" id="muslo" placeholder="muslo">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success">Agregar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<!-- Modal -->
-<div class="modal fade" id="historial" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">HIstorial</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div id="contenido"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 

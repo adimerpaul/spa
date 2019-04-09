@@ -1,4 +1,6 @@
+/*
 $(document).ready(function(){
+
 
     var calendar = $('#calendar').fullCalendar({
         header:{
@@ -122,3 +124,4 @@ $(document).ready(function(){
 
     }
 });
+*/

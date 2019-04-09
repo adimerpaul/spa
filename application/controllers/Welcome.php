@@ -19,7 +19,8 @@ class Welcome extends CI_Controller {
             $_SESSION['email']=$row->email;
             $_SESSION['tipo']=$row->tipo;
             $_SESSION['idusuario']=$row->idusuario;
-            $_SESSION['nombre']=$row->nombre; echo $_SESSION['nombre'];
+            $_SESSION['nombre']=$row->nombre;
+            echo $_SESSION['nombre'];
             header("Location: ".base_url()."Dashboard");
         }else{
             $data['tipo']='error';

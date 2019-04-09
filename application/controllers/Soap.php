@@ -36,13 +36,20 @@ class Soap extends CI_Controller{
     }
     function insert(){
         $idcotizacion=$_POST['idcotizacion'];
+        $idtratamiento=$_POST['idtratamiento'];
         $subjetivo=$_POST['subjetivo'];
         $objetivo=$_POST['objetivo'];
         $analisis=$_POST['analisis'];
         $plan=$_POST['plan'];
+        $monto=$_POST['monto'];
+        $obs=$_POST['obs'];
+        $cub=$_POST['cub'];
+        $plan=$_POST['plan'];
         //echo $plan;
-        $this->db->query("INSERT INTO soap(subjetivo,objetivo,analisis,plan,idusuario,idcotizacion) VALUES('$subjetivo','$objetivo','$analisis','$plan','".$_SESSION['idusuario']."','$idcotizacion')");
+        $this->db->query("INSERT INTO soap(subjetivo,objetivo,analisis,plan,idusuario,idcotizacion,monto) VALUES('$subjetivo','$objetivo','$analisis','$plan','".$_SESSION['idusuario']."','$idcotizacion','$monto')");
+        $this->db->query("INSERT INTO montos(monto,idcotizacion,idtratamiento,obs,cub) VALUES('$monto','$idcotizacion','$idtratamiento','$obs','$cub')");
 
+       // exit;
         header("Location: ".base_url()."Soap/index/$idcotizacion");
     }
     function imprimir($idcotizacion=""){
@@ -58,10 +65,11 @@ class Soap extends CI_Controller{
             $pdf->Cell(3,5,utf8_decode($row->fecha));
             $pdf->Ln();
             $pdf->SetFont('Arial','',10);
-            $pdf->MultiCell(170,5,utf8_decode($row->subjetivo.", ".$row->objetivo.", ".$row->analisis.", ".$row->plan));
+            $pdf->MultiCell(170,5,utf8_decode($row->subjetivo." ".$row->objetivo." ".$row->analisis." ".$row->plan));
             $pdf->Ln();
             $pdf->SetFont('Arial','',10);
-            $pdf->Cell(180,5,utf8_decode($this->User->consulta('nombre','usuario','idusuario',$row->idusuario)),0,0,'R');
+            $pdf->Cell(100,5,utf8_decode("Monto/adelanto :".$row->monto."   Fecha: ".$row->fecha));
+            $pdf->Cell(80,5,utf8_decode($this->User->consulta('nombre','usuario','idusuario',$row->idusuario)),0,0,'R');
             $pdf->Ln();
         }
         $pdf->Output();

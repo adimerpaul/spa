@@ -916,7 +916,7 @@ if($query){
         $this->db->query("INSERT INTO cotizacion(idhistorial,diagnostico,programa) VALUES('$idhistorial','$diagnostico','$programa')");
         $idcotizacion=$this->db->insert_id();
         //if($adelanto!=""){
-            $this->db->query("INSERT INTO montos(monto,idcotizacion) VALUES('$adelanto','$idcotizacion')");
+        $this->db->query("INSERT INTO montos(monto,idcotizacion,idusuario) VALUES('$adelanto','$idcotizacion','".$_SESSION['idusuario']."')");
         $idmonto=$this->db->insert_id();
         $motivo=$_POST['motivo'];
         $cot=$_POST['cot'];

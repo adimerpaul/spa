@@ -16,7 +16,7 @@ class Dashboard extends CI_Controller
         $data['css']="";
         $data['title']='Menu principal';
         $this->load->view('templates/header',$data);
-        $this->load->view('dashboard');
+        //$this->load->view('dashboard');
         $data['tipo']="info";
         $data['msg']="Bienvenido al sistema";
         $data['js']="";
