@@ -51,7 +51,7 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
 WHERE idcotizacion='".$row->idcotizacion."'");
         $montos="";
         foreach ($query2->result() as $row2){
-            $montos=$montos."<b>Monto:</b> ".$row2->monto." <b>Bs.  Fecha:</b> ".substr($row2->fecha,0,10);
+            $montos=$montos."<b>Monto:</b> ".$row2->monto." <b>Bs.  Fecha:</b> ".substr($row2->fecha,0,10)."<br>";
 
         }
 
@@ -272,7 +272,7 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Imprimir consentimientos</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Imprimir Laboratorio</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

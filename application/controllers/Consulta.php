@@ -8,16 +8,18 @@
 require('fpdf.php');
 class Consulta extends CI_Controller{
 
-
-    function index($hoy=""){
+    function index($fecha=""){
         if ($_SESSION['tipo']==""){
             header("Location: ".base_url());
         }
         $data['title']='Controlar consulta';
-        $data['hoy']=$hoy;
+        if ($fecha==""){
+            $fecha=date("Y-m-d");
+        }
+        $data['fecha']=$fecha;
         $data['css']="";
         $this->load->view('templates/header',$data);
-        $this->load->view('consulta');
+        $this->load->view('consulta',$fecha);
         $data['tipo']="info";
         $data['msg']="Consulta";
         $data['js']="";

@@ -64,24 +64,46 @@
                                 <i class="ti-tag"></i><span>Consulta medica </span>
                             </a>
                         </li>
+                        <li>
+                            <a href="<?=base_url()?>Venta" aria-expanded="true">
+                                <i class="ti-bag"></i><span>Realizar venta</span>
+                            </a>
+                        </li>
                         <?php
                             if ($_SESSION['tipo']=='ADMIN') {
                                 ?>
                                 <li>
-                                    <a href="<?= base_url() ?>Usuarios" aria-expanded="true">
-                                        <i class="ti-user"></i><span>Gestionar usuarios</span>
-                                    </a>
+                                    <a href="javascript:void(0)" aria-expanded="true"><i class="ti-book"></i><span>Controles</span></a>
+                                    <ul class="collapse">
+                                        <li>
+                                            <a href="<?= base_url() ?>Usuarios" aria-expanded="true">
+                                                <i class="ti-user"></i><span>Gestionar usuarios</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= base_url() ?>Consentimientos" aria-expanded="true">
+                                                <i class="ti-files"></i><span>Gestionar consentimiento</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= base_url() ?>Tratamientos" aria-expanded="true">
+                                                <i class="ti-rss"></i><span>Gestionar tratamientos</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= base_url() ?>Inventario" aria-expanded="true">
+                                                <i class="ti-map"></i><span>Gestionar inventario</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= base_url() ?>Productos" aria-expanded="true">
+                                                <i class="ti-archive"></i><span>Gestionar productos</span>
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
-                                <li>
-                                    <a href="<?= base_url() ?>Consentimientos" aria-expanded="true">
-                                        <i class="ti-files"></i><span>Gestionar consentimiento</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="<?= base_url() ?>Tratamientos" aria-expanded="true">
-                                        <i class="ti-rss"></i><span>Gestionar tratamientos</span>
-                                    </a>
-                                </li>
+
+
                                 <li>
                                     <a href="<?= base_url() ?>Export" aria-expanded="true">
                                         <i class="ti-sharethis"></i><span>Exportar BD</span>
@@ -90,14 +112,7 @@
                                 <?php
                             }
                         ?>
-                        <!--li>
-                            <a href="javascript:void(0)" aria-expanded="true"><i class="ti-dashboard"></i><span>dashboard</span></a>
-                            <ul class="collapse">
-                                <li><a href="index.html">ICO dashboard</a></li>
-                                <li><a href="index2.html">Ecommerce dashboard</a></li>
-                                <li><a href="index3.html">SEO dashboard</a></li>
-                            </ul>
-                        </li-->
+
                     </ul>
                 </nav>
             </div>

@@ -10,7 +10,7 @@ $st=0;
     </div>
     <div class="form-group mx-sm-3 mb-2">
         <label for="fecha" class="sr-only">Password</label>
-        <input type="date" class="form-control" id="fecha" value="<?=date('Y-m-d')?>" >
+        <input type="date" class="form-control" id="fecha" value="<?=$fecha?>" >
     </div>
     <button type="submit" class="btn btn-success mb-2 btn-sm"> <i class="fa fa-check"></i> Consultar </button>
     <button type="submit" class="btn btn-info mb-2 btn-sm"> <i class="fa fa-print"></i> Imprimir </button>
@@ -39,7 +39,7 @@ $st=0;
         </thead>
         <tbody>
         <?php
-        $query=$this->db->query("SELECT * FROM `montos` WHERE date(`fecha`)=date(now()) AND `idtratamiento` is NULL");
+        $query=$this->db->query("SELECT * FROM `montos` WHERE date(`fecha`)=date('$fecha') AND `idtratamiento` is NULL");
         foreach ($query->result() as $row){
                 $hora=date('Y-m-d');
                 $horaactual = strtotime(date("H:i:00",time()));
@@ -96,7 +96,7 @@ $st=0;
             $query=$this->db->query("
             SELECT * FROM `montos` m
             INNER JOIN tratamiento t ON m.idtratamiento=t.idtratamiento 
-            WHERE date(`fecha`)=date(now()) AND m.idtratamiento is not NULL
+            WHERE date(`fecha`)=date('$fecha') AND m.idtratamiento is not NULL
             AND t.idtipotratamiento=1
             ");
             foreach ($query->result() as $row){
@@ -156,7 +156,7 @@ $st=0;
             $query=$this->db->query("
             SELECT * FROM `montos` m
             INNER JOIN tratamiento t ON m.idtratamiento=t.idtratamiento 
-            WHERE date(`fecha`)=date(now()) AND m.idtratamiento is not NULL
+            WHERE date(`fecha`)=date('$fecha') AND m.idtratamiento is not NULL
             AND t.idtipotratamiento=2
             ");
             foreach ($query->result() as $row){

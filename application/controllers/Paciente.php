@@ -1086,6 +1086,7 @@ Identificado(a) con la cédula de identidad número $ci manifiesto que:"));
         $pdf->Output();
     }
 function laboratorioinsert(){
+
     $idpaciente=$_POST['idpaciente'];
     $idcotizacion=$_POST['idcotizacion'];
     $diagnostico=$_POST['diagnostico'];
