@@ -59,7 +59,8 @@ $('#formulario').submit(function (e) {
                 "                <td>"+subtotal+"<input name='s"+idproducto+"' value='"+subtotal+"' hidden></td>" +
                 "            </tr>" );
     }
-    $('#total').html(total);
+    $('#to').html(total);
+    $('#total').val(total);
     $('#exampleModal').modal('hide');
     return false;
 });

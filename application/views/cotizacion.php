@@ -80,9 +80,9 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
             <td> 
             <a href='".base_url()."Paciente/fotografia/".$row->idcotizacion."'  class='btn btn-sm btn-warning btn-sm text-white sin'><i class='fa fa-photo'></i> Fotografias</a>
             <br>
-            <a href='".base_url()."Paciente/receta/".$row->idcotizacion."'  class='btn btn-sm btn-primary btn-sm sin'><i class='fa fa-coffee'></i> Recetas</a>
+            <!--a href='".base_url()."Paciente/receta/".$row->idcotizacion."'  class='btn btn-sm btn-primary btn-sm sin'><i class='fa fa-coffee'></i> Recetas</a>
              
-             <br>
+             <br-->
              <button data-toggle=\"modal\" data-target=\"#consentimiento\"
                data-idcotizacion='$row->idcotizacion'
                data-idpaciente='$idpaciente'
@@ -105,7 +105,7 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
              <br>
              
              <button type='button' class='btn btn-primary btn-sm sin' data-toggle='modal' data-target='#medidas' 
-             data-idcotizacion='".$row->idcotizacion."'> <i class='fa fa-medium'></i> Medias</button>
+             data-idcotizacion='".$row->idcotizacion."'> <i class='fa fa-medium'></i> Medidas</button>
              <br>
              <a type='button' href='".base_url()."Paciente/regtratamiento/$idpaciente/$idhistorial/$row->idcotizacion' class='btn btn-success btn-sm sin'
              data-idcotizacion='".$row->idcotizacion."'> <i class='fa fa-map-marker'></i> Agregar tratamiento</a>
@@ -140,7 +140,7 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
 </script>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog " role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Registrar Tratamientos</h5>
@@ -154,12 +154,11 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
                     <input type="text" value="<?=$idpaciente?>" hidden name="idpaciente">
                     <input type="text" value="<?=$idhistorial?>" hidden name="idhistorial">
                     <div class="form-group">
-                        <center>
+                        <!--center>
                         <table  >
                             <thead style='border: 0;padding: 0;margin: 0'>
                                 <tr style='border: 0;padding: 0;margin: 0'>
                                     <th class='sin' >Tratamientos</th>
-                                    <!--th class='sin'>Selecionar</th-->
                                     <th class='sin'>N</th>
                                     <th class='sin'>Tiempo</th>
                                     <th class='sin'>Costo/Sesion</th>
@@ -167,23 +166,66 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
                             </thead>
                             <tboby>
                                 <?php
-                                    $query=$this->db->query("SELECT * FROM tratamiento");
+                                    /*$query=$this->db->query("SELECT * FROM tratamiento");
                                     foreach ($query->result() as $row){
                                         echo "<tr style='border: 0;padding: 0;margin: 0'>
                                                     <td style='border-bottom: solid black 1px;padding: 0;margin: 0'>".$row->nombre."</td>
                                                     <!--td style='border: 0;padding: 0;margin: 0'><input style='border: 0;padding: 0;margin: 0' type='checkbox' name='t".$row->idtratamiento."' id=''> Seleccionar</td-->
-                                                    <td style='border: 0;padding: 0;margin: 0'><input style='padding: 0;margin: 0;width: 50px' type='text' name='n".$row->idtratamiento."' id=''> </td>
-                                                    <td style='border: 0;padding: 0;margin: 0'><input style='padding: 0;margin: 0;width: 50px' type='text' name='ti".$row->idtratamiento."' id=''> </td>
-                                                    <td style='border: 0;padding: 0;margin: 0'><input type='number' class='sum' value='0' style='padding: 0;margin: 0;width: 50px' type='text' name='c".$row->idtratamiento."' id=''> </td>
+                                                    <td style='border: 0;padding: 0;margin: 0'><input style='padding: 0;margin: 0;width: 50px' type='text' name='n".$row->idtratamiento."' id='' value='$row->sesiones'> </td>
+                                                    <td style='border: 0;padding: 0;margin: 0'><input style='padding: 0;margin: 0;width: 50px' type='text' name='ti".$row->idtratamiento."' id='' value=''> </td>
+                                                    <td style='border: 0;padding: 0;margin: 0'><input type='number' class='sum' value='$row->costo' style='padding: 0;margin: 0;width: 50px' type='text' name='c".$row->idtratamiento."' id=''> </td>
                                                 </tr>";
-                                    }
+                                    }*/
                                 ?>
 
                             </tboby>
-                            <!--h2>TOTAL <span id="total">0</span></h2-->
 
                         </table>
-                        </center>
+                        </center-->
+
+                        <div class="accordion sin" id="accordionExample">
+                            <?php
+                            $query=$this->db->query("SELECT * FROM tipotratamiento");
+                            foreach ($query->result() as $row){
+                                echo "<div class='card sin' >
+                                        <div class='card-header sin' id='headingTwo'>
+                                            <h2 class='mb-0 sin'>
+                                                <button class='btn btn-link collapsed sin' type='button' data-toggle='collapse' data-target='#c$row->idtipotratamiento' aria-expanded='false' aria-controls='c$row->idtipotratamiento'>
+                                                    $row->nombre
+                                                </button>
+                                            </h2>
+                                        </div>
+                                        <div id='c$row->idtipotratamiento' class='collapse sin' aria-labelledby='headingTwo' data-parent='#accordionExample'>
+                                            <div class='card-body sin'>";
+                                $query2=$this->db->query("SELECT * FROM tratamiento WHERE idtipotratamiento='$row->idtipotratamiento'");
+                                $t="<table style='width: 100%'>
+                                <tr>
+                                    
+                                    <td><b>Tratamiento/caracteristica</b></td>
+                                    <td> <b>Sessiones</b> </td>
+                                    <td> <b>Tiempo</b> </td>
+                                    <td> <b>Costo</b> </td>
+                                    <td> <b>Seleccionar</b> </td>
+                                </tr>";
+                                foreach ($query2->result() as $row2){
+                                    $t=$t."<tr>
+                                                <td>$row2->nombre $row2->caracteristica</td>
+                                                <td><input style='padding: 0;margin: 0;width: 50px' type='text' name='n".$row2->idtratamiento."' id='' value='$row2->sesiones'></td>
+                                                <td><input style='padding: 0;margin: 0;width: 50px' type='text' name='ti".$row2->idtratamiento."' id='' value='$row2->tiempo'> </td>
+                                                <td><input type='number' value='$row2->costo' style='padding: 0;margin: 0;width: 50px' type='text' name='c".$row2->idtratamiento."' id=''> </td>
+                                                <td><input style='border: 0;padding: 0;margin: 0' type='checkbox' name='t".$row2->idtratamiento."' id=''> Seleccionar</td>
+                                           </tr>";
+                                }
+                                $t=$t."</table>";
+                                echo "         $t 
+                                            </div>
+                                        </div>
+                                    </div>";
+                            }
+                            ?>
+
+
+                        </div>
 
                     </div>
                     <div class="form-group row">
@@ -200,24 +242,6 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
                         <label for="adelanto" class="col-sm-4 col-form-label">Costo/Adelanto</label>
                         <div class="col-sm-8">
                             <input type="number" name="adelanto" style="width: 100%" value="100" id="adelanto" required >
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="motivo" class="col-sm-4 col-form-label">Motivo/DX</label>
-                        <div class="col-sm-8">
-                            <input type="text" name="motivo" style="width: 100%" id="motivo"  >
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="cot" class="col-sm-4 col-form-label">COT/SUG TX</label>
-                        <div class="col-sm-8">
-                            <input type="text" name="cot" style="width: 100%"  id="cot"  >
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="ref" class="col-sm-4 col-form-label">Referencia</label>
-                        <div class="col-sm-8">
-                            <input type="text" name="ref" style="width: 100%"  id="ref"  >
                         </div>
                     </div>
                     <div class="modal-footer">

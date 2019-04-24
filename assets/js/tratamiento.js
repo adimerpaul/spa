@@ -21,12 +21,16 @@ $(document).ready(function() {
             data:datos,
             success:function (e) {
                 var datos=JSON.parse(e)[0];
-                //console.log(e);
+                console.log(e);
                 $('#idtratamiento2').val(datos.idtratamiento)
                 $('#nombre2').val(datos.nombre);
-                $('#tipo2').val(datos.idtipotratamiento);
-
-
+                $('#idtipotratamiento2').val(datos.idtipotratamiento);
+                $('#caracteristica2').val(datos.caracteristica);
+                $('#sesiones2').val(datos.sesiones);
+                $('#costo2').val(datos.costo);
+                $('#tiempo2').val(datos.tiempo);
+                $('#tipo2').val(datos.tipo);
+                $('#reposicion2').val(datos.reposicion);
             }
         })
     })

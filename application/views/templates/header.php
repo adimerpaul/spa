@@ -100,6 +100,11 @@
                                                 <i class="ti-archive"></i><span>Gestionar productos</span>
                                             </a>
                                         </li>
+                                        <li>
+                                            <a href="<?= base_url() ?>Dosificacion" aria-expanded="true">
+                                                <i class="ti-archive"></i><span>Gestionar Dosificacion</span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
 

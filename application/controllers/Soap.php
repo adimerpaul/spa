@@ -48,6 +48,11 @@ class Soap extends CI_Controller{
         //echo $plan;
         $this->db->query("INSERT INTO soap(subjetivo,objetivo,analisis,plan,idusuario,idcotizacion,monto) VALUES('$subjetivo','$objetivo','$analisis','$plan','".$_SESSION['idusuario']."','$idcotizacion','$monto')");
         $this->db->query("INSERT INTO montos(monto,idcotizacion,idtratamiento,obs,cub,idusuario) VALUES('$monto','$idcotizacion','$idtratamiento','$obs','$cub','".$_SESSION['idusuario']."')");
+        $query=$this->db->query("SELECT * FROM tratamientoreactivo WHERE idtratamiento='$idtratamiento'");
+        foreach ($query->result() as $row) {
+            $this->db->query("UPDATE reactivo  SET cantidad=cantidad-$row->cantidad 
+            WHERE idreactivo=$row->idreactivo ");
+        }
 
        // exit;
         header("Location: ".base_url()."Soap/index/$idcotizacion");

@@ -849,9 +849,10 @@ unas) VALUES (
         $fechanac=$_POST['fechanac'];
         $celular=$_POST['celular'];
         $telefono=$_POST['telefono'];
+        $referencia=$_POST['referencia'];
         $ci=$_POST['ci'];
-         $query=$this->db->query("INSERT INTO paciente(ci,nombres,apellidos,zona,direccion,fechanac,celular,telefono,idusuario) 
-VALUES ('$ci','$nombres', '$apellidos', '$zona', '$direccion', '$fechanac', '$celular','$telefono', '".$_SESSION['idusuario']."');");
+         $query=$this->db->query("INSERT INTO paciente(ci,nombres,apellidos,zona,direccion,fechanac,celular,telefono,idusuario,referencia) 
+VALUES ('$ci','$nombres', '$apellidos', '$zona', '$direccion', '$fechanac', '$celular','$telefono', '".$_SESSION['idusuario']."','$referencia');");
 
 
 /*
@@ -926,7 +927,7 @@ if($query){
 
         $query=$this->db->query("SELECT * FROM tratamiento");
         foreach ($query->result() as $row){
-            if ($_POST['c'.$row->idtratamiento]!="" AND $_POST['c'.$row->idtratamiento]!="0" ){
+            if ($_POST['t'.$row->idtratamiento]!="" AND $_POST['t'.$row->idtratamiento]!="0" ){
                 if (isset($_POST['n'.$row->idtratamiento])){
                     $n=$_POST['n'.$row->idtratamiento];
                 }else{
@@ -1044,6 +1045,7 @@ VALUES('$idcotizacion','".$row->idtratamiento."','$n','$tiempo','$costo')");
         $query=$this->db->query("DELETE FROM soap WHERE idcotizacion='$idcotizacion'");
         $query=$this->db->query("DELETE FROM receta WHERE idcotizacion='$idcotizacion'");
         $query=$this->db->query("DELETE FROM cotizacionconsetimeinto WHERE idcotizacion='$idcotizacion'");
+        $query=$this->db->query("DELETE FROM cotizacionlaboratorio WHERE idcotizacion='$idcotizacion'");
         $query=$this->db->query("DELETE FROM cotizacion WHERE idcotizacion='$idcotizacion'");
         header("Location: ".base_url()."Paciente/cotizacion/$idpaciente/$idhistorial");
     }

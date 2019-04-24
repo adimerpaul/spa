@@ -38,7 +38,9 @@
                 <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
-                <th scope="col">TOTAL : <span id="total">0</span></th>
+                <th scope="col">TOTAL : <span id="to">0</span>
+                    <input type="text" id="total" name="total" hidden>
+                </th>
             </tfoot>
         </table>
     </div>

@@ -123,11 +123,11 @@
 
             </div>
             <div class="form-group col-md-2 sinespacio" >
-                <label for="sueno" class="sinespacio">Ámbito de sueño</label>
+                <label for="sueno" class="sinespacio">Hambito de sueño</label>
                 <input type="text"  class="form-control sinespaciotexto" id="sueno" placeholder="sueño" name="sueno" >
             </div>
             <div class="form-group col-md-4 sinespacio" >
-                <label for="alimentos" class="sinespacio">Ámbito de alimentos</label>
+                <label for="alimentos" class="sinespacio">Hambito de alimentos</label>
                 <input type="text"  class="form-control sinespaciotexto" id="alimentos" placeholder="alimentos" name="alimentos" >
             </div>
             <div class="form-group col-md-2 sinespacio" >

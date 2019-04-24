@@ -42,26 +42,27 @@ $st=0;
         $query=$this->db->query("SELECT * FROM `montos` WHERE date(`fecha`)=date('$fecha') AND `idtratamiento` is NULL");
         foreach ($query->result() as $row){
                 $hora=date('Y-m-d');
-                $horaactual = strtotime(date("H:i:00",time()));
-                $mediodia = strtotime("12:00:00");
                 $idhistorial=$this->User->consulta('idhistorial','cotizacion','idcotizacion',$row->idcotizacion);
                 $idpaciente=$this->User->consulta('idpaciente','historial','idhistorial',$idhistorial);
+            $consulta=$this->User->consulta('consulta','historial','idhistorial',$idhistorial);
                 $nombres=$this->User->consulta('nombres','paciente','idpaciente',$idpaciente);
                 $apellidos=$this->User->consulta('apellidos','paciente','idpaciente',$idpaciente);
                 $celular=$this->User->consulta('celular','paciente','idpaciente',$idpaciente);
-                $referencia=$this->User->consulta('referencia','historial','idhistorial',$idhistorial);
+                $referencia=$this->User->consulta('referencia','paciente','idpaciente',$idpaciente);
                 $nombre=$this->User->consulta('nombre','usuario','idusuario',$row->idusuario);
-                if($horaactual<$mediodia){
-                    $t="M";
-                    $sm=$sm+$row->monto;
-                }else{
-                    $t="T";
-                    $st=$st+$row->monto;
-                }
+            $mediodia = strtotime("12:00:00");
+            $horaactual = strtotime(date("H:j:s",strtotime(substr($row->fecha,10,6))));
+            if($horaactual<$mediodia){
+                $t="M";
+                $sm=$sm+$row->monto;
+            }else{
+                $t="T";
+                $st=$st+$row->monto;
+            }
                 echo "<tr>
-                <th scope='col'>$t ".substr($row->fecha,10,6)."</th>
+                <th scope='col'>$t".substr($row->fecha,10,6)."</th>
                 <th scope='col'>$apellidos $nombres</th>
-                <th scope='col'></th>
+                <th scope='col'>$consulta</th>
                 <th scope='col'>$referencia</th>
                 <th scope='col'>$row->monto</th>
                 <th scope='col'>$celular</th>
@@ -83,7 +84,7 @@ $st=0;
             <tr>
                 <th scope="col">HORA</th>
                 <th scope="col">PACIENTE</th>
-                <th scope="col">TRATAMINENTO</th>
+                <th scope="col">TRATAMIENTO</th>
                 <th scope="col">OBS/RES</th>
                 <th scope="col">CUB/SES</th>
                 <th scope="col">CELULAR</th>
@@ -94,22 +95,19 @@ $st=0;
             <tbody>
             <?php
             $query=$this->db->query("
-            SELECT * FROM `montos` m
-            INNER JOIN tratamiento t ON m.idtratamiento=t.idtratamiento 
-            WHERE date(`fecha`)=date('$fecha') AND m.idtratamiento is not NULL
-            AND t.idtipotratamiento=1
+            SELECT nombres,apellidos,obs,cub,celular,t.nombre as nombret,monto,u.nombre as nombreu,m.fecha
+            FROM montos m 
+            INNER JOIN tratamiento t ON m.idtratamiento=t.idtratamiento
+            INNER JOIN cotizacion c ON c.idcotizacion=m.idcotizacion
+            INNER JOIN historial h ON h.idhistorial=c.idhistorial
+            INNER JOIN paciente p ON p.idpaciente=h.idpaciente
+            INNER JOIN usuario u ON u.idusuario=m.idusuario
+            WHERE date(m.fecha)=date('$fecha')
+            AND t.tipo='FACIAL'
             ");
             foreach ($query->result() as $row){
                 $mediodia = strtotime("12:00:00");
-                $horaactual = strtotime(date("H:i:00",time()));
-                $idhistorial=$this->User->consulta('idhistorial','cotizacion','idcotizacion',$row->idcotizacion);
-                $idpaciente=$this->User->consulta('idpaciente','historial','idhistorial',$idhistorial);
-                $nombres=$this->User->consulta('nombres','paciente','idpaciente',$idpaciente);
-                $apellidos=$this->User->consulta('apellidos','paciente','idpaciente',$idpaciente);
-                $celular=$this->User->consulta('celular','paciente','idpaciente',$idpaciente);
-                $referencia=$this->User->consulta('referencia','historial','idhistorial',$idhistorial);
-                $nombre=$this->User->consulta('nombre','usuario','idusuario',$row->idusuario);
-                $nombretratamiento=$this->User->consulta('nombre','tratamiento','idtratamiento',$row->idtratamiento);
+                $horaactual = strtotime(date("H:j:s",strtotime(substr($row->fecha,10,6))));
                 if($horaactual<$mediodia){
                     $t="M";
                     $sm=$sm+$row->monto;
@@ -117,15 +115,15 @@ $st=0;
                     $t="T";
                     $st=$st+$row->monto;
                 }
-            echo "<tr>
-                    <th scope='col' style='width: 72px'>$t ".substr($row->fecha,10,6)."</th>
-                    <th scope='col'>$apellidos $nombres</th>
-                    <th scope='col'>$nombretratamiento</th>
+                echo "<tr>
+                    <th scope='col' style='width: 72px'>$t".substr($row->fecha,10,6)."</th>
+                    <th scope='col'>$row->nombres $row->apellidos</th>
+                    <th scope='col'>$row->nombret</th>
                     <th scope='col'>$row->obs</th>
                     <th scope='col'>$row->cub</th>
-                    <th scope='col'>$celular</th>
+                    <th scope='col'>$row->celular</th>
                     <th scope='col'>$row->monto</th>
-                    <th scope='col'>$nombre</th>
+                    <th scope='col'>$row->nombreu</th>
                 </tr>";
             }
             ?>
@@ -143,7 +141,7 @@ $st=0;
             <tr>
                 <th scope="col">HORA</th>
                 <th scope="col">PACIENTE</th>
-                <th scope="col">TRATAMNIENTO</th>
+                <th scope="col">TRATAMIENTO</th>
                 <th scope="col">OBS/RES</th>
                 <th scope="col">CUB/SES</th>
                 <th scope="col">CELULAR</th>
@@ -154,22 +152,19 @@ $st=0;
             <tbody>
             <?php
             $query=$this->db->query("
-            SELECT * FROM `montos` m
-            INNER JOIN tratamiento t ON m.idtratamiento=t.idtratamiento 
-            WHERE date(`fecha`)=date('$fecha') AND m.idtratamiento is not NULL
-            AND t.idtipotratamiento=2
+            SELECT nombres,apellidos,obs,cub,celular,t.nombre as nombret,monto,u.nombre as nombreu,m.fecha
+            FROM montos m 
+            INNER JOIN tratamiento t ON m.idtratamiento=t.idtratamiento
+            INNER JOIN cotizacion c ON c.idcotizacion=m.idcotizacion
+            INNER JOIN historial h ON h.idhistorial=c.idhistorial
+            INNER JOIN paciente p ON p.idpaciente=h.idpaciente
+            INNER JOIN usuario u ON u.idusuario=m.idusuario
+            WHERE date(m.fecha)=date('$fecha')
+            AND t.tipo='CORPORAL'
             ");
             foreach ($query->result() as $row){
                 $mediodia = strtotime("12:00:00");
-                $horaactual = strtotime(date("H:i:00",time()));
-                $idhistorial=$this->User->consulta('idhistorial','cotizacion','idcotizacion',$row->idcotizacion);
-                $idpaciente=$this->User->consulta('idpaciente','historial','idhistorial',$idhistorial);
-                $nombres=$this->User->consulta('nombres','paciente','idpaciente',$idpaciente);
-                $apellidos=$this->User->consulta('apellidos','paciente','idpaciente',$idpaciente);
-                $celular=$this->User->consulta('celular','paciente','idpaciente',$idpaciente);
-                $referencia=$this->User->consulta('referencia','historial','idhistorial',$idhistorial);
-                $nombre=$this->User->consulta('nombre','usuario','idusuario',$row->idusuario);
-                $nombretratamiento=$this->User->consulta('nombre','tratamiento','idtratamiento',$row->idtratamiento);
+                $horaactual = strtotime(date("H:j:s",strtotime(substr($row->fecha,10,6))));
                 if($horaactual<$mediodia){
                     $t="M";
                     $sm=$sm+$row->monto;
@@ -178,14 +173,14 @@ $st=0;
                     $st=$st+$row->monto;
                 }
                 echo "<tr>
-                    <th scope='col' style='width: 72px'>$t ".substr($row->fecha,10,6)."</th>
-                    <th scope='col'>$apellidos $nombres</th>
-                    <th scope='col'>$nombretratamiento</th>
+                    <th scope='col' style='width: 72px'>$t".substr($row->fecha,10,6)."</th>
+                    <th scope='col'>$row->nombres $row->apellidos</th>
+                    <th scope='col'>$row->nombret</th>
                     <th scope='col'>$row->obs</th>
                     <th scope='col'>$row->cub</th>
-                    <th scope='col'>$celular</th>
+                    <th scope='col'>$row->celular</th>
                     <th scope='col'>$row->monto</th>
-                    <th scope='col'>$nombre</th>
+                    <th scope='col'>$row->nombreu</th>
                 </tr>";
             }
             ?>
@@ -246,7 +241,7 @@ $st=0;
                     <td ><?=$sm?></td>
                 </tr>
                 <tr>
-                    <th class="thead-dark">Mañana:</th>
+                    <th class="thead-dark">Tarde:</th>
                     <td ><?=$st?></td>
                 </tr>
                 <tr>

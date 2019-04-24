@@ -49,7 +49,7 @@
             <td>".$row->celular."</td>
             <td> 
             <a href='".base_url()."Paciente/reghistorial/".$row->idpaciente."' class='btn btn-sm btn-success text-white sinespaciotexto' ><i class='fa fa-file-archive-o'></i> Reg. Historial</a>
-            <a type='button' class='btn btn-warning text-white btn-sm sinespaciotexto' href='".base_url()."Paciente/escoger/".$row->idpaciente."' > <i class=\"fa fa-align-justify\"></i>Historial</a>
+            <a type='button' class='btn btn-warning text-white btn-sm sinespaciotexto' href='".base_url()."Paciente/escoger/".$row->idpaciente."' > <i class=\"fa fa-align-justify\"></i>Historiales</a>
              </td>
         </tr>";
     }
