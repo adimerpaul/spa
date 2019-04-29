@@ -162,9 +162,9 @@
                             <select name="idpaciente" id="paciente" class="form-control" required>
                                 <option value="">Seleccionar...</option>
                                 <?php
-                                $query=$this->db->query("SELECT * FROM paciente ORDER BY nombres");
+                                $query=$this->db->query("SELECT * FROM paciente ORDER BY apellidos");
                                 foreach ($query->result() as $row){
-                                    echo "<option value='$row->idpaciente'>$row->nombres $row->apellidos</option>";
+                                    echo "<option value='$row->idpaciente'>$row->apellidos $row->nombres</option>";
                                 }
                                 ?>
                             </select>

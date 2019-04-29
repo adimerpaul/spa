@@ -12,7 +12,7 @@ class Consulta extends CI_Controller{
         if ($_SESSION['tipo']==""){
             header("Location: ".base_url());
         }
-        $data['title']='Controlar consulta';
+        $data['title']='Reporte diario';
         if (isset($_POST['fecha'])){
             $fecha=$_POST['fecha'];
         }else{
@@ -49,5 +49,27 @@ class Consulta extends CI_Controller{
         }
         $pdf->Output();
 
+    }
+
+    public function insertdeudas(){
+        $comprador=$_POST['comprador'];
+        $detalle=$_POST['detalle'];
+        $celular=$_POST['celular'];
+        $monto=$_POST['monto'];
+
+        if (isset($_POST['tipo'])){
+            $tipo="ADELANTO";
+        }else{
+            $tipo="PAGO DEUDA";
+        }
+        $this->db->query("INSERT INTO deudas(comprador,detalle,celular,monto,idusuario,tipo)VALUES(
+        '$comprador',
+        '$detalle',
+        '$celular',
+        '$monto',
+        '".$_SESSION['idusuario']."',
+        '$tipo'
+        )");
+        header('Location: '.base_url().'Consulta');
     }
 }

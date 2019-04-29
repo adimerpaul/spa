@@ -23,8 +23,7 @@
 <!-- bootstrap 4 js -->
 <script src="<?=base_url()?>assets/js/popper.min.js"></script>
 <script src="<?=base_url()?>assets/js/bootstrap.min.js"></script>
-
-
+<script src="<?=base_url()?>assets/js/bootstrap4-toggle.min.js"></script>
 
 <script src="<?=base_url()?>assets/js/owl.carousel.min.js"></script>
 <script src="<?=base_url()?>assets/js/metisMenu.min.js"></script>

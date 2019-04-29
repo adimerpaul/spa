@@ -21,6 +21,7 @@ class Welcome extends CI_Controller {
             $_SESSION['idusuario']=$row->idusuario;
             $_SESSION['nombre']=$row->nombre;
             echo $_SESSION['nombre'];
+            $this->db->query("INSERT INTO ingreso(idusuario) VALUES('$row->idusuario')");
             header("Location: ".base_url()."Dashboard");
         }else{
             $data['tipo']='error';
@@ -29,6 +30,8 @@ class Welcome extends CI_Controller {
         }
     }
     function logout(){
+        $idusuario=$_SESSION['idusuario'];
+        $this->db->query("INSERT INTO ingreso(idusuario,tipo) VALUES('$idusuario','SALIDA')");
 	    session_destroy();
 	    header("Location: ".base_url());
     }

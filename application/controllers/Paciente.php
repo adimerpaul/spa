@@ -919,10 +919,10 @@ if($query){
         //if($adelanto!=""){
         $this->db->query("INSERT INTO montos(monto,idcotizacion,idusuario) VALUES('$adelanto','$idcotizacion','".$_SESSION['idusuario']."')");
         $idmonto=$this->db->insert_id();
-        $motivo=$_POST['motivo'];
-        $cot=$_POST['cot'];
-        $ref=$_POST['ref'];
-        $this->db->query("INSERT INTO consulta(motivo,cot,ref,idmonto) VALUES('$motivo','$cot','$ref','$idmonto')");
+        //$motivo=$_POST['motivo'];
+        //$cot=$_POST['cot'];
+        //$ref=$_POST['ref'];
+        //$this->db->query("INSERT INTO consulta(motivo,cot,ref,idmonto) VALUES('$motivo','$cot','$ref','$idmonto')");
         //}
 
         $query=$this->db->query("SELECT * FROM tratamiento");

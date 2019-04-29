@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="<?=base_url()?>assets/images/icon/favicon.ico">
     <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap4-toggle.min.css">
     <link rel="stylesheet" href="<?=base_url()?>assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="<?=base_url()?>assets/css/themify-icons.css">
     <link rel="stylesheet" href="<?=base_url()?>assets/css/metisMenu.css">
@@ -61,7 +62,7 @@
                         </li>
                         <li>
                             <a href="<?=base_url()?>Consulta" aria-expanded="true">
-                                <i class="ti-tag"></i><span>Consulta medica </span>
+                                <i class="ti-tag"></i><span>Reporte diario </span>
                             </a>
                         </li>
                         <li>
