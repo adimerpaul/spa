@@ -52,7 +52,7 @@
             <td>".$row->hasta."</td>
             <td>".$row->nrotramite."</td>
             <td>".$row->nroautorizacion."</td>
-            <td>".$row->nrofactura."</td>
+            <td>".$row->nrofacturai."</td>
 
             <td> ".$t."</td>
             <td> 

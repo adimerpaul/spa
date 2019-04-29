@@ -72,7 +72,7 @@
                     <div class="form-row" style="padding: 0px;margin: 0px;border: 0px">
                         <div class="form-group col-md-2" style="padding: 0px;margin: 0px;border: 0px" >
                             <label for="nombres" style="padding: 0px;margin: 0px;border: 0px">nombres</label>
-                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="nombres" placeholder="nombres" name="nombres" required>
+                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="nombres" placeholder="nombres" name="nombres" >
                         </div>
                         <div class="form-group col-md-2" style="padding: 0px;margin: 0px;border: 0px">
                             <label for="apellidos" style="padding: 0px;margin: 0px;border: 0px">apellidos</label>
@@ -98,7 +98,7 @@
                         </div>
                         <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
                             <label for="celular">celular</label>
-                            <input type="number" style="padding: 0px;margin: 0px" class="form-control" id="celular" placeholder="celular" name="celular" required>
+                            <input type="number" style="padding: 0px;margin: 0px" class="form-control" id="celular" placeholder="celular" name="celular" >
                         </div>
                         <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
                             <label for="telefono">telefono</label>
@@ -106,7 +106,7 @@
                         </div>
                         <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
                             <label for="referencia">referencia</label>
-                            <select name="referencia" id="referencia" required style="padding: 0px;margin: 0px" class="form-control">
+                            <select name="referencia" id="referencia"  style="padding: 0px;margin: 0px" class="form-control">
                                 <option value="">Seleccionar..</option>
                                 <option value="Facebook">Facebook</option>
                                 <option value="Periódico">Periódico</option>

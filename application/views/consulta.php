@@ -3,14 +3,14 @@ $dias = array("domingo","lunes","martes","mi&eacute;rcoles","jueves","viernes","
 $sm=0;
 $st=0;
 ?>
-<form class="form-inline">
+<form class="form-inline" method="post" ACTION="<?=base_url()?>Consulta/index">
     <div class="form-group mb-2">
         <label for="staticEmail2" class="sr-only">Email</label>
         <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="Fecha">
     </div>
     <div class="form-group mx-sm-3 mb-2">
         <label for="fecha" class="sr-only">Password</label>
-        <input type="date" class="form-control" id="fecha" value="<?=$fecha?>" >
+        <input type="date" class="form-control" id="fecha" name="fecha" value="<?=$fecha?>" >
     </div>
     <button type="submit" class="btn btn-success mb-2 btn-sm"> <i class="fa fa-check"></i> Consultar </button>
     <button type="submit" class="btn btn-info mb-2 btn-sm"> <i class="fa fa-print"></i> Imprimir </button>
@@ -60,13 +60,13 @@ $st=0;
                 $st=$st+$row->monto;
             }
                 echo "<tr>
-                <th scope='col'>$t".substr($row->fecha,10,6)."</th>
-                <th scope='col'>$apellidos $nombres</th>
-                <th scope='col'>$consulta</th>
-                <th scope='col'>$referencia</th>
-                <th scope='col'>$row->monto</th>
-                <th scope='col'>$celular</th>
-                <th scope='col'>$nombre</th>
+                <td scope='col'>$t".substr($row->fecha,10,6)."</td>
+                <td scope='col'>$apellidos $nombres</td>
+                <td scope='col'>$consulta</td>
+                <td scope='col'>$referencia</td>
+                <td scope='col'>$row->monto</td>
+                <td scope='col'>$celular</td>
+                <td scope='col'>$nombre</td>
             </tr>";
         }
         ?>
@@ -116,14 +116,14 @@ $st=0;
                     $st=$st+$row->monto;
                 }
                 echo "<tr>
-                    <th scope='col' style='width: 72px'>$t".substr($row->fecha,10,6)."</th>
-                    <th scope='col'>$row->nombres $row->apellidos</th>
-                    <th scope='col'>$row->nombret</th>
-                    <th scope='col'>$row->obs</th>
-                    <th scope='col'>$row->cub</th>
-                    <th scope='col'>$row->celular</th>
-                    <th scope='col'>$row->monto</th>
-                    <th scope='col'>$row->nombreu</th>
+                    <td scope='col' style='width: 72px'>$t".substr($row->fecha,10,6)."</td>
+                    <td scope='col'>$row->nombres $row->apellidos</td>
+                    <td scope='col'>$row->nombret</td>
+                    <td scope='col'>$row->obs</td>
+                    <td scope='col'>$row->cub</td>
+                    <td scope='col'>$row->celular</td>
+                    <td scope='col'>$row->monto</td>
+                    <td scope='col'>$row->nombreu</td>
                 </tr>";
             }
             ?>
@@ -173,14 +173,14 @@ $st=0;
                     $st=$st+$row->monto;
                 }
                 echo "<tr>
-                    <th scope='col' style='width: 72px'>$t".substr($row->fecha,10,6)."</th>
-                    <th scope='col'>$row->nombres $row->apellidos</th>
-                    <th scope='col'>$row->nombret</th>
-                    <th scope='col'>$row->obs</th>
-                    <th scope='col'>$row->cub</th>
-                    <th scope='col'>$row->celular</th>
-                    <th scope='col'>$row->monto</th>
-                    <th scope='col'>$row->nombreu</th>
+                    <td scope='col' style='width: 72px'>$t".substr($row->fecha,10,6)."</td>
+                    <td scope='col'>$row->nombres $row->apellidos</td>
+                    <td scope='col'>$row->nombret</td>
+                    <td scope='col'>$row->obs</td>
+                    <td scope='col'>$row->cub</td>
+                    <td scope='col'>$row->celular</td>
+                    <td scope='col'>$row->monto</td>
+                    <td scope='col'>$row->nombreu</td>
                 </tr>";
             }
             ?>
@@ -199,13 +199,44 @@ $st=0;
                 <th scope="col">HORA</th>
                 <th scope="col">COMPRADOR</th>
                 <th scope="col">DETALLE DEL PRODUCTO</th>
+                <th scope="col">CANTIDAD</th>
+
                 <th scope="col">CELULAR</th>
                 <th scope="col">COSTO</th>
                 <th scope="col">VENDEDOR</th>
             </tr>
             </thead>
             <tbody>
+            <?php
+            $query=$this->db->query("SELECT f.fecha,nombres,apellidos,pr.nombre,cantidad,celular,subtotal,u.nombre as usuarionombre
+ FROM factura f
+            INNER JOIN paciente p ON p.idpaciente=f.idpaciente
+            INNER JOIN detallefactura d ON d.idfactura=f.idfactura
+            INNER JOIN producto pr ON pr.idproducto=d.idproducto
+            INNER JOIN usuario u ON u.idusuario=f.idusuario
+            WHERE date(f.fecha)=date('$fecha')");
+            foreach ($query->result() as $row){
+                $mediodia = strtotime("12:00:00");
+                $horaactual = strtotime(date("H:j:s",strtotime(substr($row->fecha,10,6))));
+                if($horaactual<$mediodia){
+                    $t="M";
+                    $sm=$sm+$row->subtotal;
+                }else{
+                    $t="T";
+                    $st=$st+$row->subtotal;
+                }
 
+                echo "<tr>
+                <td scope='col'>$t".substr($row->fecha,10,6)."</td>
+                <td scope='col'>$row->apellidos $row->nombres</td>
+                <td scope='col'>$row->nombre</td>
+                <td scope='col'>$row->cantidad</td>
+                <td scope='col'>$row->celular</td>
+                <td scope='col'>$row->subtotal</td>
+                <td scope='col'>$row->usuarionombre</td>
+            </tr>";
+            }
+            ?>
             </tbody>
         </table>
     </div>
@@ -227,6 +258,7 @@ $st=0;
             </tr>
             </thead>
             <tbody>
+
             </tbody>
         </table>
     </div>

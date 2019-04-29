@@ -69,6 +69,11 @@
                                 <i class="ti-bag"></i><span>Realizar venta</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="<?=base_url()?>Listaventa" aria-expanded="true">
+                                <i class="ti-files"></i><span>Listado venta</span>
+                            </a>
+                        </li>
                         <?php
                             if ($_SESSION['tipo']=='ADMIN') {
                                 ?>

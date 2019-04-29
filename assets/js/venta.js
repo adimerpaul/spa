@@ -35,6 +35,34 @@ $('#precio').keyup(function (e) {
     var cantidad=$('#cantidad').val();
     $('#subtotal').val(precio*cantidad);
 });
+$('#a').hide();
+$('#n').hide();
+    $('#ci').keyup(function (e) {
+        var datos={
+            'ci':$('#ci').val()
+        };
+        $.ajax({
+             data:datos,
+            type: 'POST',
+            url: 'Venta/cliente',
+            success:function (e) {
+                //console.log(e);
+                var datos=JSON.parse(e)[0];
+                console.log(datos);
+                if (datos !=null){
+                    $('#r').show();
+                    $('#razon').val(datos.apellidos+' '+datos.nombres);
+                    $('#a').hide();
+                    $('#n').hide();
+                }else{
+                    $('#r').hide();
+                    $('#razon').val('');
+                    $('#a').show();
+                    $('#n').show();
+                }
+            }
+         });
+    });
 var total=0;
 var con=0;
 $('#formulario').submit(function (e) {

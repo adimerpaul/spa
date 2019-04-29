@@ -1,16 +1,39 @@
 <form method="post" action="<?=base_url()?>Venta/imprimir">
-    <div class="form-group">
+    <!--div class="form-group">
         <label for="exampleInputEmail1">COMPRADOR</label>
         <select name="idpaciente" id="idpaciente" class="form-control" required>
             <option value="">Selecionar...</option>
             <?php
-            $query=$this->db->query("SELECT * FROM paciente");
+            $query=$this->db->query("SELECT * FROM paciente ORDER BY apellidos");
             foreach ($query->result() as $row){
-                echo "<option value='$row->idpaciente'>$row->nombres $row->apellidos</option>";
+                echo "<option value='$row->idpaciente'>$row->apellidos $row->nombres</option>";
             }
-
             ?>
         </select>
+    </div-->
+    <div class="form-group row">
+        <label for="ci" class="col-sm-3 col-form-label">CI/NIT</label>
+        <div class="col-sm-9">
+            <input type="text" id="ci" name="ci" class="form-control" placeholder="CI/NIT">
+        </div>
+    </div>
+    <div class="form-group row" id="r">
+        <label for="razon" class="col-sm-3 col-form-label">Razon Social</label>
+        <div class="col-sm-9">
+            <input type="text" id="razon" name="razon"  class="form-control" placeholder="Nombre razon">
+        </div>
+    </div>
+    <div class="form-group row" id="a">
+        <label for="apellidos" class="col-sm-3 col-form-label">apellidos o razon</label>
+        <div class="col-sm-9">
+            <input type="text" id="apellidos" name="apellidos"  class="form-control" placeholder="apellidos">
+        </div>
+    </div>
+    <div class="form-group row" id="n">
+        <label for="nombres" class="col-sm-3 col-form-label">nombres</label>
+        <div class="col-sm-9">
+            <input type="text" id="nombres" name="nombres"  class="form-control" placeholder="nombres">
+        </div>
     </div>
     <div class="form-group">
         <label for="exampleInputPassword1">PRODUCTOS

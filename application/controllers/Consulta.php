@@ -8,12 +8,14 @@
 require('fpdf.php');
 class Consulta extends CI_Controller{
 
-    function index($fecha=""){
+    function index(){
         if ($_SESSION['tipo']==""){
             header("Location: ".base_url());
         }
         $data['title']='Controlar consulta';
-        if ($fecha==""){
+        if (isset($_POST['fecha'])){
+            $fecha=$_POST['fecha'];
+        }else{
             $fecha=date("Y-m-d");
         }
         $data['fecha']=$fecha;

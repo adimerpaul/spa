@@ -36,7 +36,7 @@ class Dosificacion extends CI_Controller
         $hasta = $_POST['hasta'];
         $nrotramite = $_POST['nrotramite'];
         $nroautorizacion = $_POST['nroautorizacion'];
-        $nrofactura = $_POST['nrofactura'];
+        $nrofacturai = $_POST['nrofactura'];
         $llave = $_POST['llave'];
         $leyenda = $_POST['leyenda'];
         $estado = $_POST['estado'];
@@ -47,7 +47,7 @@ class Dosificacion extends CI_Controller
         hasta='$hasta',
         nrotramite='$nrotramite',
         nroautorizacion='$nroautorizacion',
-        nrofactura='$nrofactura',
+        nrofactura='$nrofacturai',
         llave='$llave',
         leyenda='$leyenda',
         estado='$estado'
@@ -77,11 +77,11 @@ class Dosificacion extends CI_Controller
         $hasta = $_POST['hasta'];
         $nrotramite = $_POST['nrotramite'];
         $nroautorizacion = $_POST['nroautorizacion'];
-        $nrofactura = $_POST['nrofactura'];
+        $nrofacturai = $_POST['nrofactura'];
         $llave = $_POST['llave'];
         $leyenda = $_POST['leyenda'];
-        $query = $this->db->query("INSERT INTO dosificacion(desde,hasta,nrotramite,nroautorizacion,nrofactura,llave,leyenda) 
-VALUES ('$desde','$hasta','$nrotramite','$nroautorizacion','$nrofactura','$llave','$leyenda');");
+        $query = $this->db->query("INSERT INTO dosificacion(desde,hasta,nrotramite,nroautorizacion,nrofacturai,llave,leyenda) 
+VALUES ('$desde','$hasta','$nrotramite','$nroautorizacion','$nrofacturai','$llave','$leyenda');");
         header("Location: ".base_url().'Dosificacion');
     }
 }
