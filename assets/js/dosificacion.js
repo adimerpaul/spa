@@ -27,7 +27,7 @@ $(document).ready(function() {
                 $('#hasta2').val(datos.hasta);
                 $('#nrotramite2').val(datos.nrotramite);
                 $('#nroautorizacion2').val(datos.nroautorizacion);
-                $('#nrofactura2').val(datos.nrofactura);
+                $('#nrofactura2').val(datos.nrofacturai);
                 $('#llave2').val(datos.llave);
                 $('#leyenda2').val(datos.leyenda);
                 $('#estado2').val(datos.estado);

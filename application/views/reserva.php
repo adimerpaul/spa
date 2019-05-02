@@ -106,7 +106,7 @@
                     url: 'Reserva/insert',
                     data: '&title='+title+'&start='+startTime+'&end='+endTime,
                     type: "POST",
-                    success: function(json) {
+                    success: function() {
                         $("#calendar").fullCalendar('renderEvent',
                             {
                                 id: json.id,

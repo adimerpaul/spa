@@ -47,7 +47,7 @@ class Dosificacion extends CI_Controller
         hasta='$hasta',
         nrotramite='$nrotramite',
         nroautorizacion='$nroautorizacion',
-        nrofactura='$nrofacturai',
+        nrofacturai='$nrofacturai',
         llave='$llave',
         leyenda='$leyenda',
         estado='$estado'

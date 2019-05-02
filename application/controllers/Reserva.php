@@ -43,7 +43,7 @@ class Reserva extends CI_Controller{
 
         $title=$this->User->consulta('nombres','paciente','idpaciente',$idpaciente)." ".$this->User->consulta('apellidos','paciente','idpaciente',$idpaciente);
 
-        $this->db->query("INSERT INTO `events` (
+        $query=$this->db->query("INSERT INTO `events` (
                     `title` ,
                     `start` ,
                     `end` ,
@@ -59,7 +59,11 @@ class Reserva extends CI_Controller{
                     '".$_SESSION['idusuario']."',
                     '".$_POST['descripcion']."'
                     )");
-        header("Location: ".base_url()."Reserva");
+        header('Content-Type: application/json');
+        echo '{"id":"'.$this->db->insert_id().'","title":"'.$title.'"}';
+        exit;
+
+        //header("Location: ".base_url()."Reserva");
         //header('Content-Type: application/json');
         //echo '{"id":"'.$this->db->insert_id().'"}';
         //exit;

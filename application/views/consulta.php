@@ -13,7 +13,7 @@ $st=0;
         <input type="date" class="form-control" id="fecha" name="fecha" value="<?=$fecha?>" >
     </div>
     <button type="submit" class="btn btn-success mb-2 btn-sm"> <i class="fa fa-check"></i> Consultar </button>
-    <button type="submit" class="btn btn-info mb-2 btn-sm"> <i class="fa fa-print"></i> Imprimir </button>
+    <a href="<?=base_url()?>Consulta/printA/<?=$fecha?>"  class="btn btn-info mb-2 btn-sm"> <i class="fa fa-print"></i> Imprimir </a>
     <a href="" class="btn btn-warning mb-2 btn-sm"> <i class="fa fa-rebel"></i> Actualizar </a>
 
 </form>
@@ -203,7 +203,6 @@ $st=0;
                 <th scope="col">COMPRADOR</th>
                 <th scope="col">DETALLE DEL PRODUCTO</th>
                 <th scope="col">CANTIDAD</th>
-
                 <th scope="col">CELULAR</th>
                 <th scope="col">COSTO</th>
                 <th scope="col">VENDEDOR</th>
@@ -217,7 +216,8 @@ $st=0;
             INNER JOIN detallefactura d ON d.idfactura=f.idfactura
             INNER JOIN producto pr ON pr.idproducto=d.idproducto
             INNER JOIN usuario u ON u.idusuario=f.idusuario
-            WHERE date(f.fecha)=date('$fecha')");
+            WHERE date(f.fecha)=date('$fecha')
+            ORDER BY f.fecha");
             foreach ($query->result() as $row){
                 $mediodia = strtotime("12:00:00");
                 $horaactual = strtotime(date("H:j:s",strtotime(substr($row->fecha,10,6))));
@@ -313,7 +313,7 @@ $st=0;
 <div class="row">
 
     <div class="col-sm-6">
-        <center><h8>INGRESOS</h8></center><div class="col-sm-12">
+        <center><h8><b>INGRESOS</b></h8></center><div class="col-sm-12">
             <table border="1" style="width: 100%">
                 <tr>
                     <th colspan="2" class="thead-dark">Mañana:</th>
@@ -340,23 +340,25 @@ $st=0;
             </table>
         </div>
     </div>
-    <div class="col-sm-6">
-        <center><h8>EGRESOS</h8></center><div class="col-sm-12">
-            <table border="1" style="width: 100%">
-                <tr>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>7</td>
-                </tr>
-
-            </table>
+    <div class="col-sm-6 row">
+        <div class="col-sm-12 text-center">
+            <h8><b>EGRESOS</b></h8>
         </div>
+        <?php
+        $query=$this->db->query("SELECT e.idegreso,e.monto,t.nombre FROM egreso e
+ INNER JOIN usuario u ON u.idusuario=e.idusuario
+ INNER JOIN tratamiento t ON t.idtratamiento=e.idtratamiento
+ WHERE date(fecha)=date('$fecha')");
+        foreach ($query->result() as $row){
+          echo "
+                <div class='col-sm-4'>
+                   $row->monto $row->nombre
+                   <button type='button' data-idegreso='$row->idegreso' class='btn btn-warning btn-sm' style='padding: 1px;' data-toggle='modal' data-target='#egreso'>
+                        <i class='fa fa-pencil'></i>
+                    </button>
+                </div>";
+        }
+        ?>
     </div>
 
 </div>
@@ -417,3 +419,56 @@ $st=0;
         </div>
     </div>
 </div>
+
+<!-- Button trigger modal -->
+
+<div class="modal fade" id="egreso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modificar Egreso</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="<?=base_url()?>Consulta/modificaregreso" method="post">                    <div class="form-group row">
+                        <label for="monto2" class="col-form-label col-sm-4">Monto</label>
+                        <input type="text" id="idegreso2" name="idegreso" hidden>
+                        <div class="col-sm-8">
+                            <input type="number" name="monto" class="form-control" id="monto2" placeholder="monto2" required>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-warning">Modificar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script !src="">
+    window.onload = function() {
+        $('#egreso').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var idegreso = button.data('idegreso') // Extract info from data-* attributes
+            var datos={
+                'idegreso':idegreso
+            }
+            $.ajax({
+                type:'POST',
+                data:datos,
+                url:'Consulta/datosegreso',
+                success:function (e) {
+                    var dato=JSON.parse(e)[0];
+                    console.log( dato);
+                    $('#monto2').val(dato.monto);
+                    $('#idegreso2').val(dato.idegreso);
+                }
+            });
+        })
+    };
+</script>

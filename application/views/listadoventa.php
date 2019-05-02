@@ -48,7 +48,7 @@ INNER JOIN dosificacion d ON f.idpaciente=p.idpaciente
             <td>".$row->total."</td>
             <td> ".$row->apellidos." ".$row->nombres."</td>
             <td> 
-           <a href='".base_url()."Listaventa/printfactura/$row->idfactura' class='btn btn-sm btn-outline-info sinespaciotexto' ><i class='fa fa-print'></i> Imprimir</a>
+           <a href='".base_url()."Venta/printfactura/$row->idfactura' class='btn btn-sm btn-outline-info sinespaciotexto' ><i class='fa fa-print'></i> Imprimir</a>
             </td>
         </tr>";
     }

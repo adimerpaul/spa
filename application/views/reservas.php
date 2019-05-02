@@ -15,6 +15,7 @@
 <script>
 
     document.addEventListener('DOMContentLoaded', function() {
+        var elimina;
         var calendarEl = document.getElementById('calendar');
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -39,6 +40,7 @@
                 // change the border color just for fun
                 info.el.style.borderColor = 'red';
                 */
+
                 $('#calendarModal').modal();
                 var idpaciente=(info.event._def.extendedProps.idpaciente);
                 var descripcion=(info.event._def.extendedProps.descripcion);
@@ -49,6 +51,13 @@
                 $('#start2').val(moment(start).format('YYYY-MM-DDTHH:mm'));
                 $('#end2').val(moment(end).format('YYYY-MM-DDTHH:mm'));
                 $('#id2').val(info.event.id);
+                //$('#id3').val(info.event);
+                elimina=info.event;
+                //console.log(info.event);
+
+                /*if (confirm('delete event?')) {
+                    info.event.remove()
+                }*/
             },
             select: function(info) {
                 //alert('selected ' + info.startStr + ' to ' + info.endStr);
@@ -81,7 +90,66 @@
             $('#end').val(hora);
         });
 
+        $('#eliminar').on('click', function(e){
+            // We don't want this to act as a link so cancel the link action
+            e.preventDefault();
+            doDelete();
+        });
 
+        $("#formulario").submit(function(e){
+            var idpaciente=$('#idpaciente').val();
+            //var title = $('#title').val();
+            var start= $('#start').val();
+            var end = $('#end').val();
+            var descripcion = $('#descripcion').val();
+            var datos={
+                'idpaciente':idpaciente,
+                'start':start,
+                'end':end,
+                'descripcion':descripcion
+            }
+            //console.log(idpaciente);
+
+            $.ajax({
+                url: 'Reserva/insert',
+                data: datos,
+                type: "POST",
+                success: function(json) {
+                    console.log(json.id);
+                        calendar.addEvent({
+                            title: json.title,
+                            id: json.id,
+                            start: start,
+                            end: end
+                        })
+                    calendar.unselect()
+                    $("#registrar").modal('hide');
+                }
+            });
+            return false;
+        });
+
+        function doDelete(){
+            $("#calendarModal").modal('hide');
+            var eventID = $('#id2').val();
+            $.ajax({
+                url: 'Reserva/delete',
+                data: 'id='+eventID,
+                type: "POST",
+                success: function(json) {
+                    if(json == 1){
+                        //$("#calendar").fullCalendar('removeEvents',eventID);
+                        //console.log(eventID);
+                        //$('#calendar').fullCalendar('removeEvents');
+                        //$("#calendar").destroy(eventID);
+                        if (confirm('Seguro de eliminar?')) {
+                            elimina.remove()
+                        }
+                    }else
+                        return false;
+                }
+            });
+        }
     });
 
 </script>
@@ -97,7 +165,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" action="<?=base_url()?>Reserva/update">
+                <form  method="post" action="<?=base_url()?>Reserva/update">
                     <div class="form-group row">
                         <label for="idpaciente2" class="col-sm-3 col-form-label">Paciente</label>
                         <div class="col-sm-9">
@@ -133,7 +201,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-danger" > <i class="fa fa-trash-o"></i> Eliminar</button>
+                        <button id="eliminar" type="button" class="btn btn-danger" > <i class="fa fa-trash-o"></i> Eliminar</button>
                         <button type="submit" class="btn btn-warning"> <i class="fa fa-pencil"></i> Modificar</button>
                     </div>
                 </form>
@@ -155,11 +223,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" action="<?=base_url()?>Reserva/insert">
+                <form id="formulario" method="post" action2="<?=base_url()?>Reserva/insert">
                     <div class="form-group row">
-                        <label for="paciente" class="col-sm-3 col-form-label">Paciente</label>
+                        <label for="idpaciente" class="col-sm-3 col-form-label">Paciente</label>
                         <div class="col-sm-9">
-                            <select name="idpaciente" id="paciente" class="form-control" required>
+                            <select name="idpaciente" id="idpaciente" class="form-control" required>
                                 <option value="">Seleccionar...</option>
                                 <?php
                                 $query=$this->db->query("SELECT * FROM paciente ORDER BY apellidos");
