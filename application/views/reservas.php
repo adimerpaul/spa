@@ -21,7 +21,7 @@
         var calendar = new FullCalendar.Calendar(calendarEl, {
             plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list' ],
             header: {
-                left: 'prev,next today custom1',
+                left: 'prev,next today custom1 actualizar',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
             },
@@ -71,6 +71,12 @@
                     text: 'Registrar reserva',
                     click: function() {
                         $('#registrar').modal();
+                    }
+                },
+                actualizar:{
+                    text: 'Actualizar',
+                    click: function() {
+                        location.reload();
                     }
                 }
             }
