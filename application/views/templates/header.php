@@ -111,6 +111,11 @@
                                                 <i class="ti-archive"></i><span>Gestionar Dosificacion</span>
                                             </a>
                                         </li>
+                                        <li>
+                                            <a href="<?= base_url() ?>Tipotratamiento" aria-expanded="true">
+                                                <i class="ti-agenda"></i><span>Tipo Traramiento</span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
 
