@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-05-2019 a las 22:56:51
+-- Tiempo de generación: 06-05-2019 a las 22:38:20
 -- Versión del servidor: 10.1.36-MariaDB
 -- Versión de PHP: 7.2.11
 
@@ -95,9 +95,9 @@ CREATE TABLE `cotizacion` (
 
 INSERT INTO `cotizacion` (`idcotizacion`, `fecha`, `idhistorial`, `diagnostico`, `programa`) VALUES
 (72, '2019-04-29 19:53:44', 4, 'melasma llameal', '1.dieta'),
-(73, '2019-04-30 17:18:06', 1, 'melasma llameal', '1 dieta'),
 (74, '2019-04-30 17:38:20', 3, 'melasma llameal', '1dieta'),
-(75, '2019-04-30 19:11:32', 1, '', '');
+(75, '2019-04-30 19:11:32', 1, '', ''),
+(76, '2019-05-06 16:14:21', 2, 'melasma llameal', '1. dieta 2.ejercicio');
 
 -- --------------------------------------------------------
 
@@ -146,9 +146,9 @@ CREATE TABLE `cotizaciontratamiento` (
 
 INSERT INTO `cotizaciontratamiento` (`idcotizacion`, `idtratamiento`, `n`, `tiempo`, `costo`) VALUES
 (72, 29, '6', '10 min', '150'),
-(73, 29, '6', '10 min', '150'),
 (74, 29, '6', '10 min', '150'),
-(75, 27, '6', '15min', '180');
+(75, 27, '6', '15min', '180'),
+(76, 29, '6', '10 min', '150');
 
 -- --------------------------------------------------------
 
@@ -288,7 +288,8 @@ INSERT INTO `detallefactura` (`idfactura`, `idproducto`, `cantidad`, `subtotal`,
 (76, 1, 1, 150, 150),
 (77, 5, 1, 160, 160),
 (78, 1, 1, 150, 150),
-(79, 5, 1, 160, 160);
+(79, 5, 1, 160, 160),
+(80, 5, 2, 320, 160);
 
 -- --------------------------------------------------------
 
@@ -314,7 +315,9 @@ CREATE TABLE `deudas` (
 INSERT INTO `deudas` (`iddeudas`, `fecha`, `comprador`, `detalle`, `celular`, `monto`, `idusuario`, `tipo`) VALUES
 (6, '2019-04-29 19:07:15', 'adimer', 'adelanto meso', '5261245', 120, 1, 'ADELANTO'),
 (7, '2019-04-29 19:08:07', 'adimer', 'adelnato sofware', '', 150, 1, 'PAGO DEUDA'),
-(8, '2019-04-30 17:17:40', 'JOSe', 'pago de agua', '', 100, 1, 'PAGO DEUDA');
+(8, '2019-04-30 17:17:40', 'JOSe', 'pago de agua', '', 100, 1, 'PAGO DEUDA'),
+(9, '2019-05-06 16:20:58', 'LA LUZ', 'PAGO DE LUZ', '', 100, 1, 'PAGO DEUDA'),
+(10, '2019-05-06 16:21:35', 'DON DANIEL', 'adelanto meso', '', 100, 1, 'ADELANTO');
 
 -- --------------------------------------------------------
 
@@ -362,7 +365,8 @@ CREATE TABLE `egreso` (
 INSERT INTO `egreso` (`idegreso`, `fecha`, `monto`, `idusuario`, `idtratamiento`) VALUES
 (1, '2019-04-30 17:38:31', 50, 1, 24),
 (2, '2019-04-30 17:39:59', 150, 1, 24),
-(3, '2019-04-30 17:55:56', 50, 1, 29);
+(3, '2019-04-30 17:55:56', 50, 1, 29),
+(4, '2019-05-06 16:15:50', 100, 1, 29);
 
 -- --------------------------------------------------------
 
@@ -397,7 +401,9 @@ INSERT INTO `events` (`id`, `start`, `end`, `title`, `idusuario`, `idpaciente`, 
 (48, '2019-05-02 08:00:00', '2019-05-02 08:30:00', ' CINE GRAN REX', 1, 4, ''),
 (54, '2019-05-05 06:30:00', '2019-05-05 07:00:00', 'PEPE FERNANDEZ', 1, 2, ''),
 (61, '2019-05-04 07:00:00', '2019-05-04 07:30:00', 'ADIMER PAUL CHAMBI AJATA', 1, 5, ''),
-(71, '2019-05-03 07:00:00', '2019-05-03 07:30:00', 'ADIMER PAUL CHAMBI AJATA', 1, 5, '');
+(71, '2019-05-03 07:00:00', '2019-05-03 07:30:00', 'ADIMER PAUL CHAMBI AJATA', 1, 5, ''),
+(75, '2019-05-09 09:00:00', '2019-05-09 09:30:00', ' CINE GRAN REX', 1, 4, ''),
+(76, '2019-05-10 09:00:00', '2019-05-10 09:30:00', 'ADIMER PAUL CHAMBI AJATA', 1, 5, '');
 
 -- --------------------------------------------------------
 
@@ -499,7 +505,8 @@ INSERT INTO `factura` (`idfactura`, `idpaciente`, `fecha`, `total`, `codigocontr
 (76, 1, '2019-05-02 15:51:54', 150, '4A-4C-F2-81', 3, 61, 1),
 (77, 1, '2019-05-02 16:41:53', 160, 'D6-7F-12-C7-82', 3, 62, 1),
 (78, 1, '2019-05-02 16:47:27', 150, '09-63-81-C5-77', 3, 63, 1),
-(79, 1, '2019-05-02 16:48:42', 160, '6F-C6-7F-CB-17', 3, 64, 1);
+(79, 1, '2019-05-02 16:48:42', 160, '6F-C6-7F-CB-17', 3, 64, 1),
+(80, 1, '2019-05-06 16:17:19', 320, 'BD-01-C5-92-A7', 3, 65, 1);
 
 -- --------------------------------------------------------
 
@@ -628,7 +635,8 @@ INSERT INTO `ingreso` (`idingreso`, `fecha`, `idusuario`, `tipo`) VALUES
 (8, '2019-05-02 11:47:49', 3, 'ENTRADA'),
 (9, '2019-05-02 15:51:41', 1, 'ENTRADA'),
 (10, '2019-05-02 16:40:21', 1, 'ENTRADA'),
-(11, '2019-05-02 16:51:10', 3, 'ENTRADA');
+(11, '2019-05-02 16:51:10', 3, 'ENTRADA'),
+(12, '2019-05-06 15:57:18', 1, 'ENTRADA');
 
 -- --------------------------------------------------------
 
@@ -739,14 +747,13 @@ CREATE TABLE `montos` (
 INSERT INTO `montos` (`idmonto`, `monto`, `fecha`, `idcotizacion`, `idtratamiento`, `obs`, `cub`, `idusuario`) VALUES
 (18, 100, '2019-04-29 23:53:44', 72, NULL, '', '', 1),
 (19, 0, '2019-04-29 23:54:53', 72, 29, 'NINGUNO', '4/3', 1),
-(20, 100, '2019-04-30 21:18:06', 73, NULL, '', '', 1),
-(21, 0, '2019-04-30 21:18:36', 73, 29, '', '', 1),
 (22, 100, '2019-04-30 21:38:20', 74, NULL, '', '', 1),
 (23, 0, '2019-04-30 21:38:31', 74, 29, '', '', 1),
 (24, 110, '2019-04-30 21:39:59', 74, 29, '', '', 1),
-(25, 0, '2019-04-30 21:55:56', 73, 29, '', '', 1),
 (26, 100, '2019-04-30 23:11:32', 75, NULL, '', '', 1),
-(27, 0, '2019-04-30 23:11:56', 75, 27, '', '', 1);
+(27, 0, '2019-04-30 23:11:56', 75, 27, '', '', 1),
+(28, 100, '2019-05-06 20:14:21', 76, NULL, '', '', 1),
+(29, 100, '2019-05-06 20:15:50', 76, 29, 'falta de vitamintas', '3/2', 1);
 
 -- --------------------------------------------------------
 
@@ -801,7 +808,7 @@ CREATE TABLE `producto` (
 INSERT INTO `producto` (`idproducto`, `nombre`, `precio`, `stock`) VALUES
 (1, 'NEUROVIRIL', 150, 96),
 (3, 'MENTISAN', 20, 0),
-(5, 'PROTECTOR SOLAR COREANO', 160, 38),
+(5, 'PROTECTOR SOLAR COREANO', 160, 36),
 (6, 'PROTECTOR SOLAR VEGANO', 230, 12);
 
 -- --------------------------------------------------------
@@ -932,11 +939,10 @@ INSERT INTO `soap` (`idsoap`, `idcotizacion`, `subjetivo`, `objetivo`, `analisis
 (28, 66, 'paciente enfermo', '', '', '', '2019-04-24 17:51:36', 1, 0),
 (30, 67, 'paciente enfermo', 'acude a llevar ', 'tener', '', '2019-04-29 17:39:05', 1, 100),
 (31, 72, 'paciente enfermo', 'acude a llevar ', 'analisi', 'plan', '2019-04-29 19:54:53', 1, 0),
-(32, 73, 'paciente enfermo', '', '', '', '2019-04-30 17:18:36', 1, 0),
 (33, 74, 'paciente enfermo', '', '', '', '2019-04-30 17:38:31', 1, 0),
 (34, 74, 'paciente enfermo', '', '', '', '2019-04-30 17:39:59', 1, 110),
-(35, 73, 'paciente enfermo', '', '', '', '2019-04-30 17:55:56', 1, 0),
-(36, 75, 'paciente enfermo', '', '', '', '2019-04-30 19:11:56', 1, 0);
+(36, 75, 'paciente enfermo', '', '', '', '2019-04-30 19:11:56', 1, 0),
+(37, 76, 'paciente enfermo', '', '', '', '2019-05-06 16:15:50', 1, 100);
 
 -- --------------------------------------------------------
 
@@ -1335,7 +1341,7 @@ ALTER TABLE `corporal`
 -- AUTO_INCREMENT de la tabla `cotizacion`
 --
 ALTER TABLE `cotizacion`
-  MODIFY `idcotizacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `idcotizacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT de la tabla `cotizacionlaboratorio`
@@ -1347,7 +1353,7 @@ ALTER TABLE `cotizacionlaboratorio`
 -- AUTO_INCREMENT de la tabla `deudas`
 --
 ALTER TABLE `deudas`
-  MODIFY `iddeudas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `iddeudas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `dosificacion`
@@ -1359,13 +1365,13 @@ ALTER TABLE `dosificacion`
 -- AUTO_INCREMENT de la tabla `egreso`
 --
 ALTER TABLE `egreso`
-  MODIFY `idegreso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idegreso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT de la tabla `facial`
@@ -1377,7 +1383,7 @@ ALTER TABLE `facial`
 -- AUTO_INCREMENT de la tabla `factura`
 --
 ALTER TABLE `factura`
-  MODIFY `idfactura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `idfactura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT de la tabla `foto`
@@ -1395,7 +1401,7 @@ ALTER TABLE `historial`
 -- AUTO_INCREMENT de la tabla `ingreso`
 --
 ALTER TABLE `ingreso`
-  MODIFY `idingreso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `idingreso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `laboratorio`
@@ -1419,7 +1425,7 @@ ALTER TABLE `medida`
 -- AUTO_INCREMENT de la tabla `montos`
 --
 ALTER TABLE `montos`
-  MODIFY `idmonto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `idmonto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT de la tabla `paciente`
@@ -1449,7 +1455,7 @@ ALTER TABLE `receta`
 -- AUTO_INCREMENT de la tabla `soap`
 --
 ALTER TABLE `soap`
-  MODIFY `idsoap` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `idsoap` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT de la tabla `tipolaboratorio`
