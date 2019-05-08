@@ -36,8 +36,10 @@ class Tratamientos extends CI_Controller{
         $tipo = $_POST['tipo'];
         $idtipotratamiento = $_POST['idtipotratamiento'];
         $tiempo = $_POST['tiempo'];
-        $query = $this->db->query("INSERT INTO tratamiento(nombre,idtipotratamiento,caracteristica,sesiones,costo,tiempo,tipo) 
-VALUES ('$nombre','$idtipotratamiento','$caracteristica','$sesiones','$costo','$tiempo','$tipo');");
+        $reposicion=$_POST['reposicion'];
+        $query = $this->db->query("INSERT INTO tratamiento(nombre,idtipotratamiento,caracteristica,sesiones,costo,tiempo,tipo,reposicion) 
+VALUES ('$nombre','$idtipotratamiento','$caracteristica','$sesiones','$costo','$tiempo','$tipo','$reposicion');");
+
         header("Location: ".base_url().'Tratamientos');
     }
     function datos(){

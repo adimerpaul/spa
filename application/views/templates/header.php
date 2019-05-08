@@ -52,12 +52,12 @@
                     <ul class="metismenu" id="menu">
                         <li>
                             <a href="<?=base_url()?>Paciente" aria-expanded="true">
-                                <i class="ti-dashboard"></i><span>Atención a clientes </span>
+                                <i class="ti-dashboard"></i><span>Pacientes </span>
                             </a>
                         </li>
                         <li>
                             <a href="<?=base_url()?>Reserva" aria-expanded="true">
-                                <i class="ti-time"></i><span>Realizar reserva </span>
+                                <i class="ti-time"></i><span> Reservas </span>
                             </a>
                         </li>
                         <li>
@@ -67,7 +67,7 @@
                         </li>
                         <li>
                             <a href="<?=base_url()?>Venta" aria-expanded="true">
-                                <i class="ti-bag"></i><span>Realizar venta</span>
+                                <i class="ti-bag"></i><span> Ventas</span>
                             </a>
                         </li>
                         <li>
@@ -83,37 +83,38 @@
                                     <ul class="collapse">
                                         <li>
                                             <a href="<?= base_url() ?>Usuarios" aria-expanded="true">
-                                                <i class="ti-user"></i><span>Gestionar usuarios</span>
+                                                <i class="ti-user"></i><span> Usuarios</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="<?= base_url() ?>Consentimientos" aria-expanded="true">
-                                                <i class="ti-files"></i><span>Gestionar consentimiento</span>
+                                                <i class="ti-files"></i><span> Consentimiento</span>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="<?= base_url() ?>Tipotratamiento" aria-expanded="true">
+                                                <i class="ti-agenda"></i><span>Tipo Traramiento</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="<?= base_url() ?>Tratamientos" aria-expanded="true">
-                                                <i class="ti-rss"></i><span>Gestionar tratamientos</span>
+                                                <i class="ti-rss"></i><span> Tratamientos</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="<?= base_url() ?>Inventario" aria-expanded="true">
-                                                <i class="ti-map"></i><span>Gestionar inventario</span>
+                                                <i class="ti-map"></i><span> inventario</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="<?= base_url() ?>Productos" aria-expanded="true">
-                                                <i class="ti-archive"></i><span>Gestionar productos</span>
+                                                <i class="ti-archive"></i><span> Productos</span>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="<?= base_url() ?>Dosificacion" aria-expanded="true">
-                                                <i class="ti-archive"></i><span>Gestionar Dosificacion</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="<?= base_url() ?>Tipotratamiento" aria-expanded="true">
-                                                <i class="ti-agenda"></i><span>Tipo Traramiento</span>
+                                                <i class="ti-archive"></i><span> Dosificacion FACTURA</span>
                                             </a>
                                         </li>
                                     </ul>
