@@ -26,6 +26,8 @@ $(document).ready(function() {
                 $('#nombre2').val(datos.nombre);
                 $('#cantidad2').val(datos.cantidad);
                 $('#presentacion2').val(datos.presentacion);
+                $('#stock2').val(datos.stock);
+                $('#unidadesporpaciente2').val(datos.unidadesporpaciente);
             }
         })
     })

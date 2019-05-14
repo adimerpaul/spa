@@ -56,7 +56,10 @@ VALUES('$repocicion','".$_SESSION['idusuario']."','$idtratamiento')");
 
         $query=$this->db->query("SELECT * FROM tratamientoreactivo WHERE idtratamiento='$idtratamiento'");
         foreach ($query->result() as $row) {
-            $this->db->query("UPDATE reactivo  SET cantidad=cantidad-$row->cantidad 
+            $s=$this->User->consulta('unidadesporpaciente','reactivo','idreactivo=',$row->reactivo);
+            $this->db->query("UPDATE reactivo  SET cantidad=cantidad-$row->  
+            WHERE idreactivo=$row->idreactivo ");
+            $this->db->query("UPDATE reactivo  SET stock=stock-$s 
             WHERE idreactivo=$row->idreactivo ");
         }
 

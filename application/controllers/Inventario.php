@@ -32,8 +32,11 @@ class Inventario extends CI_Controller{
         $nombre = ($_POST['nombre']);
         $cantidad = $_POST['cantidad'];
         $presentacion = $_POST['presentacion'];
-        $query = $this->db->query("INSERT INTO reactivo(nombre,cantidad,presentacion) 
-VALUES ('$nombre','$cantidad','$presentacion');");
+        $stock = $_POST['stock'];
+        $unidadesporpaciente = $_POST['unidadesporpaciente'];
+        $unidadesporpaciente=1/$unidadesporpaciente;
+        $query = $this->db->query("INSERT INTO reactivo(nombre,cantidad,presentacion,stock,unidadesporpaciente) 
+VALUES ('$nombre','$cantidad','$presentacion','$stock','$unidadesporpaciente');");
         header("Location: ".base_url().'Inventario');
     }
     function datos(){
@@ -50,10 +53,15 @@ VALUES ('$nombre','$cantidad','$presentacion');");
         $idreactivo=$_POST['idreactivo'];
         $cantidad = $_POST['cantidad'];
         $presentacion = $_POST['presentacion'];
+        $stock = $_POST['stock'];
+        $unidadesporpaciente = $_POST['unidadesporpaciente'];
+        $unidadesporpaciente=1/$unidadesporpaciente;
         $query = $this->db->query("UPDATE reactivo SET 
         nombre='$nombre',
         cantidad='$cantidad',
-        presentacion='$presentacion'
+        presentacion='$presentacion',
+        stock='$stock',
+        unidadesporpaciente='$unidadesporpaciente'
         WHERE
         idreactivo='$idreactivo';
 ");
