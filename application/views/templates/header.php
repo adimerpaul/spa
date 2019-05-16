@@ -94,7 +94,7 @@
 
                                         <li>
                                             <a href="<?= base_url() ?>Tipotratamiento" aria-expanded="true">
-                                                <i class="ti-agenda"></i><span>Tipo Traramiento</span>
+                                                <i class="ti-agenda"></i><span>Tipo Tratamiento</span>
                                             </a>
                                         </li>
                                         <li>

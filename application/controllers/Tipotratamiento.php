@@ -43,33 +43,16 @@ VALUES ('$nombre','$descripcion','$costo');");
     }
     function update()
     {
-        if ($_SESSION['tipo'] == "") {
-            header("Location: " . base_url());
-        }
         $nombre = strtoupper($_POST['nombre']);
-        $idtratamiento=$_POST['idtratamiento'];
-        $tipo = $_POST['tipo'];
-        $reposicion = $_POST['reposicion'];
-        $tiempo = $_POST['tiempo'];
-        $idtipotratamiento = $_POST['idtipotratamiento'];
-        $caracteristica = $_POST['caracteristica'];
-        $sesiones = $_POST['sesiones'];
-        $costo = $_POST['costo'];
-        $query = $this->db->query("UPDATE tratamiento SET 
-        nombre='$nombre',
-        idtipotratamiento='$tipo',
-        caracteristica='$caracteristica',
-        sesiones='$sesiones',
-        costo='$costo',
-        tiempo='$tiempo',
-        idtipotratamiento='$idtipotratamiento',
-        tipo='$tipo',
-        reposicion='$reposicion'
-        WHERE
-        idtratamiento='$idtratamiento';
-");
-
-        header("Location: ".base_url().'Tratamientos');
+        $idtipotratamiento = strtoupper($_POST['idtipotratamiento']);
+        $descripcion = strtoupper($_POST['descripcion']);
+        $costo = strtoupper($_POST['costo']);
+        $query = $this->db->query("UPDATE tipotratamiento SET
+nombre='$nombre',
+descripcion='$descripcion',
+costo='$costo') 
+WHERE idtipotratamiento='$idtipotratamiento';");
+        header("Location: ".base_url().'Tipotratamiento');
     }
     function delete($id){
         if ($_SESSION['tipo'] == "") {

@@ -63,6 +63,9 @@
             }
         })
     }
+    window.onload=function (e) {
+
+    }
 
 </script>
 <!-- Modal -->
@@ -117,56 +120,22 @@
             <div class="modal-body">
                 <form method="post" action="<?=base_url()?>Tratamientos/update" style="padding: 0px;margin: 0px;border: 0px">
                     <div class="form-row" style="padding: 0px;margin: 0px;border: 0px">
-                        <div class="form-group col-md-6" style="padding: 0px;margin: 0px;border: 0px" >
-                            <label for="nombre2" style="padding: 0px;margin: 0px;border: 0px">Nombre</label>
-                            <input type="text" name="idtratamiento" id="idtratamiento2">
+                        <div class="form-group col-md-12" style="padding: 0px;margin: 0px;border: 0px" >
+                            <label for="nombre2" style="padding: 0px;margin: 0px;border: 0px">nombre</label>
                             <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="nombre2" placeholder="nombre" name="nombre" required>
                         </div>
-                        <div class="form-group col-md-6" style="padding: 0px;margin: 0px;border: 0px" >
-                            <label for="caracteristica2" style="padding: 0px;margin: 0px;border: 0px">caracteristica</label>
-                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="caracteristica2" placeholder="caracteristica" name="caracteristica" required>
+                        <div class="form-group col-md-12" style="padding: 0px;margin: 0px;border: 0px" >
+                            <label for="descripcion2" style="padding: 0px;margin: 0px;border: 0px">descripcion</label>
+                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="descripcion2" placeholder="descripcion" name="descripcion" required>
                         </div>
-                        <div class="form-group col-md-6" style="padding: 0px;margin: 0px;border: 0px" >
-                            <label for="sesiones2" style="padding: 0px;margin: 0px;border: 0px">sesiones</label>
-                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="sesiones2" placeholder="sesiones" name="sesiones" required>
-                        </div>
-                        <div class="form-group col-md-6" style="padding: 0px;margin: 0px;border: 0px" >
+                        <div class="form-group col-md-12" style="padding: 0px;margin: 0px;border: 0px" >
                             <label for="costo2" style="padding: 0px;margin: 0px;border: 0px">costo</label>
                             <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="costo2" placeholder="costo" name="costo" required>
-                        </div>
-                        <div class="form-group col-md-6" style="padding: 0px;margin: 0px;border: 0px" >
-                            <label for="tiempo2" style="padding: 0px;margin: 0px;border: 0px">Tiempo</label>
-                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="tiempo2" placeholder="tiempo" name="tiempo" required>
-                        </div>
-                        <div class="form-group col-md-6"  >
-                            <label for="tipo2" style="padding: 0px;margin: 0px;border: 0px">Tipo</label>
-                            <select class="form-control" name="tipo" id="tipo2" required>
-                                <option value="">Selecionar..</option>
-                                <option value="FACIAL">FACIAL</option>
-                                <option value="CORPORAL">CORPORAL</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-6" >
-                            <label for="idtipotratamiento2">Tipo Traramiento</label> <br>
-                            <select required name="idtipotratamiento" id="idtipotratamiento2" class="form-control">
-                                <option value="">Seleccionar...</option>
-                                <?php
-                                $query=$this->db->query("SELECT * FROM tipotratamiento");
-                                foreach ($query->result() as $row){
-                                    echo "<option value='$row->idtipotratamiento'>$row->nombre</option>";
-                                }
-
-                                ?>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-6"  >
-                            <label for="reposicion2" style="padding: 0px;margin: 0px;border: 0px">Reposicion</label>
-                            <input class="form-control" name="reposicion" id="reposicion2" required>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-warning">Update</button>
+                        <button type="submit" class="btn btn-success">Guardar</button>
                     </div>
                 </form>
 
