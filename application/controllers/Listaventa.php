@@ -11,6 +11,19 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 class Listaventa extends CI_Controller{
     function index()
     {
+        $anio=date('Y');
+        $mes=date('m');
+        if (isset($_POST['anio'])){
+            $anio=$_POST['anio'];
+        }
+        if (isset($_POST['mes'])){
+            $mes=$_POST['mes'];
+        }
+        $data['anio']=$anio;
+        $data['mes']=$mes;
+        //echo $mes;
+        //exit;
+
         if ($_SESSION['tipo'] == "") {
             header("Location: " . base_url());
         }
@@ -32,6 +45,14 @@ class Listaventa extends CI_Controller{
 <script src='" . base_url() . "assets/js/buttons.print.min.js'></script>
 <script src='" . base_url() . "assets/js/dosificacion.js'></script>";
         $this->load->view('templates/footer', $data);
+    }
+    public function anular($id){
+        if ($_SESSION['tipo'] == "") {
+            header("Location: " . base_url());
+        }
+        $query=$this->db->query("UPDATE factura SET total=0 WHERE idfactura='$id'");
+        header("Location: " . base_url()."Listaventa");
+
     }
     function printfactura($idfactura){
         $nombre_impresora = "POS";

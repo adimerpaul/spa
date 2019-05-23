@@ -91,7 +91,11 @@
                                                 <i class="ti-files"></i><span> Consentimiento</span>
                                             </a>
                                         </li>
-
+                                        <li>
+                                            <a href="<?= base_url() ?>Indicaciones" aria-expanded="true">
+                                                <i class="ti-apple"></i><span> Indicaciones</span>
+                                            </a>
+                                        </li>
                                         <li>
                                             <a href="<?= base_url() ?>Tipotratamiento" aria-expanded="true">
                                                 <i class="ti-agenda"></i><span>Tipo Tratamiento</span>

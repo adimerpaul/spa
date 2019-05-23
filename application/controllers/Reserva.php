@@ -5,7 +5,7 @@
  * Date: 31/01/2019
  * Time: 19:41
  */
-
+require('fpdf.php');
 class Reserva extends CI_Controller{
     function index(){
         if ($_SESSION['tipo']==""){
@@ -108,6 +108,40 @@ class Reserva extends CI_Controller{
             echo 1;
         }
         exit;
+    }
+    function imprimir($idindicaciones,$idpaciente,$hora){
+        $pdf = new FPDF('P','mm','Letter');
+        $hora=str_replace('T',' ',$hora);
+
+
+        $nombres=$this->User->consulta('nombres','paciente','idpaciente',$idpaciente);
+        $apellidos=$this->User->consulta('apellidos','paciente','idpaciente',$idpaciente);
+        //$ci=$this->User->consulta('nombres','paciente','idpaciente',$idpaciente);
+        $query=$this->db->query("SELECT * FROM indicaciones WHERE idindicaciones=$idindicaciones");
+        $row=$query->row();
+        $nombre=$row->titulo;
+        $contenido=$row->contenido;
+
+        $texto= htmlspecialchars_decode($contenido, ENT_NOQUOTES);
+        $pdf->AddPage();
+        $pdf->Image('assets/img/spa.png',0,0,216);
+        $pdf->Ln(19);
+        $pdf->SetFont('Times','B',10);
+        $pdf->Cell(5);
+        $pdf->MultiCell(185,4,utf8_decode($nombre),'B','C' );
+        $pdf->SetFont('Times','',10);
+        $pdf->Ln();
+
+        $pdf->Cell(11,4,utf8_decode('Oruro, '.date("d/m/Y")));
+        $pdf->Ln();
+        $pdf->MultiCell(0,4,utf8_decode("PACIENTE : $nombres $apellidos "));
+        $pdf->SetFont('Times','B',10);
+        $pdf->MultiCell(0,4,utf8_decode("FECHA DE SU PROXIMA REVISION $hora"));
+        $pdf->SetFont('Times','',10);
+        $pdf->Ln();
+        $pdf->MultiCell(0,4, utf8_decode($texto));
+        $pdf->Ln();$pdf->Cell(75);
+        $pdf->Output();
     }
 
 }

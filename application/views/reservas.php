@@ -122,12 +122,14 @@
                 type: "POST",
                 success: function(json) {
                     console.log(json.id);
-                        calendar.addEvent({
-                            title: json.title,
-                            id: json.id,
-                            start: start,
-                            end: end
-                        })
+                    calendar.addEvent({
+                        title: json.title,
+                        id: json.id,
+                        start: start,
+                        end: end,
+                        idpaciente:idpaciente,
+                        descripcion:descripcion
+                    })
                     calendar.unselect()
                     $("#registrar").modal('hide');
                 }
@@ -136,26 +138,34 @@
         });
 
         function doDelete(){
-            $("#calendarModal").modal('hide');
-            var eventID = $('#id2').val();
-            $.ajax({
-                url: 'Reserva/delete',
-                data: 'id='+eventID,
-                type: "POST",
-                success: function(json) {
-                    if(json == 1){
-                        //$("#calendar").fullCalendar('removeEvents',eventID);
-                        //console.log(eventID);
-                        //$('#calendar').fullCalendar('removeEvents');
-                        //$("#calendar").destroy(eventID);
-                        if (confirm('Seguro de eliminar?')) {
+            if (confirm('Seguro de eliminar?')) {
+
+                $("#calendarModal").modal('hide');
+                var eventID = $('#id2').val();
+                $.ajax({
+                    url: 'Reserva/delete',
+                    data: 'id='+eventID,
+                    type: "POST",
+                    success: function(json) {
+                        if(json == 1){
+                            //$("#calendar").fullCalendar('removeEvents',eventID);
+                            //console.log(eventID);
+                            //$('#calendar').fullCalendar('removeEvents');
+                            //$("#calendar").destroy(eventID);
+
                             elimina.remove()
-                        }
-                    }else
-                        return false;
-                }
-            });
+
+                        }else
+                            return false;
+                    }
+                });
+            }
         }
+        $('#idindicaciones2').change(function (e) {
+            $('#print').show();
+            $('#print').prop('href',window.location.href+'/imprimir/'+$('#idindicaciones2').val()+'/'+$('#idpaciente2').val()+'/'+$('#start2').val());
+        });
+        $('#print').hide();
     });
 
 </script>
@@ -205,6 +215,23 @@
                             <input type="text" class="form-control" id="descripcion2" name="descripcion">
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="idindicaciones2" class="col-sm-3 col-form-label">Indicaciones</label>
+                        <div class="col-sm-6">
+                            <select name="idindicaciones" id="idindicaciones2" class="form-control" required>
+                                <option value="">Seleccionar...</option>
+                                <?php
+                                $query=$this->db->query("SELECT * FROM indicaciones");
+                                foreach ($query->result() as $row){
+                                    echo "<option value='$row->idindicaciones'>$row->titulo</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <a href="" id="print" class="btn btn-info"><i class="fa fa-print"></i> Print</a>
+                        </div>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button id="eliminar" type="button" class="btn btn-danger" > <i class="fa fa-trash-o"></i> Eliminar</button>
@@ -247,13 +274,13 @@
                     <div class="form-group row">
                         <label for="start" class="col-sm-3 col-form-label">Inicio</label>
                         <div class="col-sm-9">
-                        <input type="datetime-local" class="form-control" id="start"  required name="start">
+                            <input type="datetime-local" class="form-control" id="start"  required name="start">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="end" class="col-sm-3 col-form-label">Fin</label>
                         <div class="col-sm-9">
-                        <input type="datetime-local" class="form-control" id="end" required name="end">
+                            <input type="datetime-local" class="form-control" id="end" required name="end">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -262,6 +289,7 @@
                             <input type="text" class="form-control" id="descripcion" name="descripcion">
                         </div>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                         <button type="submit" class="btn btn-success">Guardar</button>

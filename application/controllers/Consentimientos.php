@@ -17,7 +17,7 @@ class Consentimientos extends CI_Controller{
         $this->load->view('templates/header',$data);
         $this->load->view('consentimientos');
         $data['tipo']="info";
-        $data['msg']="Bienvenidos a gestinar usuarios";
+        $data['msg']="Gestionar consentimientos";
         $data['js']="
 <script src='".base_url()."assets/js/jquery.dataTables.min.js'></script>
 <script src='".base_url()."assets/js/dataTables.buttons.min.js'></script>
