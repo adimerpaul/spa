@@ -75,6 +75,11 @@
                                 <i class="ti-files"></i><span>Listado venta</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="<?=base_url()?>Filtros" aria-expanded="true">
+                                <i class="ti-export"></i><span>Filtrados</span>
+                            </a>
+                        </li>
                         <?php
                             if ($_SESSION['tipo']=='ADMIN') {
                                 ?>
