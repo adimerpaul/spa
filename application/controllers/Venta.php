@@ -25,7 +25,7 @@ class Venta extends CI_Controller{
         $this->load->view('venta');
         $data['tipo']="info";
         $data['msg']="Gestionar Venta";
-        $data['js']="
+        $data['js']="printfactura2
 <script src='".base_url()."assets/js/venta.js'></script>";
         $this->load->view('templates/footer',$data);
     }
@@ -82,13 +82,13 @@ VALUES ('$nombre','$tipo');");
         $hasta = $row->hasta;
         $nrotramite = $row->nrotramite;
         $nroautorizacion = $row->nroautorizacion;
-        $nrofactura = $row->nrofacturai;
+        $nrofacturai = $row->nrofacturai;
         $llave = $row->llave;
         $leyenda = $row->leyenda;
         $iddosificacion = $row->iddosificacion;
-        $query=$this->db->query("SELECT count(*)+1 as cantidad FROM factura WHERE iddosificacion=$iddosificacion");
+        $query=$this->db->query("SELECT count(*) as cantidad FROM factura WHERE iddosificacion=$iddosificacion");
         $row=$query->row();
-        $numerodefactura=$row->cantidad;
+        $numerodefactura=$row->cantidad+$nrofacturai;
         $class2 = new ControlCode();
         $nitci="170444028";
         $fecha=date("Ymd");
@@ -441,19 +441,199 @@ WHERE f.idfactura='$idfactura'");
 
 // create new PDF document
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+//        $pdf->SetFont('times', 'BI', 20, '', 'false');
 
 // remove default header/footer
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
         $pdf->AddPage();
         $pdf->SetFont('times', '', 9);
+        $pdf->Image('img/fac2.jpg', 3, 3, 203, 135, 'JPG');
 
         $query=$this->db->query("SELECT * FROM detallefactura d 
 INNER JOIN producto p ON p.idproducto=d.idproducto
 WHERE d.idfactura='$idfactura'");
         $t="";
         foreach ($query->result() as $row){
-            $t='<tr>
+            $t=$t.'<tr>
+                <td>'.$row->idproducto.'</td>
+                <td>'.$row->nombre.'</td>
+                <td>'.$row->cantidad.'</td>
+                <td>'.$row->precio.'</td>
+                <td>'.$row->subtotal.'</td>
+                </tr>';
+        }
+
+        $html='<!--table>
+<tr align="center" >
+<td>
+Lo ultimo en tecnologia estetica sin cirugia<br>
+        CALLE BOLIVAR ENTRE POTOSI y 6 DE OCTUBRE NRO. 440(ZONA: CENTRAL)<br>
+        Teléfono 5210229 Celular: 60413300<br>
+</td>
+<td>
+        <small style="font-weight: bold;font-size: 15px">FACTURA</small> <br>
+        
+        ORURO-BOLIVIA<br>
+</td>
+<td>
+<table border="1">
+<tr>
+<td>
+<b>NIT: 170444028 </b><br>
+FACTURA N° '.$nrofactura.' <br>
+AUTORIZACION N° '.$nroautorizacion.' <br>
+ <b> ORIGINAL CLIENTE</b>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table-->
+<div style="text-align: right;padding-right: 100px">
+'.$nroautorizacion.' <br>
+'.$nrofactura.' <br>
+</div>
+
+
+<table border="">
+<tr>
+<td>
+<table>
+<tr>
+<td>
+ <b>Oruro:</b> '.$fecha.' <br>
+ <b>Señores (es)</b> '.$apellidos.' '.$nombres.'
+</td>
+<td>
+ <b>CI/NIT:</b> '.$ci.'
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<table border="0">
+<tr>
+<td><b>CODIGO</b></td>
+<td><b>DESCRIPCION</b></td>
+<td><b>CANTIDAD</b></td>
+<td><b>PRECIO UNITARIO</b></td>
+<td><b>PRECIO TOTAL</b></td>
+</tr>
+'.$t.'
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td><b>TOTAL:</b></td>
+<td>'.$total.'</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td><b>DESCUENTO:</b></td>
+<td>0</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td><b>NETO TOTAL:</b></td>
+<td>'.$total.'</td>
+</tr>
+
+</table>
+<br>
+<b>SON: </b>'.$c->convertir($entero).' '.$decimal.'/100 Bs. <br>
+<b>CODIGO DE CONTROL:</b> '.$codigocontrol.' <br>
+<b>FECHA LIMITE DE EMISION:</b> '.$hasta.' <br>
+<div align="center">
+<img src="temp/test.png" alt="qr" width="70"> <br>
+ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAIS. EL USO ILICITO DE ESTA SERA SANCIONADO DE ACUERDO A LEY
+</div>
+'.$leyenda.' <br>
+<b>PUNTO:</b> '.gethostname().' <br>
+<b>USUARIO:</b> '.$_SESSION['nombre'].' <br>
+<b>NUMERO:</b> '.$idfactura.' <br>  
+';
+        // set font
+        $pdf->SetFont('helvetica', '', 9);
+        $pdf->Cell(165, 0, '', 0, 0, 'C', 0, '', 0);
+        $pdf->Cell(22, 0, $nroautorizacion, 0, 0, 'R', 0, '', 0);
+        $pdf->Cell(165, 0, '', 0, 1, 'C', 0, '', 0);
+
+        $pdf->Cell(165, 0, '', 0, 0, 'C', 0, '', 0);
+        $pdf->Cell(22, 0, $nrofactura, 0, 0, 'R', 0, '', 0);
+        $pdf->Cell(165, 0, '', 0, 1, 'C', 0, '', 0);
+
+        $pdf->Ln();
+        $pdf->Ln();
+        $pdf->Ln();
+        $pdf->Ln();
+        $pdf->Ln();
+        $pdf->Ln();
+        $pdf->Cell(66, 0, '', 0, 0, 'C', 0, '', 0);
+        $pdf->Cell(120, 0, $apellidos.' '.$nombres, 0, 0, 'L', 0, '', 0);
+        $pdf->Cell(165, 0, '', 0, 1, 'C', 0, '', 0);
+        $pdf->Ln();
+        $pdf->Cell(14, 0, date('d', strtotime($fecha)), 0, 0, 'C', 0, '', 0);
+        $pdf->Cell(14, 0, date('m', strtotime($fecha)), 0, 0, 'C', 0, '', 0);
+        $pdf->Cell(14, 0, date('Y', strtotime($fecha)), 0, 0, 'C', 0, '', 0);
+        $pdf->Cell(20, 0, '', 0, 0, 'C', 0, '', 0);
+        $pdf->Cell(100, 0, $ci, 0, 1, 'L', 0, '', 0);
+
+//        $pdf->writeHTML($html, true, false, true, false, '');
+
+//Close and output PDF document
+        $pdf->Output('Factura.pdf', 'I');
+
+    }
+    public function printfactura3($idfactura=''){
+        $query=$this->db->query("SELECT * FROM factura f
+INNER JOIN dosificacion d ON f.iddosificacion=d.iddosificacion
+INNER JOIN paciente p ON p.idpaciente=f.idpaciente
+WHERE f.idfactura='$idfactura'");
+        $row=$query->row();
+        $nrofactura=$row->nrofactura;
+        $nroautorizacion=$row->nroautorizacion;
+        $total=number_format($row->total,2);
+        $d = explode('.',$total);
+        $entero=$d[0];
+        $decimal=$d[1];
+        $fecha=$row->fecha;
+        $nombres=$row->nombres;
+        $apellidos=$row->apellidos;
+        $ci=$row->ci;
+        $codigocontrol=$row->codigocontrol;
+        $hasta=$row->hasta;
+        $leyenda=$row->leyenda;
+        $nit="170444028";
+
+        $c= new NumeroALetras();
+        //echo date('d/m/Y', strtotime($fecha));
+        //exit;
+        $testStr = "$nit|$nrofactura|$nroautorizacion|".date('d/m/Y',strtotime($fecha))."|$total|$total|$codigocontrol|$ci|0|0|0|0";
+        QRcode::png($testStr, 'temp/test.png', 'L', 4, 2);
+        require_once('tcpdf.php');
+
+// create new PDF document
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+// remove default header/footer
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        $pdf->AddPage();
+        $pdf->SetFont('times', '', 9);
+        $pdf->Image('img/fac2.jpg', 0, 0, 210, 100, 'JPG');
+
+        $query=$this->db->query("SELECT * FROM detallefactura d 
+INNER JOIN producto p ON p.idproducto=d.idproducto
+WHERE d.idfactura='$idfactura'");
+        $t="";
+        foreach ($query->result() as $row){
+            $t=$t.'<tr>
                 <td>'.$row->idproducto.'</td>
                 <td>'.$row->nombre.'</td>
                 <td>'.$row->cantidad.'</td>

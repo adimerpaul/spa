@@ -1,3 +1,8 @@
+<?php
+$dosi=$this->db->query("SELECT * FROM dosificacion WHERE estado='ACTIVO' AND date(now())>=date(desde) AND date(now())<=date(hasta)");
+
+//echo($dosi->estado);
+?>
 <form method="post" action="<?=base_url()?>Venta/imprimir">
     <!--div class="form-group">
         <label for="exampleInputEmail1">COMPRADOR</label>
@@ -37,10 +42,19 @@
     </div>
     <div class="form-group">
         <label for="exampleInputPassword1">PRODUCTOS
-            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">
-                <i class="fa fa-plus"></i> Agregar
-            </button>
-            <a href="" class="btn btn-warning"> <i class="fa fa-recycle"></i> Reiniciar </a>
+            <?php
+
+            if($dosi->num_rows()==1){
+                echo "<button type='button' class='btn btn-success btn-sm' data-toggle='modal' data-target='#exampleModal'>
+                            <i class='fa fa-plus'></i> Agregar
+                        </button>
+                        <a href='' class='btn btn-warning'> <i class='fa fa-recycle'></i> Reiniciar </a>";
+            }else{
+                echo "<div class='w-100 alert alert-danger ' >NO TIENE UNA DOSIFICACIÓN ACTIVA</div>";
+            }
+
+            ?>
+
         </label>
         <table class="table">
             <thead class="thead-dark">

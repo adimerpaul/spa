@@ -42,7 +42,12 @@ class Dosificacion extends CI_Controller
         $estado = $_POST['estado'];
         $iddosificacion = $_POST['iddosificacion'];
 
-        $query = $this->db->query("UPDATE dosificacion SET 
+        if ($estado=='ACTIVO'){
+            $this->db->query("UPDATE dosificacion SET 
+                estado='INACTIVO'
+                ");
+        }
+        $this->db->query("UPDATE dosificacion SET 
         desde='$desde',
         hasta='$hasta',
         nrotramite='$nrotramite',
@@ -53,7 +58,7 @@ class Dosificacion extends CI_Controller
         estado='$estado'
         WHERE
         iddosificacion='$iddosificacion';
-");
+        ");
         header("Location: ".base_url().'Dosificacion');
     }
     function datos(){

@@ -6,6 +6,7 @@
  * Time: 16:08
  */
 require('fpdf.php');
+require_once('tcpdf.php');
 class PDF extends FPDF
 {
     function titulo($title,$a=0){
@@ -45,11 +46,6 @@ class Imprimir extends CI_Controller{
         if ($_SESSION['tipo']==""){
             header("Location: ".base_url());
         }
-        $query=$this->db->query("SELECT * FROM cotizacion WHERE idcotizacion=$idcotizacion");
-        $row=$query->row();
-        $diagnostico=$row->diagnostico;
-        $programa=$row->programa;
-
         $query=$this->db->query("SELECT * FROM cotizacion WHERE idcotizacion=$idcotizacion");
         $row=$query->row();
         $diagnostico=$row->diagnostico;
@@ -120,6 +116,7 @@ class Imprimir extends CI_Controller{
             $piel=$row->piel;
             $biotipo=$row->biotipo;
             $arrugas=$row->arrugas;
+
             $pdf = new PDF('P','mm','Letter');
 
 
@@ -366,18 +363,7 @@ class Imprimir extends CI_Controller{
             $pdf->texto("$biotipo ");
             $pdf->subtitulo("TIPO Y LUGAR DE ARRUGAS:");
             $pdf->texto("$arrugas ");
-            /*
-            $pdf->SetFont('Times','B',8);
-            $pdf->Cell(16,5,utf8_decode('ESTADO CIVIL:'));
-            $pdf->SetFont('Times','',8);
-            $pdf->Cell(10,5,utf8_decode('(X)'));
-            $pdf->SetFont('Times','B',8);
-            $pdf->Cell(7,5,utf8_decode('OCUPACION:'));
-            $pdf->SetFont('Times','',8);
-            $pdf->Cell(10,5,utf8_decode('(X)'));
-            $pdf->SetFont('Times','B',8);
-            $pdf->Cell(18,5,utf8_decode('FUMA:'));
-            */
+
 
             $pdf->Ln();
             $pdf->titulo("MEDIDAS A REDUCIR:",0);
@@ -489,5 +475,646 @@ class Imprimir extends CI_Controller{
 
 
         $pdf->Output();
+    }
+    function imprimir2($idcotizacion="81",$idpaciente="13",$idhistorial="12"){
+        $query=$this->db->query("SELECT * FROM cotizacion WHERE idcotizacion=$idcotizacion");
+        $row=$query->row();
+        $diagnostico=$row->diagnostico;
+        $programa=$row->programa;
+        $query=$this->db->query("SELECT * FROM paciente WHERE idpaciente=$idpaciente");
+        $row=$query->row();
+        $nombres=$row->nombres;
+        $apellidos=$row->apellidos;
+        $zona=$row->zona;
+        $direccion=$row->direccion;
+        $fechanac=$row->fechanac;
+        $celular=$row->celular;
+        $telefono=$row->telefono;
+        $query=$this->db->query("SELECT * FROM historial WHERE idhistorial='$idhistorial'");
+        $row=$query->row();
+        $consulta=$row->consulta;
+        $doctor=$row->doctor;
+        $fecha=$row->fecha;
+        $pa=$row->pa;
+        $fc=$row->fc;
+        $peso=$row->peso;
+        $talla=$row->talla;
+        $imc=$row->imc;
+        $gc=$row->gc;
+        $diabetes= $row->diabetes;
+        $hta=$row->hta;
+        $cardios=$row->cardios;
+        $cancer=$row->cancer;
+        $quefamilia=$row->quefamilia;
+        $estadocivil=$row->estadocivil;
+        $ocupacion=$row->ocupacion;
+        $fuma=$row->fuma;
+        $bebe=$row->bebe;
+        $actividadfisica=$row->actividadfisica;
+        $sueno=$row->sueno;
+        $alimentos=$row->alimentos;
+        $diuresis=$row->diuresis;
+        $catarsis=$row->catarsis;
+        $patologico=$row->patologico;
+        $alergias=$row->alergias;
+        $tratamientos=$row->tratamientos;
+        $estadopsicologico=$row->estadopsicologico;
+        $fum=$row->fum;
+        $dias=$row->dias;
+        $frecuencia=$row->frecuencia;
+        $caracteristica=$row->caracteristica;
+        $gestas=$row->gestas;
+        $partos=$row->partos;
+        $ab=$row->ab;
+        $cesareas=$row->cesareas;
+        $lactancia=$row->lactancia;
+        $nhijos=$row->nhijos;
+        $menopausia=$row->menopausia;
+        $pap=$row->pap;
+        $anticonceptivos=$row->anticonceptivos;
+        $examenmamario=$row->examenmamario;
+        $ptsimamaria=$row->ptsimamaria;
+        $cremas=$row->cremas;
+        $cutis=$row->cutis;
+        $donde=$row->donde;
+        $queutilizaron=$row->queutilizaron;
+        $sol=$row->sol;
+        $solar=$row->solar;
+        $otros=$row->otros;
+        $alopecia=$row->alopecia;
+        $depilacion=$row->depilacion;
+        $piel=$row->piel;
+        $biotipo=$row->biotipo;
+        $arrugas=$row->arrugas;
+
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        // remove default header/footer
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        // set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        // set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        // set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->setCellPaddings(0,0,0,0);
+        // set font
+        $pdf->SetFont('times', '', 14);
+        // add a page
+        $pdf->AddPage();
+        // set JPEG quality
+        $pdf->setJPEGQuality(75);
+        $pdf->Image('assets/img/spa.jpg', 0, 0, 220, 22);
+        $cumpleanos = new DateTime($fechanac);
+        $hoy = new DateTime();
+        $annos = $hoy->diff($cumpleanos);
+        if ($examenmamario=="si"){
+            $examenmamario=(" SI(X) NO()");
+        }else if($examenmamario=="no"){
+            $examenmamario=(" SI() NO(X)");
+        }else{
+            $examenmamario=(" SI() NO()");
+        }
+        if ($ptsimamaria=="si"){
+            $ptsimamaria=(" SI(X) NO()");
+        }else if($ptsimamaria=="no"){
+            $ptsimamaria=(" SI() NO(X)");
+        }else{
+            $ptsimamaria=(" SI() NO()");
+        }
+        if ($cutis=="si"){
+            $cutis=(" SI(X) NO()");
+        }else if($cutis=="no"){
+            $cutis=(" SI() NO(X)");
+        }else{
+            $cutis=(" SI() NO()");
+        }
+        if ($alopecia=="si"){
+            $alopecia=(" SI(X) NO()");
+        }else if($alopecia=="no"){
+            $alopecia=(" SI() NO(X)");
+        }else{
+            $alopecia=(" SI() NO()");
+        }
+        $table='<table style="width: 650px;padding: 1px" border="1">';
+        $query=$this->db->query("SELECT fecha FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table.'<tr><td style="font-size: 10px;width: 100px">FECHA DE MEDICION</td>';
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->fecha</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT papada FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>PAPADA</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->papada</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT brazosd1 FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>BRAZOS D-1</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->brazosd1</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT espaldaalta FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>ESPALDA ALTA</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->espaldaalta</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT espaldabaja FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>ESPALDA BAJA</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->espaldabaja</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT cintura FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>CINTURA</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->cintura</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT ombligo FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>OMBLIGO</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->ombligo</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT cm2 FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>A 2 CM DEL OMBLIGO</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->cm2</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT cm4 FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>A 4 CM DEL OMBLIGO</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->cm4</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT cadera FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>CADERA</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->cadera</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+        $query=$this->db->query("SELECT muslo FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>MUSLO</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->muslo</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+
+        $table=$table."</table>";
+
+
+        $query=$this->db->query("SELECT * FROM cotizacion WHERE idcotizacion='$idcotizacion'");
+        $row=$query->row();
+        $diagnostico=$row->diagnostico;
+        $programa=$row->programa;
+
+
+        $query=$this->db->query("SELECT t.nombre,n,c.tiempo,c.costo FROM cotizaciontratamiento c
+ INNER JOIN tratamiento t ON c.idtratamiento=t.idtratamiento
+ WHERE c.idcotizacion='$idcotizacion'");
+        $s=0;
+        $t='';
+        $to=0;
+        foreach ($query->result() as $row){
+            $s++;
+            $t=$t."$s $row->nombre $row->n $row->tiempo <b>COSTO:</b> $row->costo<br>";
+            if( $row->costo==""){
+             $row->costo=0;
+            }
+            $to=$to+intval ($row->costo);
+        }
+
+//        $pdf->Ln();
+//        $pdf->SetFont('Times','B',10);
+//        $pdf->Cell(30,6,'PROGRAMA DE TRATAMIENTO y % APROXIMADO DE MEJORIAS:');
+//        $pdf->Ln();
+//        $pdf->SetFont('Times','',10);
+//        $pdf->MultiCell(150,5,utf8_decode($programa));
+//        $pdf->Ln(3);
+//        $pdf->SetFont('Times','B',10);
+//        $pdf->Cell(200,6,'FIRMA Y SELLO DEL MEDICO TRATANTE',0,0,'R');
+        $html='<br><br><br><small align="center"><b>HISTORIAL CLINICO</b></small> <br>
+        <small><b>FECHA: </b>'.$fecha.' <b>NOMBRE: </b>'.$apellidos.' '.$nombres.' <b>EDAD: </b>'.$annos->y.' <b>Direccion: </b>'.$direccion.'<br>
+        <b>FECHA NAC: </b>'.$fechanac.' <b>TELEFONO: </b>'.$telefono.' <b>CELULAR: </b>'.$celular.'<br>
+        <b><u>MOTIVO CONSULTA Y ENFERMEDAD ACTUAL</u></b><br>
+        '.$consulta.'<br>
+        <b><u>SIGNOS VITALES</u> PA:   </b>'.$pa.' <b>FC:   </b>'.$fc.' <b>PESO:   </b>'.$peso.' <b>TALLA:   </b>'.$talla.' <b>IMC:   </b>'.$imc.' <b>%GC:   </b>'.$gc.'<br> 
+        <b><u>ANTECEDENTES FAMILIARES</u> DIABETES: </b>('.$diabetes.') <b>HTC:   </b>'.$hta.' <b>CARDIACOS:   </b>('.$cardios.') <b>CANCER:   </b>('.$cancer.') <b>QUE FAMILIA:   </b>'.$quefamilia.'<br>
+        <b><u>ANTECEDENTES NO PATOLOGICOS</u> ESTADO CIVIL: </b>'.$estadocivil.' <b>OCUPACION:   </b>'.$ocupacion.' <b>FUMA:   </b>'.$fuma.' <br>
+        <b>BEBE: </b>'.$bebe.' <b>ACTIVIDAD FISICA:   </b>'.$actividadfisica.' <b>HABITOS DE SUEÑO:   </b>'.$sueno.' <br>
+        <b>HABITOS ALIMENTICIOS: </b>'.$alimentos.' <b>DIURESIS:   </b>'.$diuresis.' <b>CATARASIS:   </b>'.$catarsis.' <br>
+        <b><u>ANTECEDENTES PATOLOGICOS</u></b><br>
+        '.$patologico.'<br>
+        <b>ALERGIAS: </b>'.$alergias.' <b>TRATAMIENTO RECIENTES:   </b>'.$tratamientos.' <b>ESTADO PSICOLOGICO:   </b>'.$estadopsicologico.' <br>
+        <b><u>ANTECEDENTES GINECO OBSTETRICOS</u></b><br>
+        <b>FUM: </b>'.$fum.' <b>DIAS:   </b>'.$dias.' <b>FRECUENCIA:   </b>'.$frecuencia.' <b>GESTAS:   </b>'.$gestas.' <b>PARTOS:   </b>'.$partos.' <b>AB:   </b>'.$ab.'<b>CESARIAS:   </b>'.$cesareas.' <br>
+        <b>LACTANCIA: </b>'.$lactancia.' <b>Nº HIJOS:   </b>'.$nhijos.' <b>MENOPAUSIA:   </b>'.$menopausia.' <b>PAP:   </b>'.$pap.' <b>ANTICONCEPTIVOS:   </b>'.$anticonceptivos.' <br>
+        <b>AUTO EXAMEN MAMARIO: </b>'.$examenmamario.' <b>PTOSIS MAMARIO:   </b>'.$ptsimamaria.' <br>
+        <b><u>PIEL Y FANERAS</u>QUEMAS QUE ULITIZA: </b>'.$cremas.' <b>LIMPIEZA DE CUTIS:   </b>'.$cutis.' <b>DONDE:   </b>'.$donde.' <br>
+        <b> QUE ULITIZARON: </b>'.$queutilizaron.' <b>ESTA EN EL SOL:   </b>'.$sol.' <b>PROTECION  SOLAR:   </b>'.$solar.' <b>OTROS TX ESTETICOS:   </b>'.$otros.' <br>
+        <b><u>ALOPECIA</u></b>'.$alopecia.' <b>DEPILACION(Describa habitos depilatorios): </b> '.$depilacion.'<br>
+        <b> TIPO DE PIEL: </b>'.$piel.' <br>
+        <b> BIO TIPO DE PIEL: </b>'.$biotipo.' <b>TIPO Y LUGAR DE ARRUGAS:   </b>'.$arrugas.'<br>
+        <b><u>MEDIDAS A REDUCIR</u></b> <br>
+        '.$table.' <br>
+        <b> DIAGNOSTICO: </b>'.$diagnostico.' <br>
+        <b> COTIZACIONES: </b><br>
+        '.$t.'
+        <b>COSTO TOTAL='.$to.'</b><br>
+        <b>PROGRAMA DE TRATAMIENTO y % APROXIMADO DE MEJORIAS:</b> <br>
+        '.$programa.'
+        <br>
+        <div align="right">DR. '.$doctor.'</div>
+        </small>';
+        $pdf->writeHTML($html, true, false, true, false, '');
+         $pdf->Output('example_002.pdf', 'I');
+
+    }
+    function solo($idcotizacion="81",$idpaciente="13",$idhistorial="12"){
+        $query=$this->db->query("SELECT * FROM cotizacion WHERE idcotizacion=$idcotizacion");
+        $row=$query->row();
+        $diagnostico=$row->diagnostico;
+        $programa=$row->programa;
+        $query=$this->db->query("SELECT * FROM paciente WHERE idpaciente=$idpaciente");
+        $row=$query->row();
+        $nombres=$row->nombres;
+        $apellidos=$row->apellidos;
+        $zona=$row->zona;
+        $direccion=$row->direccion;
+        $fechanac=$row->fechanac;
+        $celular=$row->celular;
+        $telefono=$row->telefono;
+        $query=$this->db->query("SELECT * FROM historial WHERE idhistorial='$idhistorial'");
+        $row=$query->row();
+        $consulta=$row->consulta;
+        $pa=$row->pa;
+        $fc=$row->fc;
+        $peso=$row->peso;
+        $talla=$row->talla;
+        $imc=$row->imc;
+        $gc=$row->gc;
+        $diabetes= $row->diabetes;
+        $hta=$row->hta;
+        $cardios=$row->cardios;
+        $cancer=$row->cancer;
+        $quefamilia=$row->quefamilia;
+        $estadocivil=$row->estadocivil;
+        $ocupacion=$row->ocupacion;
+        $fuma=$row->fuma;
+        $bebe=$row->bebe;
+        $actividadfisica=$row->actividadfisica;
+        $sueno=$row->sueno;
+        $alimentos=$row->alimentos;
+        $diuresis=$row->diuresis;
+        $catarsis=$row->catarsis;
+        $patologico=$row->patologico;
+        $alergias=$row->alergias;
+        $tratamientos=$row->tratamientos;
+        $estadopsicologico=$row->estadopsicologico;
+        $fum=$row->fum;
+        $dias=$row->dias;
+        $frecuencia=$row->frecuencia;
+        $caracteristica=$row->caracteristica;
+        $gestas=$row->gestas;
+        $partos=$row->partos;
+        $ab=$row->ab;
+        $cesareas=$row->cesareas;
+        $lactancia=$row->lactancia;
+        $nhijos=$row->nhijos;
+        $menopausia=$row->menopausia;
+        $pap=$row->pap;
+        $anticonceptivos=$row->anticonceptivos;
+        $examenmamario=$row->examenmamario;
+        $ptsimamaria=$row->ptsimamaria;
+        $cremas=$row->cremas;
+        $cutis=$row->cutis;
+        $donde=$row->donde;
+        $queutilizaron=$row->queutilizaron;
+        $sol=$row->sol;
+        $solar=$row->solar;
+        $otros=$row->otros;
+        $alopecia=$row->alopecia;
+        $depilacion=$row->depilacion;
+        $piel=$row->piel;
+        $biotipo=$row->biotipo;
+        $arrugas=$row->arrugas;
+
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        // remove default header/footer
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        // set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        // set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        // set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->setCellPaddings(0,0,0,0);
+        // set font
+        $pdf->SetFont('times', '', 14);
+        // add a page
+        $pdf->AddPage();
+        // set JPEG quality
+        $pdf->setJPEGQuality(75);
+        $pdf->Image('assets/img/spa.jpg', 0, 0, 220, 22);
+        $cumpleanos = new DateTime($fechanac);
+        $hoy = new DateTime();
+        $annos = $hoy->diff($cumpleanos);
+        if ($examenmamario=="si"){
+            $examenmamario=(" SI(X) NO()");
+        }else if($examenmamario=="no"){
+            $examenmamario=(" SI() NO(X)");
+        }else{
+            $examenmamario=(" SI() NO()");
+        }
+        if ($ptsimamaria=="si"){
+            $ptsimamaria=(" SI(X) NO()");
+        }else if($ptsimamaria=="no"){
+            $ptsimamaria=(" SI() NO(X)");
+        }else{
+            $ptsimamaria=(" SI() NO()");
+        }
+        if ($cutis=="si"){
+            $cutis=(" SI(X) NO()");
+        }else if($cutis=="no"){
+            $cutis=(" SI() NO(X)");
+        }else{
+            $cutis=(" SI() NO()");
+        }
+        if ($alopecia=="si"){
+            $alopecia=(" SI(X) NO()");
+        }else if($alopecia=="no"){
+            $alopecia=(" SI() NO(X)");
+        }else{
+            $alopecia=(" SI() NO()");
+        }
+        $table='<table style="width: 650px;padding: 1px" border="1">';
+        $query=$this->db->query("SELECT fecha FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table.'<tr><td style="font-size: 10px;width: 100px">FECHA DE MEDICION</td>';
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->fecha</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT papada FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>PAPADA</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->papada</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT brazosd1 FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>BRAZOS D-1</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->brazosd1</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT espaldaalta FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>ESPALDA ALTA</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->espaldaalta</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT espaldabaja FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>ESPALDA BAJA</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->espaldabaja</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT cintura FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>CINTURA</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->cintura</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT ombligo FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>OMBLIGO</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->ombligo</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT cm2 FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>A 2 CM DEL OMBLIGO</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->cm2</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT cm4 FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>A 4 CM DEL OMBLIGO</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->cm4</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+        $query=$this->db->query("SELECT cadera FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>CADERA</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->cadera</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+        $query=$this->db->query("SELECT muslo FROM medida WHERE idcotizacion=$idcotizacion  ");
+        $table=$table."<tr><td>MUSLO</td>";
+        $n=$query->num_rows();
+        $can=10-$n;
+        foreach ($query->result() as $row){
+            $table = $table . "<td>$row->muslo</td>";
+        }
+        for ($i=0;$i<$can;$i++){
+            $table = $table . "<td></td>";
+        }
+        $table=$table."</tr>";
+
+
+        $table=$table."</table>";
+
+
+        $query=$this->db->query("SELECT * FROM cotizacion WHERE idcotizacion='$idcotizacion'");
+        $row=$query->row();
+        $diagnostico=$row->diagnostico;
+        $programa=$row->programa;
+
+
+        $query=$this->db->query("SELECT t.nombre,n,c.tiempo,c.costo FROM cotizaciontratamiento c
+ INNER JOIN tratamiento t ON c.idtratamiento=t.idtratamiento
+ WHERE c.idcotizacion='$idcotizacion'");
+        $s=0;
+        $t='';
+        $to=0;
+        foreach ($query->result() as $row){
+            $s++;
+            $t=$t."$s $row->nombre $row->n $row->tiempo <b>COSTO:</b> $row->costo<br>";
+            $to=$to+$row->costo;
+        }
+
+//        $pdf->Ln();
+//        $pdf->SetFont('Times','B',10);
+//        $pdf->Cell(30,6,'PROGRAMA DE TRATAMIENTO y % APROXIMADO DE MEJORIAS:');
+//        $pdf->Ln();
+//        $pdf->SetFont('Times','',10);
+//        $pdf->MultiCell(150,5,utf8_decode($programa));
+//        $pdf->Ln(3);
+//        $pdf->SetFont('Times','B',10);
+//        $pdf->Cell(200,6,'FIRMA Y SELLO DEL MEDICO TRATANTE',0,0,'R');
+        $html='<br><br><br><small align="center"><b>HISTORIAL CLINICO</b></small> <br>
+        <small><b>FECHA: </b>'.date('Y-m-d').' <b>NOMBRE: </b>'.$apellidos.' '.$nombres.' <b>EDAD: </b>'.$annos->y.' <b>Direccion: </b>'.$direccion.'<br>
+        <b>FECHA NAC: </b>'.$fechanac.' <b>TELEFONO: </b>'.$telefono.' <b>CELULAR: </b>'.$celular.'<br>
+        <b><u>MOTIVO CONSULTA Y ENFERMEDAD ACTUAL</u></b><br>
+        '.$consulta.'<br>
+        <b><u>SIGNOS VITALES</u> PA:   </b>'.$pa.' <b>FC:   </b>'.$fc.' <b>PESO:   </b>'.$peso.' <b>TALLA:   </b>'.$talla.' <b>IMC:   </b>'.$imc.' <b>%GC:   </b>'.$gc.'<br> 
+        <b><u>ANTECEDENTES FAMILIARES</u> DIABETES: </b>('.$diabetes.') <b>HTC:   </b>'.$hta.' <b>CARDIACOS:   </b>('.$cardios.') <b>CANCER:   </b>('.$cancer.') <b>QUE FAMILIA:   </b>'.$quefamilia.'<br>
+        <b><u>ANTECEDENTES NO PATOLOGICOS</u> ESTADO CIVIL: </b>'.$estadocivil.' <b>OCUPACION:   </b>'.$ocupacion.' <b>FUMA:   </b>'.$fuma.' <br>
+        <b>BEBE: </b>'.$bebe.' <b>ACTIVIDAD FISICA:   </b>'.$actividadfisica.' <b>HABITOS DE SUEÑO:   </b>'.$sueno.' <br>
+        <b>HABITOS ALIMENTICIOS: </b>'.$alimentos.' <b>DIURESIS:   </b>'.$diuresis.' <b>CATARASIS:   </b>'.$catarsis.' <br>
+        <b><u>ANTECEDENTES PATOLOGICOS</u></b><br>
+        '.$patologico.'<br>
+        <b>ALERGIAS: </b>'.$alergias.' <b>TRATAMIENTO RECIENTES:   </b>'.$tratamientos.' <b>ESTADO PSICOLOGICO:   </b>'.$estadopsicologico.' <br>
+        <b><u>ANTECEDENTES GINECO OBSTETRICOS</u></b><br>
+        <b>FUM: </b>'.$fum.' <b>DIAS:   </b>'.$dias.' <b>FRECUENCIA:   </b>'.$frecuencia.' <b>GESTAS:   </b>'.$gestas.' <b>PARTOS:   </b>'.$partos.' <b>AB:   </b>'.$ab.'<b>CESARIAS:   </b>'.$cesareas.' <br>
+        <b>LACTANCIA: </b>'.$lactancia.' <b>Nº HIJOS:   </b>'.$nhijos.' <b>MENOPAUSIA:   </b>'.$menopausia.' <b>PAP:   </b>'.$pap.' <b>ANTICONCEPTIVOS:   </b>'.$anticonceptivos.' <br>
+        <b>AUTO EXAMEN MAMARIO: </b>'.$examenmamario.' <b>PTOSIS MAMARIO:   </b>'.$ptsimamaria.' <br>
+        <b><u>PIEL Y FANERAS</u>QUEMAS QUE ULITIZA: </b>'.$cremas.' <b>LIMPIEZA DE CUTIS:   </b>'.$cutis.' <b>DONDE:   </b>'.$donde.' <br>
+        <b> QUE ULITIZARON: </b>'.$queutilizaron.' <b>ESTA EN EL SOL:   </b>'.$sol.' <b>PROTECION  SOLAR:   </b>'.$solar.' <b>OTROS TX ESTETICOS:   </b>'.$otros.' <br>
+        <b><u>ALOPECIA</u></b>'.$alopecia.' <b>DEPILACION(Describa habitos depilatorios): </b> '.$depilacion.'<br>
+        <b> TIPO DE PIEL: </b>'.$piel.' <br>
+        <b> BIO TIPO DE PIEL: </b>'.$biotipo.' <b>TIPO Y LUGAR DE ARRUGAS:   </b>'.$arrugas.'<br>
+        <b><u>MEDIDAS A REDUCIR</u></b> <br>
+        '.$table.' <br>
+        <b> DIAGNOSTICO: </b>'.$diagnostico.' <br>
+        <b> COTIZACIONES: </b><br>
+        '.$t.'
+        <b>COSTO TOTAL='.$to.'</b><br>
+        <b>PROGRAMA DE TRATAMIENTO y % APROXIMADO DE MEJORIAS:</b> <br>
+        '.$programa.'
+        <br>
+        <div align="right">FIRMA Y SELLO DEL MEDICO TRATANTE</div>
+        </small>';
+        $pdf->writeHTML($html, true, false, true, false, '');
+        $pdf->Output('example_002.pdf', 'I');
+
     }
 }

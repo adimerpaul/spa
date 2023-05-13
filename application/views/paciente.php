@@ -22,7 +22,7 @@
     <i class="fa fa-file"></i> Registrar Paciente
 </button>
 <div class="mt-1"></div>
-<table id="example" class="display nowrap" style="width:100%">
+<table id="example1" class="display nowrap" style="width:100%">
     <thead>
     <tr>
         <th>Idpaciente</th>
@@ -35,7 +35,7 @@
     </thead>
     <tbody>
     <?php
-    $query=$this->db->query("SELECT * FROM paciente");
+    $query=$this->db->query("SELECT * FROM paciente WHERE idpaciente!=8");
     foreach ($query->result() as $row){
         $cumpleanos = new DateTime($row->fechanac);
         $hoy = new DateTime();
@@ -46,16 +46,136 @@
             <td>".$row->nombres." ".$row->apellidos."</td>
             <td>".$row->direccion."</td>
             <td>".$annos->y."</td>
-            <td>".$row->celular."</td>
+            <td><a target='_blank' href='https://wa.me/591".$row->celular."?text='>".$row->celular."</a></td>
             <td> 
-            <a href='".base_url()."Paciente/reghistorial/".$row->idpaciente."' class='btn btn-sm btn-success text-white sinespaciotexto' ><i class='fa fa-file-archive-o'></i> Reg. Historial</a>
-            <a type='button' class='btn btn-warning text-white btn-sm sinespaciotexto' href='".base_url()."Paciente/escoger/".$row->idpaciente."' > <i class=\"fa fa-align-justify\"></i>Historiales</a>
+            <a href='".base_url()."Paciente/reghistorial/".$row->idpaciente."' class='btn btn-sm btn-success text-white sinespaciotexto' ><i class='fa fa-file-archive-o'></i> Reg. Historial</a> <br>
+            <a type='button'  class='btn btn-warning btn-sm sinespaciotexto' href='".base_url()."Paciente/escoger/".$row->idpaciente."' > <i class=\"fa fa-align-justify\"></i>Historiales</a> <br>
+            <button type='button' class='btn btn-warning sinespaciotexto' data-idpaciente='$row->idpaciente' data-toggle='modal' data-target='#modificar'>
+                <i class='fa fa-pencil'></i> Modificar
+            </button> <br>
+            <a  class='btn btn-info sinespaciotexto' href='".base_url()."photo/index/$row->idpaciente'>
+                <i class='fa fa-photo'></i> Subir fotografia
+            </a>
+            </button> <br>
+            <a  class='btn btn-danger sinespaciotexto eli' href='".base_url()."Paciente/delete/$row->idpaciente'>
+                <i class='fa fa-trash'></i> Eliminar
+            </a>
              </td>
         </tr>";
     }
     ?>
     </tbody>
 </table>
+
+<script !src="">
+    window.onload=function (e) {
+        $('.eli').click(function (e) {
+            if (!confirm("Seguro de eliminar")){
+                e.preventDefault();
+            }
+        });
+        $('#example1').DataTable();
+
+        $('#modificar').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var idpaciente = button.data('idpaciente');
+            $.ajax({
+                url:'Paciente/datospaciente',
+                type:'POST',
+                data:'idpaciente='+idpaciente,
+                success:function (e) {
+                    var dato=JSON.parse(e)[0];
+                    //console.log(dato);
+                    $('#apellidos2').val(dato.apellidos);
+                    $('#nombres2').val(dato.nombres);
+                    $('#ci2').val(dato.ci);
+                    $('#zona2').val(dato.zona);
+                    $('#direccion2').val(dato.direccion);
+                    $('#fechanac2').val(dato.fechanac);
+                    $('#celular2').val(dato.celular);
+                    $('#telefono2').val(dato.telefono);
+                    $('#referencia2').val(dato.referencia);
+                    $('#idpaciente2').val(dato.idpaciente);
+
+                }
+            });
+        })
+    }
+</script>
+
+<!-- Modal -->
+<div class="modal fade" id="modificar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modificar cliente</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="<?=base_url()?>paciente/update" style="padding: 0px;margin: 0px;border: 0px">
+                    <div class="form-row" style="padding: 0px;margin: 0px;border: 0px">
+                        <div class="form-group col-md-2" style="padding: 0px;margin: 0px;border: 0px">
+                            <input type="text" name="idpaciente" id="idpaciente2" hidden>
+                            <label for="apellidos2" style="padding: 0px;margin: 0px;border: 0px">apellidos</label>
+                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="apellidos2" placeholder="apellidos" name="apellidos" required>
+                        </div>
+                        <div class="form-group col-md-2" style="padding: 0px;margin: 0px;border: 0px" >
+                            <label for="nombres2" style="padding: 0px;margin: 0px;border: 0px">nombres</label>
+                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="nombres2" placeholder="nombres" name="nombres" >
+                        </div>
+                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
+                            <label for="ci2">ci</label>
+                            <input type="text" style="padding: 0px;margin: 0px" class="form-control" id="ci2" placeholder="ci" name="ci">
+                        </div>
+                        <div class="form-group col-md-2" style="padding: 0px;margin: 0px;border: 0px">
+                            <label for="zona2">zona</label>
+                            <input type="text" style="padding: 0px;margin: 0px" class="form-control" id="zona2" placeholder="zona" name="zona">
+                        </div>
+                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
+                            <label for="direccion2">direccion</label>
+                            <input type="text" style="padding: 0px;margin: 0px"  class="form-control" id="direccion2" placeholder="1234 Main St" name="direccion">
+                        </div>
+                    </div>
+                    <div class="form-row" style="padding: 0px;margin: 0px;border: 0px">
+                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
+                            <label for="fechanac2">fechanac</label>
+                            <input type="text" style="padding: 0px;margin: 0px" class="form-control" id="fechanac2" placeholder="fechanac" name="fechanac" value="<?=date("Y-m-d")?>" required>
+                        </div>
+                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
+                            <label for="celular2">celular</label>
+                            <input type="number" style="padding: 0px;margin: 0px" class="form-control" id="celular2" placeholder="celular" name="celular" >
+                        </div>
+                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
+                            <label for="telefono2">telefono</label>
+                            <input type="number" style="padding: 0px;margin: 0px" class="form-control" id="telefono2" placeholder="telefono" name="telefono">
+                        </div>
+                        <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
+                            <label for="referencia2">referencia</label>
+                            <select name="referencia" id="referencia2"  style="padding: 0px;margin: 0px" class="form-control">
+                                <option value="">Seleccionar..</option>
+                                <option value="Facebook">Facebook</option>
+                                <option value="Periódico">Periódico</option>
+                                <option value="Referido">Referido</option>
+                                <option value="Antiguo">Antiguo</option>
+                                <option value="Televisión">Televisión</option>
+                                <option value="Familiar">Familiar</option>
+                                <option value="Instagram">Instagram</option>
+                                <option value="Amigos">Amigos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-warning">Modificar</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Modal -->
 
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
@@ -70,13 +190,13 @@
             <div class="modal-body">
                 <form method="post" action="<?=base_url()?>paciente/insert" style="padding: 0px;margin: 0px;border: 0px">
                     <div class="form-row" style="padding: 0px;margin: 0px;border: 0px">
-                        <div class="form-group col-md-2" style="padding: 0px;margin: 0px;border: 0px" >
-                            <label for="nombres" style="padding: 0px;margin: 0px;border: 0px">nombres</label>
-                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="nombres" placeholder="nombres" name="nombres" >
-                        </div>
                         <div class="form-group col-md-2" style="padding: 0px;margin: 0px;border: 0px">
                             <label for="apellidos" style="padding: 0px;margin: 0px;border: 0px">apellidos</label>
                             <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="apellidos" placeholder="apellidos" name="apellidos" required>
+                        </div>
+                        <div class="form-group col-md-2" style="padding: 0px;margin: 0px;border: 0px" >
+                            <label for="nombres" style="padding: 0px;margin: 0px;border: 0px">nombres</label>
+                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="nombres" placeholder="nombres" name="nombres" >
                         </div>
                         <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
                             <label for="ci">ci</label>
@@ -94,7 +214,7 @@
                     <div class="form-row" style="padding: 0px;margin: 0px;border: 0px">
                         <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
                             <label for="fechanac">fechanac</label>
-                            <input type="date" style="padding: 0px;margin: 0px" class="form-control" id="fechanac" placeholder="fechanac" name="fechanac" value="<?=date("Y-m-d")?>" required>
+                            <input type="text" style="padding: 0px;margin: 0px" class="form-control" id="fechanac" placeholder="fechanac" name="fechanac" value="<?=date("Y-m-d")?>" required>
                         </div>
                         <div class="form-group col-md-3" style="padding: 0px;margin: 0px;border: 0px">
                             <label for="celular">celular</label>
@@ -114,6 +234,8 @@
                                 <option value="Antiguo">Antiguo</option>
                                 <option value="Televisión">Televisión</option>
                                 <option value="Familiar">Familiar</option>
+                                <option value="Instagram">Instagram</option>
+                                <option value="Amigos">Amigos</option>
                             </select>
                         </div>
                     </div>

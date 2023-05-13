@@ -56,14 +56,11 @@ VALUES('$repocicion','".$_SESSION['idusuario']."','$idtratamiento')");
 
         $query=$this->db->query("SELECT * FROM tratamientoreactivo WHERE idtratamiento='$idtratamiento'");
         foreach ($query->result() as $row) {
-            $s=$this->User->consulta('unidadesporpaciente','reactivo','idreactivo=',$row->reactivo);
-            $this->db->query("UPDATE reactivo  SET cantidad=cantidad-$row->  
-            WHERE idreactivo=$row->idreactivo ");
-            $this->db->query("UPDATE reactivo  SET stock=stock-$s 
+            $cantidad=$row->cantidad;
+            $this->db->query("UPDATE reactivo  SET cantidad=cantidad-$cantidad
             WHERE idreactivo=$row->idreactivo ");
         }
 
-       // exit;
         header("Location: ".base_url()."Soap/index/$idcotizacion");
     }
     function imprimir($idcotizacion=""){
@@ -79,7 +76,11 @@ VALUES('$repocicion','".$_SESSION['idusuario']."','$idtratamiento')");
             $pdf->Cell(3,5,utf8_decode($row->fecha));
             $pdf->Ln();
             $pdf->SetFont('Arial','',10);
-            $pdf->MultiCell(170,5,utf8_decode($row->subjetivo." ".$row->objetivo." ".$row->analisis." ".$row->plan));
+            $pdf->MultiCell(170,5,utf8_decode("SUBJETIVO: ".$row->subjetivo));
+            $pdf->MultiCell(170,5,utf8_decode("OBJETIVO: ".$row->objetivo));
+            $pdf->MultiCell(170,5,utf8_decode("ANALISIS: ".$row->analisis));
+            $pdf->MultiCell(170,5,utf8_decode("PLAN: ".$row->plan));
+
             $pdf->Ln();
             $pdf->SetFont('Arial','',10);
             $pdf->Cell(100,5,utf8_decode("Monto/adelanto :".$row->monto."   Fecha: ".$row->fecha));
@@ -88,5 +89,9 @@ VALUES('$repocicion','".$_SESSION['idusuario']."','$idtratamiento')");
         }
         $pdf->Output();
 
+    }
+    function delete($id,$c){
+$this->db->query("DELETE FROM soap WHERE idsoap='$id'");
+    header("location: " .base_url()."Soap/index/".$c);
     }
 }

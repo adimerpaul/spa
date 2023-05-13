@@ -17,9 +17,7 @@
         text-transform: uppercase;
     }
 </style>
-<form action="<?=base_url()?>Paciente/historialinsert" method="POST" >
-
-
+<form action="<?=base_url()?>Paciente/historialinsert" method="POST"   id="formulario">
     <div class="form-group">
         <input type="text" name="idpaciente" value="<?=$idpaciente?>" hidden>
         <label for="consulta">Motivo de la consulta y enfermedad actual</label>
@@ -123,11 +121,11 @@
 
             </div>
             <div class="form-group col-md-2 sinespacio" >
-                <label for="sueno" class="sinespacio">Hambito de sueño</label>
+                <label for="sueno" class="sinespacio">Habito de sueño</label>
                 <input type="text"  class="form-control sinespaciotexto" id="sueno" placeholder="sueño" name="sueno" >
             </div>
             <div class="form-group col-md-4 sinespacio" >
-                <label for="alimentos" class="sinespacio">Hambito de alimentos</label>
+                <label for="alimentos" class="sinespacio">Habito de alimentos</label>
                 <input type="text"  class="form-control sinespaciotexto" id="alimentos" placeholder="alimentos" name="alimentos" >
             </div>
             <div class="form-group col-md-2 sinespacio" >
@@ -217,14 +215,31 @@
             <div class="form-group col-md-2 sinespacio" >
                 <label for="pap" class="sinespacio">pap</label>
                 <!--input type="text"  class="form-control sinespaciotexto" id="pap" placeholder="pap" name="pap" -->
-                <select name="pap" id="pap" class="sinespaciotexto" >
-                    <option value="">Selesccionar..</option>
-                    <option value="Pap1">Pap1</option>
-                    <option value="Pap2">Pap2</option>
-                    <option value="Pap3">Pap3</option>
-                    <option value="Pap4">Pap4</option>
-                    <option value="Pap5">Pap5</option>
-                </select>
+<!--                <select name="pap" id="pap" class="sinespaciotexto" >-->
+<!--                    <option value="">Selesccionar..</option>-->
+<!--                    <option value="Pap1">Pap1</option>-->
+<!--                    <option value="Pap2">Pap2</option>-->
+<!--                    <option value="Pap3">Pap3</option>-->
+<!--                    <option value="Pap4">Pap4</option>-->
+<!--                    <option value="Pap5">Pap5</option>-->
+<!--                </select>-->
+                <br>
+                <script>
+
+                    function cambio(val) {
+                        if(val=='SI'){
+                            document.getElementById('pap').style.display = "block";
+                        }else{
+                            document.getElementById('pap').style.display = "none";
+                        }
+                    }
+                </script>
+                <input onclick="cambio('SI')" type="radio"  class="sinespaciotexto" id="pap1" placeholder="pap" name="pap2" value="si" >Si
+                <input onclick="cambio('NO')" type="radio" checked  class="sinespaciotexto" id="pap2" placeholder="pap" name="pap2" value="no" >No
+                <input type="text"  name="pap" id="pap" class="form-control sinespaciotexto" placeholder="pap" >
+                <script>
+                    document.getElementById('pap').style.display = "none";
+                </script>
             </div>
             <div class="form-group col-md-2 sinespacio" >
                 <label for="anticonceptivos" class="sinespacio">anticonceptivos</label>
@@ -330,6 +345,13 @@
 </form>
 
 <script>
+    window.onload=function () {
+     $('#formulario').submit(function (e) {
+         if (!confirm("Seguro de guardar los datos?")){
+             return false;
+         }
+
+     });
 
     var peso=document.getElementById('peso');
     var talla=document.getElementById('talla');
@@ -353,5 +375,6 @@
     cesareas.addEventListener("keyup",cgestas);
     function cgestas() {
         gestas.value= parseInt(partos.value) + parseInt( ab.value)+ parseInt(cesareas.value);
+    }
     }
 </script>

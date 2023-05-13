@@ -72,6 +72,25 @@ class Consulta extends CI_Controller{
         )");
         header('Location: '.base_url().'Consulta');
     }
+    public function insertdeudas2(){
+        $comprador=$_POST['comprador'];
+        $idreactivo=$_POST['detalle'];
+        $cantidad=$_POST['cantidad'];
+        $monto=$_POST['monto'];
+        $tipo="ADELANTO";
+        $detalle=$this->db->query("SELECT * FROM reactivo WHERE idreactivo='$idreactivo'")->row()->nombre;
+        $this->db->query("UPDATE reactivo SET cantidad=cantidad-$cantidad WHERE idreactivo='$idreactivo'");
+        $this->db->query("INSERT INTO deudas(comprador,detalle,celular,monto,idusuario,tipo)VALUES(
+        '$comprador',
+        '$detalle',
+        '',
+        '$monto',
+        '".$_SESSION['idusuario']."',
+        '$tipo'
+        )");
+//        echo $detalle;
+        header('Location: '.base_url().'Consulta');
+    }
     public function printA($fecha=''){
         require_once('tcpdf.php');
 

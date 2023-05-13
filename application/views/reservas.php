@@ -25,6 +25,9 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
             },
+            minTime: "08:00:00",
+            maxTime: "22:00:00",
+            slotDuration: "00:15:00",
             locale:'es',
             defaultView:'timeGridWeek',
             selectable: true,
@@ -36,13 +39,23 @@
                 /*alert('Event: ' + info.event.title);
                 alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
                 alert('View: ' + info.view.type);
-
                 // change the border color just for fun
                 info.el.style.borderColor = 'red';
                 */
 
                 $('#calendarModal').modal();
+                //console.log(info.event);
                 var idpaciente=(info.event._def.extendedProps.idpaciente);
+                $.ajax({
+                    url:'Reserva/datos',
+                    data:'id='+idpaciente,
+                    type:'POST',
+                    success:function (e) {
+                        var datos= JSON.parse(e)[0];
+                        //console.log(datos);
+                        $('#num').html('Enviar mensaje por Whatsapp <a target="blank" href="https://wa.me/591'+datos.celular+'?text=">'+datos.celular+'</a>');
+                    }
+                });
                 var descripcion=(info.event._def.extendedProps.descripcion);
                 var start=(info.event.start);
                 var end=(info.event.end);
@@ -53,7 +66,7 @@
                 $('#id2').val(info.event.id);
                 //$('#id3').val(info.event);
                 elimina=info.event;
-                //console.log(info.event);
+
 
                 /*if (confirm('delete event?')) {
                     info.event.remove()
@@ -64,7 +77,7 @@
                 //console.log(info.startStr);
                 $('#registrar').modal();
                 $('#start').val(moment(info.startStr).format('YYYY-MM-DDTHH:mm'));
-                $('#end').val(moment(info.endStr).format('YYYY-MM-DDTHH:mm'));
+                $('#end').val(moment(info.endStr).add('minute',15).format('YYYY-MM-DDTHH:mm'));
 
             },customButtons: {
                 custom1: {
@@ -112,7 +125,9 @@
                 'idpaciente':idpaciente,
                 'start':start,
                 'end':end,
-                'descripcion':descripcion
+                'descripcion':descripcion,
+                'nombres':$('#nombres').val(),
+                'apellidos':$('#apellidos').val()
             }
             //console.log(idpaciente);
 
@@ -121,6 +136,7 @@
                 data: datos,
                 type: "POST",
                 success: function(json) {
+                    console.log(json);
                     console.log(json.id);
                     calendar.addEvent({
                         title: json.title,
@@ -195,6 +211,7 @@
                                 }
                                 ?>
                             </select>
+                            <div id="num"></div>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -258,9 +275,9 @@
             <div class="modal-body">
                 <form id="formulario" method="post" action2="<?=base_url()?>Reserva/insert">
                     <div class="form-group row">
-                        <label for="idpaciente" class="col-sm-3 col-form-label">Paciente</label>
-                        <div class="col-sm-9">
-                            <select name="idpaciente" id="idpaciente" class="form-control" required>
+                        <label for="idpaciente" class="col-sm-2 col-form-label" style="font-size: 13px">Paciente</label>
+                        <div class="col-sm-8">
+                            <select name="idpaciente" id="idpaciente" class="form-control" >
                                 <option value="">Seleccionar...</option>
                                 <?php
                                 $query=$this->db->query("SELECT * FROM paciente ORDER BY apellidos");
@@ -269,6 +286,17 @@
                                 }
                                 ?>
                             </select>
+                            <div class="row" id="datos">
+                                <div class="col-6">
+                                    <input type="text" class="form-control" name="apellidos" id="apellidos" placeholder="Apellidos">
+                                </div>
+                                <div class="col-6">
+                                    <input type="text" class="form-control" name="nombres" id="nombres" placeholder="Nombres">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="checkbox" id="nuevo" checked data-toggle="toggle" data-on="A" data-off="N" data-onstyle="success" data-offstyle="info">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -300,3 +328,21 @@
         </div>
     </div>
 </div>
+<script !src="">
+    window.onload=function (e) {
+        $('#datos').hide();
+        $('#nuevo').change(function (e) {
+            var nuevo=( $('#nuevo:checked').val());
+            if (nuevo=='on'){
+                //console.log('antiguo');
+                $('#datos').hide();
+                $('#idpaciente').show();
+            }else{
+                //console.log('nuevo');
+                $('#datos').show();
+                $('#idpaciente').hide();
+                $('#idpaciente').val('');
+            }
+        });
+    }
+</script>

@@ -72,13 +72,13 @@
     </thead>
     <tbody>
     <?php
-    $query=$this->db->query("SELECT f.idfactura,f.fecha,f.nrofactura,d.nroautorizacion,f.estado,p.ci,p.apellidos,p.nombres,f.total,f.codigocontrol FROM factura f 
+    $query=$this->db->query("SELECT f.idfactura,f.iddosificacion,f.fecha,f.nrofactura,f.estado,p.ci,p.apellidos,p.nombres,f.total,f.codigocontrol FROM factura f 
 INNER JOIN paciente p ON f.idpaciente=p.idpaciente
-INNER JOIN dosificacion d ON f.idpaciente=p.idpaciente
 WHERE MONTH(f.fecha)='$mes' AND YEAR(f.fecha)='$anio'
 ");
     $c=0;
     foreach ($query->result() as $row){
+        $nroautorizacion=$this->db->query("SELECT * FROM dosificacion WHERE iddosificacion=$row->iddosificacion")->row()->nroautorizacion;
         $c++;
         if ($row->estado=="A"){
             $row->total=0;
@@ -89,7 +89,7 @@ WHERE MONTH(f.fecha)='$mes' AND YEAR(f.fecha)='$anio'
             <td>$c</td>
             <td>$row->fecha</td>
             <td>$row->nrofactura</td>
-            <td>$row->nroautorizacion</td>
+            <td>$nroautorizacion</td>
             <td>$row->estado</td>
             <td>$row->ci</td>
             <td>$row->apellidos $row->nombres</td>

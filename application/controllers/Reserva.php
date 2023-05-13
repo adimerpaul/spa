@@ -40,10 +40,16 @@ class Reserva extends CI_Controller{
         $end=$_POST['end'];
         $descripcion=$_POST['descripcion'];
         $idpaciente=$_POST['idpaciente'];
+        $nombres=$_POST['nombres'];
+        $apellidos=$_POST['apellidos'];
 
+        if ($idpaciente==''){
+            $this->db->query("INSERT INTO paciente SET nombres='$nombres',apellidos='$apellidos'");
+            $idpaciente=$this->db->insert_id();
+        }
         $title=$this->User->consulta('nombres','paciente','idpaciente',$idpaciente)." ".$this->User->consulta('apellidos','paciente','idpaciente',$idpaciente);
 
-        $query=$this->db->query("INSERT INTO `events` (
+        $this->db->query("INSERT INTO `events` (
                     `title` ,
                     `start` ,
                     `end` ,
@@ -55,10 +61,12 @@ class Reserva extends CI_Controller{
                     '".$title."',
                     '".date('Y-m-d H:i:s',strtotime($_POST["start"]))."',
                     '".date('Y-m-d H:i:s',strtotime($_POST["end"]))."',
-                    '".$_POST['idpaciente']."',
+                    '".$idpaciente."',
                     '".$_SESSION['idusuario']."',
                     '".$_POST['descripcion']."'
                     )");
+
+
         header('Content-Type: application/json');
         echo '{"id":"'.$this->db->insert_id().'","title":"'.$title.'"}';
         exit;
@@ -108,6 +116,12 @@ class Reserva extends CI_Controller{
             echo 1;
         }
         exit;
+    }
+    function datos(){
+        $id=$_POST['id'];
+
+        $query=$this->db->query("SELECT * FROM paciente WHERE idpaciente='$id'");
+        echo json_encode($query->result_array());
     }
     function imprimir($idindicaciones,$idpaciente,$hora){
         $pdf = new FPDF('P','mm','Letter');

@@ -52,7 +52,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Agregar reactivo</h5>
@@ -61,6 +61,9 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div class="alert alert-warning">
+                    Porfavor lo que coloque en cantidad es lo que descontara al inventario
+                </div>
                 <form id="formulario" method="post" action="<?=base_url()?>Tratamientos/insertreactivo">
                     <div class="form-group row">
                         <label for="idreactivo" class="col-sm-3 col-form-label">Reactivo</label>
@@ -71,16 +74,22 @@
                                 <?php
                                 $query=$this->db->query("SELECT * FROM reactivo WHERE cantidad >0 ORDER BY nombre");
                                 foreach ($query->result() as $row){
-                                    echo "<option value='$row->idreactivo'>$row->nombre / $row->stock</option>";
+                                    echo "<option value='$row->idreactivo'>$row->nombre-$row->presentacion/ $row->cantidad</option>";
                                 }
                                 ?>
                             </select>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="cantidad" class="col-sm-3 col-form-label">Cantidad</label>
+                        <label for="frasco" class="col-sm-3 col-form-label">Un frasco para cuantos pacientes?</label>
                         <div class="col-sm-9">
-                            <input type="text" id="cantidad" name="cantidad" value="1" class="form-control">
+                            <input type="text" id="frasco" name="frasco" value="1" placeholder="Ayuda para calcular frasco" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="cantidad" class="col-sm-3 col-form-label"><b>Cantidad</b></label>
+                        <div class="col-sm-9">
+                            <input type="text" id="cantidad" name="cantidad" value="1" class="form-control" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -92,3 +101,11 @@
         </div>
     </div>
 </div>
+<script>
+    window.onload=function (e) {
+        $('#frasco').keyup(function (e) {
+            $('#cantidad').val(parseFloat(1/$(this).val()))
+            e.preventDefault();
+        });
+    }
+</script>

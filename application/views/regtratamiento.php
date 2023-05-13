@@ -23,7 +23,7 @@
             <select name="idtratamiento" id="idtratamiento" >
                 <option value=''>Seleccionar..</option>
                 <?php
-                $query=$this->db->query("SELECT * FROM tratamiento");
+                $query=$this->db->query("SELECT * FROM tratamiento ORDER BY nombre");
                 foreach ($query->result() as $row){
                     echo "<option value='".$row->idtratamiento."'>$row->nombre</option>";
                 }

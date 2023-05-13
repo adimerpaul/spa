@@ -15,6 +15,10 @@
 <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">
     <i class="fa fa-circle-o"></i> Realizar cotizacion
 </button>
+
+<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#pesotalla">
+    <i class="fa fa-upload"></i> Actualizar peso talla
+</button>
 <div class="mt-1"></div>
 <table id="example" class="display nowrap" style="width:100%">
     <thead>
@@ -110,7 +114,7 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
              <a type='button' href='".base_url()."Paciente/regtratamiento/$idpaciente/$idhistorial/$row->idcotizacion' class='btn btn-success btn-sm sin'
              data-idcotizacion='".$row->idcotizacion."'> <i class='fa fa-map-marker'></i> Agregar tratamiento</a>
              <br>
-             <a href='".base_url()."Imprimir/index/$row->idcotizacion/$idpaciente/$idhistorial'
+             <a href='".base_url()."Imprimir/imprimir2/$row->idcotizacion/$idpaciente/$idhistorial'
                class='btn btn-sm btn-primary btn-sm sin text-white'>
                <i class='fa fa-print'></i> Imprimir
              </a>
@@ -139,6 +143,49 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
 
 </script>
 <!-- Modal -->
+<div class="modal fade" id="pesotalla" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Actualizar Peso Talla</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="formulariopesotalla">
+                    <div class="form-group row">
+                        <label for="pa" class="col-sm-1 col-form-label">PA</label>
+                        <div class="col-sm-5">
+                            <input  class="form-control" id="pa" placeholder="PA">
+                        </div>
+                        <label for="fc" class="col-sm-1 col-form-label">FC</label>
+                        <div class="col-sm-5">
+                            <input  class="form-control" id="fc" placeholder="FC">
+                        </div>
+                        <label for="peso" class="col-sm-1 col-form-label">Peso</label>
+                        <div class="col-sm-5">
+                            <input  class="form-control" id="peso" placeholder="Peso">
+                        </div>
+                        <label for="talla" class="col-sm-1 col-form-label">Talla</label>
+                        <div class="col-sm-5">
+                            <input  class="form-control" id="talla" placeholder="Talla">
+                        </div>
+                        <label for="imc" class="col-sm-1 col-form-label">IMC</label>
+                        <div class="col-sm-5">
+                            <input  class="form-control" id="imc" placeholder="IMC">
+                        </div>
+                        <label for="gc" class="col-sm-1 col-form-label">%gc</label>
+                        <div class="col-sm-5">
+                            <input  class="form-control" id="gc" placeholder="%gc">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Sign in</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -370,9 +417,9 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
                         </div>
                     </div>
                     <div class="sin form-group row">
-                        <label for="brazosd1" class=" col-sm-4 col-form-label">Brazos d-1</label>
+                        <label for="brazosd1" class=" col-sm-4 col-form-label">Brazos D-I</label>
                         <div class=" col-sm-8">
-                            <input type="text" class=" form-control" name="brazosd1" id="brazosd1" placeholder="brazosd1">
+                            <input type="text" class=" form-control" name="brazosd1" id="brazosd1" placeholder="brazos D I">
                         </div>
                     </div>
                     <div class="sin form-group row">
@@ -489,7 +536,51 @@ WHERE c.idcotizacion='".$row->idcotizacion."'");
         </div>
     </div>
 </div>
+<script>
+    window.onload=function(){
+        var idhistorial=<?=$idhistorial?>;
+        $('#pesotalla').on('show.bs.modal', function (event) {
 
+            // console.log(idhistorial);
+            $.ajax({
+                url:'../../dathistorial/'+idhistorial,
+                success:function (e) {
+                    var datos=JSON.parse(e)[0];
+                    $('#pa').val(datos.pa);
+                    $('#fc').val(datos.fc);
+                    $('#peso').val(datos.peso);
+                    $('#talla').val(datos.talla);
+                    $('#imc').val(datos.imc);
+                    $('#gc').val(datos.gc);
+                }
+            })
+        })
+        $('#formulariopesotalla').submit(function (e) {
+           var datos= {
+               "pa":$('#pa').val(),
+                "fc": $('#fc').val(),
+                "peso": $('#peso').val(),
+                "talla": $('#talla').val(),
+                "imc": $('#imc').val(),
+                "gc": $('#gc').val()
+           }
+            $.ajax({
+                url:'../../modhistorial/'+idhistorial,
+                data:datos,
+                type:'post',
+                success:function (e) {
+                    // console.log(e);
+                    if (e=="1"){
+                        toastr.success('Modificado correctamente');
+                        $('#pesotalla').modal('hide');
+                    }
+                }
+            })
+           // console.log(datos);
+            return false
+        });
+    }
+</script>
 
 
 

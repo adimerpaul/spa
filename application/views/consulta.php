@@ -251,6 +251,9 @@ $st=0;
             <button  type="button" style="padding: 2px" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">
                 <i class="fa fa-plus"></i>
             </button>
+            <button  type="button" style="padding: 2px" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#compra">
+                <i class="fa fa-plus"></i>
+            </button>
         </center>
     </div>
     <div class="col-sm-12">
@@ -407,6 +410,68 @@ $st=0;
                         <label for="tipo" class="col-form-label col-sm-4">Tipo</label>
                         <div class="col-sm-8">
                             <input name="tipo" data-width="100" data-height="35" data-size="sm" type="checkbox" checked data-toggle="toggle" data-on="Adelanto" data-off="Pago" data-onstyle="success" data-offstyle="danger">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Guardar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="compra" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Compra de articulos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="<?=base_url()?>Consulta/insertdeudas2" method="post">
+                    <div class="form-group row">
+                        <label for="comprador" class="col-form-label col-sm-4">Comprador</label>
+                        <div class="col-sm-8">
+                            <input list="compradores" name="comprador" class="form-control" id="comprador" placeholder="comprador" required>
+                            <datalist id="compradores">
+                                <?php
+                                $quer=$this->db->query("SELECT *  FROM  paciente WHERE apellidos<>'' ORDER  BY apellidos,nombres");
+                                foreach ($quer->result() as $row){
+                                    echo "<option value='$row->apellidos $row->nombres'>";
+                                }
+                                ?>
+                            </datalist>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="detalle" class="col-form-label col-sm-4">Detalle</label>
+                        <div class="col-sm-8">
+
+                            <select  type="text" name="detalle" class="form-control" id="detalle" placeholder="detalle" required>
+                                <?php
+                                $quer=$this->db->query("SELECT *  FROM  reactivo WHERE cantidad<>0 ORDER  BY nombre" );
+                                foreach ($quer->result() as $row){
+                                    echo "<option value='$row->idreactivo'> $row->nombre  $row->cantidad</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="cantidad" class="col-form-label col-sm-4">Cantidad</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="cantidad" value="1" class="form-control" id="cantidad" placeholder="Cantidad">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="monto" class="col-form-label col-sm-4">Monto</label>
+                        <div class="col-sm-8">
+                            <input type="number" name="monto" class="form-control" id="monto" placeholder="monto" required>
                         </div>
                     </div>
                     <div class="modal-footer">

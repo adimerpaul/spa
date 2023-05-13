@@ -26,10 +26,9 @@
     <thead>
     <tr>
         <th>Nombre</th>
-        <th>Cantidad</th>
         <th>Presentacion</th>
-        <th>Stock</th>
-        <th>Unidades por paciente</th>
+        <th>Cantidad</th>
+        <th style="width: 500px">Progreso</th>
         <th>Opciones</th>
     </tr>
     </thead>
@@ -37,13 +36,26 @@
     <?php
     $query=$this->db->query("SELECT * FROM `reactivo` ORDER BY `reactivo`.`nombre` DESC ");
     foreach ($query->result() as $row){
+        if ($row->cantidad > 40){
+            $color="success";
+            $t="white";
+        }else if($row->cantidad>10){
+            $color="warning";
+            $t="white";
+        }else {
+            $color="danger";
+            $t="black";
+        }
         echo "
         <tr>
             <td>".$row->nombre."</td>
-            <td>".$row->cantidad."</td>
             <td>".$row->presentacion."</td>
-            <td>".$row->stock."</td>
-            <td>".$row->unidadesporpaciente."</td>
+            <td>".$row->cantidad."</td>
+            <td>
+               <div class='progress'>
+                  <div class='progress-bar bg-$color' role='progressbar' style='color:$t;width: $row->cantidad%;' aria-valuenow='$row->cantidad' aria-valuemin='0' aria-valuemax='100'>$row->cantidad</div>
+                </div>
+            </td>
             <td> 
             <button  class='btn btn-sm btn-warning text-white sinespaciotexto' data-idusuario='$row->idreactivo' data-toggle=\"modal\" data-target=\"#modificar\" ><i class='fa fa-pencil'></i> Actualizar</button>
             <a href='".base_url()."Inventario/delete/$row->idreactivo' class='btn btn-sm btn-danger sinespaciotexto eli' ><i class='fa fa-trash-o'></i> Eliminar</a>
@@ -82,22 +94,16 @@
                             <label for="nombre" style="padding: 0px;margin: 0px;border: 0px">Nombre</label>
                             <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="nombre" placeholder="nombre" name="nombre" required>
                         </div>
-                        <div class="form-group col-md-12" style="padding: 0px;margin: 0px;border: 0px" >
-                            <label for="cantidad" style="padding: 0px;margin: 0px;border: 0px">Cantidad</label>
-                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="cantidad" value="0" placeholder="cantidad" name="cantidad" required>
-                        </div>
+
                         <div class="form-group col-md-12" style="padding: 0px;margin: 0px;border: 0px" >
                             <label for="presentacion" style="padding: 0px;margin: 0px;border: 0px">Presentacion</label>
                             <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="presentacion" value="0" placeholder="presentacion" name="presentacion" required>
                         </div>
                         <div class="form-group col-md-12" style="padding: 0px;margin: 0px;border: 0px" >
-                            <label for="stock" style="padding: 0px;margin: 0px;border: 0px">Stock</label>
-                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="stock" value="0" placeholder="stock" name="stock" required>
+                            <label for="cantidad" style="padding: 0px;margin: 0px;border: 0px">Cantidad</label>
+                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="cantidad" value="0" placeholder="cantidad" name="cantidad" required>
                         </div>
-                        <div class="form-group col-md-12" style="padding: 0px;margin: 0px;border: 0px" >
-                            <label for="unidadesporpaciente" style="padding: 0px;margin: 0px;border: 0px">Para cuantos pacientes</label>
-                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="unidadesporpaciente" value="0" placeholder="unidadesporpacinte" name="unidadesporpaciente" required>
-                        </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
@@ -130,21 +136,14 @@
                             <input type="text" id="idreactivo2" name="idreactivo">
                             <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="nombre2" placeholder="nombre" name="nombre" required>
                         </div>
-                        <div class="form-group col-md-12" style="padding: 0px;margin: 0px;border: 0px" >
-                            <label for="cantidad2" style="padding: 0px;margin: 0px;border: 0px">Cantidad</label>
-                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="cantidad2" value="0" placeholder="cantidad" name="cantidad" required>
-                        </div>
+
                         <div class="form-group col-md-12" style="padding: 0px;margin: 0px;border: 0px" >
                             <label for="presentacion2" style="padding: 0px;margin: 0px;border: 0px">Presentacion</label>
                             <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="presentacion2" value="0" placeholder="presentacion" name="presentacion" required>
                         </div>
                         <div class="form-group col-md-12" style="padding: 0px;margin: 0px;border: 0px" >
-                            <label for="stock2" style="padding: 0px;margin: 0px;border: 0px">Stock</label>
-                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="stock2" value="0" placeholder="stock" name="stock" required>
-                        </div>
-                        <div class="form-group col-md-12" style="padding: 0px;margin: 0px;border: 0px" >
-                            <label for="unidadesporpaciente2" style="padding: 0px;margin: 0px;border: 0px">Para cuantos pacientes</label>
-                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="unidadesporpaciente2" value="0" placeholder="unidadesporpacinte" name="unidadesporpaciente" required>
+                            <label for="cantidad2" style="padding: 0px;margin: 0px;border: 0px">Cantidad</label>
+                            <input type="text" style="text-transform: uppercase;padding: 0px;margin: 0px" class="form-control" id="cantidad2" value="0" placeholder="cantidad" name="cantidad" required>
                         </div>
                     </div>
                     <div class="modal-footer">

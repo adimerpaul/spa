@@ -34,6 +34,7 @@
         <th>Analisis</th>
         <th>Plan</th>
         <th>Doctor</th>
+        <th>Opcion</th>
     </tr>
     </thead>
     <tbody>
@@ -48,6 +49,7 @@
             <td><div style='width: 140px;white-space: pre-wrap;'>".$row->analisis."</div></td>
             <td><div style='width: 140px;white-space: pre-wrap;'>".$row->plan."</div></td>
             <td>".$this->User->consulta('nombre','usuario','idusuario',$row->idusuario)."</td>
+            <td> <a href='".base_url()."Soap/delete/$row->idsoap/$idcotizacion' class='btn p-1 btn-danger eli' ><i class='fa fa-trash'></i> Eliminar</a></td>
         </tr>";
     }
     ?>
@@ -121,5 +123,13 @@ INNER JOIN tratamiento t ON c.idtratamiento=t.idtratamiento
         </div>
     </div>
 </div>
-
+<script !src="">
+    window.onload=function () {
+        $('.eli').click(function (e) {
+            if (!confirm("Seguro de eliminar?")){
+                e.preventDefault();
+            }
+        })
+    }
+</script>
 

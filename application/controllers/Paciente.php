@@ -184,6 +184,19 @@ class Paciente extends CI_Controller {
 <script src='".base_url()."assets/js/paciente.js'></script>";
         $this->load->view('templates/footer',$data);
     }
+    function datospaciente(){
+        $idpaciente=$_POST['idpaciente'];
+        $query=$this->db->query("SELECT * FROM paciente WHERE idpaciente=$idpaciente");
+        echo json_encode($query->result_array());
+    }
+    function delete($id){
+        $this->db->query("DELETE FROM paciente WHERE idpaciente='$id'");
+        header("Location: ".base_url()."Paciente");
+    }
+    function elihistorial($idp,$id){
+        $this->db->query("DELETE FROM historial WHERE idhistorial='$id'");
+        header("Location: ".base_url()."Paciente/escoger/$idp");
+    }
 
     function index(){
         if ($_SESSION['nombre']=="" ){
@@ -225,6 +238,28 @@ header("Location: ".base_url()."Paciente/cotizacion/$idpaciente/$idhistorial");
         foreach ($query->result() as $row){
             echo "Fecha: <a href='paciente/historialver/".$row->idhistorial."/".$row->idpaciente."'>". substr($row->fecha,0,10)."</a> idhistorial: ".$row->idhistorial." <a href='".base_url()."Paciente/cotizacion/".$idpaciente."/".$row->idhistorial."' class='btn btn-sm btn-info sinespaciotexto' ><i class='fa fa-ambulance'></i> Tratamientos</a><br>";
         }
+    }
+    function dathistorial($idhitorial){
+        $query=$this->db->query("SELECT * FROM historial WHERE idhistorial='$idhitorial'");
+        echo json_encode($query->result_array());
+    }
+    function modhistorial($idhitorial){
+        $pa=$_POST['pa'];
+        $fc=$_POST['fc'];
+        $peso=$_POST['peso'];
+        $talla=$_POST['talla'];
+        $imc=$_POST['imc'];
+        $gc=$_POST['gc'];
+        $query=$this->db->query("UPDATE historial SET
+pa='$pa',
+fc='$fc',
+peso='$peso',
+talla='$talla',
+imc='$imc',
+gc='$gc'
+WHERE idhistorial='$idhitorial'
+");
+        echo 1;
     }
     function historialver($idhistorial='',$idpaciente=''){
         $query=$this->db->query("SELECT * FROM paciente WHERE idpaciente=$idpaciente");
@@ -668,6 +703,7 @@ header("Location: ".base_url()."Paciente/cotizacion/$idpaciente/$idhistorial");
         $quefamilia=$_POST['quefamilia'];
         $estadocivil=$_POST['estadocivil'];
         $ocupacion=$_POST['ocupacion'];
+        $doctor=$_SESSION['nombre'];
         if (isset($_POST['fuma'])){
             $fuma=$_POST['fuma'];
         }else{
@@ -722,9 +758,7 @@ header("Location: ".base_url()."Paciente/cotizacion/$idpaciente/$idhistorial");
         }
         $biotipo=$_POST['biotipo'];
         $arrugas=$_POST['arrugas'];
-        $referencia=$_POST['referencia'];
         $unas=$_POST['unas'];
-
         $this->db->query("INSERT INTO historial (idpaciente,
  consulta,
 pa,
@@ -778,8 +812,8 @@ depilacion,
 piel,
 biotipo,
 arrugas,
-referencia,
-unas) VALUES (
+unas,
+doctor) VALUES (
 '$idpaciente',
 '$consulta',
 '$pa',
@@ -833,8 +867,8 @@ unas) VALUES (
 '$piel',
 '$biotipo',
 '$arrugas',
-'$referencia',
-'$unas'
+'$unas',
+'$doctor'
 );");
         header("Location: ".base_url()."Paciente");
     }
@@ -854,30 +888,31 @@ unas) VALUES (
          $query=$this->db->query("INSERT INTO paciente(ci,nombres,apellidos,zona,direccion,fechanac,celular,telefono,idusuario,referencia) 
 VALUES ('$ci','$nombres', '$apellidos', '$zona', '$direccion', '$fechanac', '$celular','$telefono', '".$_SESSION['idusuario']."','$referencia');");
 
+        header("Location: ".base_url()."Paciente");
+    }
+    function update(){
+        $nombres= strtoupper( $_POST['nombres']);
+        $apellidos= strtoupper( $_POST['apellidos']);
+        $zona=$_POST['zona'];
+        $direccion=$_POST['direccion'];
+        $fechanac=$_POST['fechanac'];
+        $celular=$_POST['celular'];
+        $telefono=$_POST['telefono'];
+        $referencia=$_POST['referencia'];
+        $ci=$_POST['ci'];
+        $idpaciente=$_POST['idpaciente'];
+        $this->db->query("UPDATE  paciente SET
+        nombres='$nombres',
+        apellidos='$apellidos',
+        ci='$ci',
+        zona='$zona',
+        direccion='$direccion',
+        fechanac='$fechanac',
+        celular='$celular',
+        telefono='$telefono',
+        referencia='$referencia'  
+ WHERE idpaciente='$idpaciente'");
 
-/*
-if($query){
-        $data['title']='Atencion a pacientes';
-        $data['css']="<link rel='stylesheet' href='".base_url()."assets/css/jquery.dataTables.min.css'>
-        <link rel='stylesheet' href='".base_url()."assets/css/buttons.dataTables.min.css'>";
-        $this->load->view('templates/header',$data);
-        $this->load->view('paciente');
-        $data['tipo']="success";
-        $data['msg']="Paciente registrado";
-        $data['js']="
-<script src='".base_url()."assets/js/jquery.dataTables.min.js'></script>
-<script src='".base_url()."assets/js/dataTables.buttons.min.js'></script>
-<script src='".base_url()."assets/js/buttons.flash.min.js'></script>
-<script src='".base_url()."assets/js/jszip.min.js'></script>
-<script src='".base_url()."assets/js/pdfmake.min.js'></script>
-<script src='".base_url()."assets/js/vfs_fonts.js'></script>
-<script src='".base_url()."assets/js/buttons.html5.min.js'></script>
-<script src='".base_url()."assets/js/buttons.print.min.js'></script>
-<script src='".base_url()."assets/js/paciente.js'></script>";
-        $this->load->view('templates/footer',$data);
-
-}
-*/
         header("Location: ".base_url()."Paciente");
     }
     function cotizacion($idpaciente,$idhistorial=""){
@@ -927,25 +962,28 @@ if($query){
 
         $query=$this->db->query("SELECT * FROM tratamiento");
         foreach ($query->result() as $row){
-            if ($_POST['t'.$row->idtratamiento]!="" AND $_POST['t'.$row->idtratamiento]!="0" ){
-                if (isset($_POST['n'.$row->idtratamiento])){
-                    $n=$_POST['n'.$row->idtratamiento];
-                }else{
-                    $n="";
-                }
-                if (isset($_POST['ti'.$row->idtratamiento])){
-                    $tiempo=$_POST['ti'.$row->idtratamiento];
-                }else{
-                    $tiempo="";
-                }
-                if (isset($_POST['c'.$row->idtratamiento])){
-                    $costo=$_POST['c'.$row->idtratamiento];
-                }else{
-                    $costo="";
-                }
-                $this->db->query("INSERT INTO cotizaciontratamiento(idcotizacion,idtratamiento,n,tiempo,costo) 
+            if  (isset($_POST['t'.$row->idtratamiento])){
+                if ($_POST['t'.$row->idtratamiento]!="" AND $_POST['t'.$row->idtratamiento]!="0" ){
+                    if (isset($_POST['n'.$row->idtratamiento])){
+                        $n=$_POST['n'.$row->idtratamiento];
+                    }else{
+                        $n="";
+                    }
+                    if (isset($_POST['ti'.$row->idtratamiento])){
+                        $tiempo=$_POST['ti'.$row->idtratamiento];
+                    }else{
+                        $tiempo="";
+                    }
+                    if (isset($_POST['c'.$row->idtratamiento])){
+                        $costo=$_POST['c'.$row->idtratamiento];
+                    }else{
+                        $costo="";
+                    }
+                    $this->db->query("INSERT INTO cotizaciontratamiento(idcotizacion,idtratamiento,n,tiempo,costo) 
 VALUES('$idcotizacion','".$row->idtratamiento."','$n','$tiempo','$costo')");
+                }
             }
+
         }
 
 

@@ -25,7 +25,7 @@
 <table id="example" class="display nowrap" style="width:100%">
     <thead>
     <tr>
-        <th>Idconsentitmiento</th>
+        <th>Idindicacion</th>
         <th>Nombre</th>
         <th>Opciones</th>
     </tr>
