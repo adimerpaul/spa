@@ -110,6 +110,7 @@
                         paciente.fechanacformat=moment(paciente.fechanac).format(year+'-MM-DD');
                         paciente.diasParaCumpleanos=moment(paciente.fechanacformat).diff(moment(),'days');
                         paciente.diasParaCumpleanos=`<span class="badge badge-${paciente.diasParaCumpleanos<0?'danger':'success'}">${paciente.diasParaCumpleanos}</span> dias`;
+                        paciente.celular=`<a target='_blank' href='https://wa.me/591${paciente.celular}?text= SPA le da un descuento del 10% en su cumpleaños'>${paciente.celular}</a>`;
                     })
                     $('#example1').DataTable({
                         "order": [[ 0, "desc" ]],
