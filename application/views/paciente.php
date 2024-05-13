@@ -40,6 +40,13 @@
         $cumpleanos = new DateTime($row->fechanac);
         $hoy = new DateTime();
         $annos = $hoy->diff($cumpleanos);
+        $btnEliminar="";
+        //si es el usuario 8  habilitar eliminar
+        if ($_SESSION['idusuario']==8){
+            $btnEliminar="<a  class='btn btn-danger sinespaciotexto eli' href='".base_url()."Paciente/delete/$row->idpaciente'>|
+                <i class='fa fa-trash'></i> Eliminar
+            </a>";
+        }
         echo "
         <tr>
             <td>".$row->idpaciente."</td>
@@ -57,9 +64,7 @@
                 <i class='fa fa-photo'></i> Subir fotografia
             </a>
             </button> <br>
-            <a  class='btn btn-danger sinespaciotexto eli' href='".base_url()."Paciente/delete/$row->idpaciente'>
-                <i class='fa fa-trash'></i> Eliminar
-            </a>
+            $btnEliminar
              </td>
         </tr>";
     }
