@@ -44,7 +44,7 @@
         <div class="sidebar-header">
             <div class="logo">
                 <a href="<?=base_url()?>Dashboard">
-                    <img src="<?=base_url()?>assets/images/icon/logo.jpg" alt="logo" width="150px">
+                    <img src="<?=base_url()?>assets/images/icon/logo.png" alt="logo" width="150px">
                 </a>
             </div>
         </div>
