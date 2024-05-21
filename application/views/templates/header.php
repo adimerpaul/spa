@@ -43,7 +43,7 @@
     <div class="sidebar-menu">
         <div class="sidebar-header">
             <div class="logo">
-                <a href="index.html"><img src="<?=base_url()?>assets/images/icon/logo.png" alt="logo"></a>
+                <a href="index.html"><img src="<?=base_url()?>assets/images/icon/logo.jpg" alt="logo" width="150px"></a>
             </div>
         </div>
         <div class="main-menu">
