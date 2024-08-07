@@ -157,6 +157,15 @@ class Paciente extends CI_Controller {
     {
         //$this->load->model('Mmedidas');
     }*/
+    function pacientes(){
+        $search=isset($_POST['search'])?$_POST['search']:"";
+//        echo $search;
+//        exit;
+        $query=$this->db->query("SELECT * FROM paciente WHERE nombres LIKE '%$search%' OR apellidos LIKE '%$search%' OR celular LIKE '%$search%' OR telefono LIKE '%$search%'
+        OR zona LIKE '%$search%' OR direccion LIKE '%$search%'
+        LIMIT 20");
+        echo json_encode($query->result_array());
+    }
 
     function regtratamiento($idpaciente="",$idhistorial="",$idcotizacion=""){
         if ($_SESSION['nombre']=="" ){

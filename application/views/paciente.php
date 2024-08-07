@@ -22,7 +22,12 @@
     <i class="fa fa-file"></i> Registrar Paciente
 </button>
 <div class="mt-1"></div>
-<table id="example1" class="display nowrap" style="width:100%">
+alineado ala derecha
+<div style="float: right">
+    <input type="text" id="search" class="form-control" placeholder="Buscar" style="width: 300px">
+<!--    <button class="btn btn-primary" id="buscar" ><i class="fa fa-search"></i></button>-->
+</div>
+<table class="display nowrap" style="width:100%">
     <thead>
     <tr>
         <th>Idpaciente</th>
@@ -33,80 +38,44 @@
         <th>Opciones</th>
     </tr>
     </thead>
-    <tbody>
-    <?php
-    $query=$this->db->query("SELECT * FROM paciente WHERE idpaciente!=8");
-    foreach ($query->result() as $row){
-        $cumpleanos = new DateTime($row->fechanac);
-        $hoy = new DateTime();
-        $annos = $hoy->diff($cumpleanos);
-        $btnEliminar="";
-        //si es el usuario 8  habilitar eliminar
-        if ($_SESSION['idusuario']==8){
-            $btnEliminar="<a  class='btn btn-danger sinespaciotexto eli' href='".base_url()."Paciente/delete/$row->idpaciente'>|
-                <i class='fa fa-trash'></i> Eliminar
-            </a>";
-        }
-        echo "
-        <tr>
-            <td>".$row->idpaciente."</td>
-            <td>".$row->nombres." ".$row->apellidos."</td>
-            <td>".$row->direccion."</td>
-            <td>".$annos->y."</td>
-            <td><a target='_blank' href='https://wa.me/591".$row->celular."?text='>".$row->celular."</a></td>
-            <td> 
-            <a href='".base_url()."Paciente/reghistorial/".$row->idpaciente."' class='btn btn-sm btn-success text-white sinespaciotexto' ><i class='fa fa-file-archive-o'></i> Reg. Historial</a> <br>
-            <a type='button'  class='btn btn-warning btn-sm sinespaciotexto' href='".base_url()."Paciente/escoger/".$row->idpaciente."' > <i class=\"fa fa-align-justify\"></i>Historiales</a> <br>
-            <button type='button' class='btn btn-warning sinespaciotexto' data-idpaciente='$row->idpaciente' data-toggle='modal' data-target='#modificar'>
-                <i class='fa fa-pencil'></i> Modificar
-            </button> <br>
-            <a  class='btn btn-info sinespaciotexto' href='".base_url()."photo/index/$row->idpaciente'>
-                <i class='fa fa-photo'></i> Subir fotografia
-            </a>
-            </button> <br>
-            $btnEliminar
-             </td>
-        </tr>";
-    }
-    ?>
+    <tbody id="contenido">
+<!--    --><?php
+//    $query=$this->db->query("SELECT * FROM paciente WHERE idpaciente!=8");
+//    foreach ($query->result() as $row){
+//        $cumpleanos = new DateTime($row->fechanac);
+//        $hoy = new DateTime();
+//        $annos = $hoy->diff($cumpleanos);
+//        $btnEliminar="";
+//        //si es el usuario 8  habilitar eliminar
+//        if ($_SESSION['idusuario']==8){
+//            $btnEliminar="<a  class='btn btn-danger sinespaciotexto eli' href='".base_url()."Paciente/delete/$row->idpaciente'>|
+//                <i class='fa fa-trash'></i> Eliminar
+//            </a>";
+//        }
+//        echo "
+//        <tr>
+//            <td>".$row->idpaciente."</td>
+//            <td>".$row->nombres." ".$row->apellidos."</td>
+//            <td>".$row->direccion."</td>
+//            <td>".$annos->y."</td>
+//            <td><a target='_blank' href='https://wa.me/591".$row->celular."?text='>".$row->celular."</a></td>
+//            <td>
+//            <a href='".base_url()."Paciente/reghistorial/".$row->idpaciente."' class='btn btn-sm btn-success text-white sinespaciotexto' ><i class='fa fa-file-archive-o'></i> Reg. Historial</a> <br>
+//            <a type='button'  class='btn btn-warning btn-sm sinespaciotexto' href='".base_url()."Paciente/escoger/".$row->idpaciente."' > <i class=\"fa fa-align-justify\"></i>Historiales</a> <br>
+//            <button type='button' class='btn btn-warning sinespaciotexto' data-idpaciente='$row->idpaciente' data-toggle='modal' data-target='#modificar'>
+//                <i class='fa fa-pencil'></i> Modificar
+//            </button> <br>
+//            <a  class='btn btn-info sinespaciotexto' href='".base_url()."photo/index/$row->idpaciente'>
+//                <i class='fa fa-photo'></i> Subir fotografia
+//            </a>
+//            </button> <br>
+//            $btnEliminar
+//             </td>
+//        </tr>";
+//    }
+//    ?>
     </tbody>
 </table>
-
-<script !src="">
-    window.onload=function (e) {
-        $('.eli').click(function (e) {
-            if (!confirm("Seguro de eliminar")){
-                e.preventDefault();
-            }
-        });
-        $('#example1').DataTable();
-
-        $('#modificar').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var idpaciente = button.data('idpaciente');
-            $.ajax({
-                url:'Paciente/datospaciente',
-                type:'POST',
-                data:'idpaciente='+idpaciente,
-                success:function (e) {
-                    var dato=JSON.parse(e)[0];
-                    //console.log(dato);
-                    $('#apellidos2').val(dato.apellidos);
-                    $('#nombres2').val(dato.nombres);
-                    $('#ci2').val(dato.ci);
-                    $('#zona2').val(dato.zona);
-                    $('#direccion2').val(dato.direccion);
-                    $('#fechanac2').val(dato.fechanac);
-                    $('#celular2').val(dato.celular);
-                    $('#telefono2').val(dato.telefono);
-                    $('#referencia2').val(dato.referencia);
-                    $('#idpaciente2').val(dato.idpaciente);
-
-                }
-            });
-        })
-    }
-</script>
 
 <!-- Modal -->
 <div class="modal fade" id="modificar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -367,3 +336,105 @@
     </div>
 </div>
 
+<script>
+    window.onload=function (e) {
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
+        const debouncedPacientesGet = debounce(pacientesGet, 300); // 300 ms de espera
+
+        $('#search').keyup(function (e) {
+            debouncedPacientesGet();
+        });
+        pacientesGet();
+        $('#buscar').click(function (e) {
+            pacientesGet();
+        });
+
+        function pacientesGet() {
+            $.ajax({
+                url:'Paciente/pacientes',
+                data: {
+                    search: $('#search').val()
+                },
+                type:'POST',
+                success:function (e) {
+                    console.log(e);
+                    var datos=JSON.parse(e);
+                    var html="";
+                    datos.forEach(function (dato) {
+                       var cumpleanos = new Date(dato.fechanac);
+                       var hoy = new Date();
+                       var annos = hoy.getFullYear() - cumpleanos.getFullYear();
+                       var m = hoy.getMonth() - cumpleanos.getMonth();
+                       if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+                           annos--;
+                       }
+                        var btnEliminar="";
+                        //si es el usuario 8  habilitar eliminar
+                        if (<?= $_SESSION['idusuario']?>==8){
+                            btnEliminar="<a  class='btn btn-danger sinespaciotexto eli' href='<?=base_url()?>Paciente/delete/"+dato.idpaciente+"'>|<i class='fa fa-trash'></i> Eliminar</a>";
+                        }
+                        html+="<tr>\n" +
+                            "            <td>"+dato.idpaciente+"</td>\n" +
+                            "            <td>"+dato.nombres+" "+dato.apellidos+"</td>\n" +
+                            "            <td>"+dato.direccion+"</td>\n" +
+                            "            <td>"+annos+"</td>\n" +
+                            "            <td><a target='_blank' href='https://wa.me/591"+dato.celular+"?text='>"+dato.celular+"</a></td>\n" +
+                            "            <td>\n" +
+                            "            <a href='<?=base_url()?>Paciente/reghistorial/"+dato.idpaciente+"' class='btn btn-sm btn-success text-white sinespaciotexto' ><i class='fa fa-file-archive-o'></i> Reg. Historial</a> <br>\n" +
+                            "            <a type='button'  class='btn btn-warning btn-sm sinespaciotexto' href='<?=base_url()?>Paciente/escoger/"+dato.idpaciente+"' > <i class=\"fa fa-align-justify\"></i>Historiales</a> <br>\n" +
+                            "            <button type='button' class='btn btn-warning sinespaciotexto' data-idpaciente='"+dato.idpaciente+"' data-toggle='modal' data-target='#modificar'>\n" +
+                            "                <i class='fa fa-pencil'></i> Modificar\n" +
+                            "            </button> <br>\n" +
+                            "            <a  class='btn btn-info sinespaciotexto' href='<?=base_url()?>photo/index/"+dato.idpaciente+"'>\n" +
+                            "                <i class='fa fa-photo'></i> Subir fotografia\n" +
+                            "            </a>\n" +
+                            "            </button> <br>\n" +
+                            "            "+btnEliminar+"\n" +
+                            "             </td>\n" +
+                            "        </tr>";
+                    });
+                    $('#contenido').html(html);
+                }
+            });
+        }
+
+        $('.eli').click(function (e) {
+            if (!confirm("Seguro de eliminar")){
+                e.preventDefault();
+            }
+        });
+        $('#example1').DataTable();
+
+        $('#modificar').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var idpaciente = button.data('idpaciente');
+            $.ajax({
+                url:'Paciente/datospaciente',
+                type:'POST',
+                data:'idpaciente='+idpaciente,
+                success:function (e) {
+                    var dato=JSON.parse(e)[0];
+                    //console.log(dato);
+                    $('#apellidos2').val(dato.apellidos);
+                    $('#nombres2').val(dato.nombres);
+                    $('#ci2').val(dato.ci);
+                    $('#zona2').val(dato.zona);
+                    $('#direccion2').val(dato.direccion);
+                    $('#fechanac2').val(dato.fechanac);
+                    $('#celular2').val(dato.celular);
+                    $('#telefono2').val(dato.telefono);
+                    $('#referencia2').val(dato.referencia);
+                    $('#idpaciente2').val(dato.idpaciente);
+
+                }
+            });
+        })
+    }
+</script>
