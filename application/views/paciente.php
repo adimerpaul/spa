@@ -22,7 +22,7 @@
     <i class="fa fa-file"></i> Registrar Paciente
 </button>
 <div class="mt-1"></div>
-alineado ala derecha
+<!--alineado ala derecha-->
 <div style="float: right">
     <input type="text" id="search" class="form-control" placeholder="Buscar" style="width: 300px">
 <!--    <button class="btn btn-primary" id="buscar" ><i class="fa fa-search"></i></button>-->
