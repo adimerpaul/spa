@@ -205,6 +205,11 @@ class Consulta extends CI_Controller{
         $slate = array(94, 118, 138);
         $sage = array(137, 188, 171);
         $esc = function ($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); };
+        // php7.2-fpm del servidor no tiene mbstring: mayúsculas UTF-8 sin depender de él
+        $may = function ($s) {
+            if (function_exists('mb_strtoupper')) return mb_strtoupper($s, 'UTF-8');
+            return strtr(strtoupper($s), array('á' => 'Á', 'é' => 'É', 'í' => 'Í', 'ó' => 'Ó', 'ú' => 'Ú', 'ñ' => 'Ñ', 'ü' => 'Ü'));
+        };
         $bs = function ($n) {
             $n = (float)$n;
             return number_format($n, floor($n) == $n ? 0 : 2, ',', '.');
@@ -247,7 +252,7 @@ class Consulta extends CI_Controller{
             }
             $pdf->SetFont('dejavusans', '', 6.5);
             $pdf->SetXY($x + 3, 33.5);
-            $pdf->Cell($kw - 6, 4, mb_strtoupper($k[0], 'UTF-8'), 0, 1, 'L');
+            $pdf->Cell($kw - 6, 4, $may($k[0]), 0, 1, 'L');
             $pdf->SetFont('dejavusans', 'B', 12);
             $pdf->SetX($x + 3);
             $pdf->Cell($kw - 6, 6, 'Bs '.$bs($k[1]), 0, 1, 'L');
@@ -263,8 +268,8 @@ class Consulta extends CI_Controller{
             $s = trim(preg_replace('/\s+/', ' ', (string)$s));
             $ancho = $pct * 1.9 - 2 * $pad - 0.6 - ($reserva !== '' ? $pdf->GetStringWidth($reserva, 'dejavusans', '', $fs) : 0);
             if ($pdf->GetStringWidth($s, 'dejavusans', '', $fs) <= $ancho) return $s;
-            while (mb_strlen($s, 'UTF-8') > 1 && $pdf->GetStringWidth($s.'…', 'dejavusans', '', $fs) > $ancho){
-                $s = mb_substr($s, 0, -1, 'UTF-8');
+            while (preg_match('/^.{2}/us', $s) && $pdf->GetStringWidth($s.'…', 'dejavusans', '', $fs) > $ancho){
+                $s = preg_replace('/.$/us', '', $s);
             }
             return rtrim($s).'…';
         };
@@ -275,7 +280,7 @@ class Consulta extends CI_Controller{
             foreach ($filas as $f) $total += end($f);
 
             $html .= '<table cellpadding="0" cellspacing="0" style="font-size:'.($fs + 1.5).'pt"><tr>'
-                .'<td width="75%" style="color:#4a5f71;font-weight:bold">'.$esc(mb_strtoupper($titulo, 'UTF-8'))
+                .'<td width="75%" style="color:#4a5f71;font-weight:bold">'.$esc($may($titulo))
                 .' <span style="color:#89bcab;font-weight:normal;font-size:'.($fs - 0.5).'pt">'.count($filas).' reg.</span></td>'
                 .'<td width="25%" align="right" style="color:#4a5f71;font-weight:bold">Bs '.$bs($total).'</td></tr></table>';
             if ($sub !== ''){
