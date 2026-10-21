@@ -24,7 +24,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/spa';
+// BASE_URL viene del .env; si está vacío se arma con el host de la petición
+$config['base_url'] = getenv('BASE_URL') ?: ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http').'://'.(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost').'/');
 //$config['base_url'] = 'http://192.168.1.100/spa';
 
 /*

@@ -42,7 +42,7 @@ class Indicaciones extends CI_Controller{
         header("Location: ".base_url()."Indicaciones");
     }
     function delete($id){
-        $this->db->query("DELETE FROM indicaciones WHERE idindicaciones='$id' ");
+        $this->Papelera->eliminar('indicaciones', array('idindicaciones' => $id), 'Indicación #'.$id);
 
         header("Location: ".base_url()."Indicaciones");
     }
@@ -78,7 +78,7 @@ class Indicaciones extends CI_Controller{
 
         $texto= htmlspecialchars_decode($contenido, ENT_NOQUOTES);
         $pdf->AddPage();
-        $pdf->Image('assets/img/spa.png',0,0,216);
+        $this->Configuracion->logoPdf($pdf, 0, 4, 216, 22);
         $pdf->Ln(19);
         $pdf->SetFont('Times','B',10);
         $pdf->Cell(5);

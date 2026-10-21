@@ -123,7 +123,7 @@ class Imprimir extends CI_Controller{
 
             $pdf->AddPage();
 
-            $pdf->Image('assets/img/spa.png',0,0,216);
+            $this->Configuracion->logoPdf($pdf, 0, 4, 216, 22);
             $pdf->Ln(19);
 
             $pdf->SetFont('Times','B',12);

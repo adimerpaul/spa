@@ -107,6 +107,7 @@
                     pacientes=JSON.parse(e).data;
                     console.log(pacientes);
                     pacientes.forEach(paciente=>{
+                        paciente.nombreCompleto=((paciente.nombres||'')+' '+(paciente.apellidos||'')).trim();
                         paciente.fechanacformat=moment(paciente.fechanac).format(year+'-MM-DD');
                         paciente.diasParaCumpleanos=moment(paciente.fechanacformat).diff(moment(),'days');
                         paciente.diasParaCumpleanos=`<span class="badge badge-${paciente.diasParaCumpleanos<0?'danger':'success'}">${paciente.diasParaCumpleanos}</span> dias`;
@@ -150,7 +151,7 @@
                         destroy:true,
                         columns:[
                             {data:'idpaciente'},
-                            {data:'nombres'},
+                            {data:'nombreCompleto'},
                             {data:'fechanacformat'},
                             {data:'diasParaCumpleanos'},
                             {data:'celular'},

@@ -45,7 +45,7 @@ class Cumpleanos extends CI_Controller{
         $pdf = new FPDF('P','mm','Letter');
         $pdf->AddPage();
 
-        $pdf->Image('assets/img/spa.png',0,0,216);
+        $this->Configuracion->logoPdf($pdf, 0, 4, 216, 22);
 
         $pdf->Ln(19);
         $query=$this->db->query("SELECT * FROM soap WHERE idcotizacion='$idcotizacion'");

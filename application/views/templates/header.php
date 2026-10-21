@@ -6,7 +6,9 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title><?=$title?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" type="image/png" href="<?=base_url()?>assets/images/icon/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="<?=base_url()?>assets/images/icon/favicon-esencia.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?=base_url()?>assets/images/icon/favicon-esencia-32.png">
+    <link rel="apple-touch-icon" href="<?=base_url()?>assets/images/icon/apple-touch-icon.png">
     <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap4-toggle.min.css">
     <link rel="stylesheet" href="<?=base_url()?>assets/css/font-awesome.min.css">
@@ -26,6 +28,18 @@
     <!-- modernizr css -->
     <script src="<?=base_url()?>assets/js/vendor/modernizr-2.8.3.min.js"></script>
     <?=$css?>
+    <script>
+        // Dentro de la SPA (iframe) se oculta el menú y la cabecera antiguos
+        if (window.self !== window.top) document.documentElement.className += ' embed';
+    </script>
+    <style>
+        .embed #preloader, .embed .sidebar-menu, .embed .header-area, .embed .page-title-area, .embed footer { display: none !important; }
+        .embed .page-container { padding-left: 0 !important; }
+        .embed .main-content { margin-left: 0 !important; padding-left: 0 !important; width: 100% !important; background: #f3f6f7; min-height: 100vh; }
+        .embed .main-content-inner { padding: 16px !important; }
+        .embed body { background: #f3f6f7; }
+        .embed .card { border: 0; border-radius: 14px; box-shadow: 0 4px 18px rgba(60, 80, 95, .07); }
+    </style>
 </head>
 
 <body>
@@ -44,7 +58,7 @@
         <div class="sidebar-header">
             <div class="logo">
                 <a href="<?=base_url()?>Dashboard">
-                    <img src="<?=base_url()?>assets/images/icon/logo.png" alt="logo" width="150px">
+                    <img src="<?=$this->Configuracion->logoUrl()?>" alt="logo" width="150px">
                 </a>
             </div>
         </div>

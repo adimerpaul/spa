@@ -1,3 +1,6 @@
 RewriteEngine on
 RewriteCond $1 !^(index\.php|robots\.txt|sitemap\.xml|assets|vendor|temp|test.png)
 RewriteRule ^(.*)$ index.php/$1 [L]
+<FilesMatch "^\.env">
+    Require all denied
+</FilesMatch>

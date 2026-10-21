@@ -64,8 +64,10 @@ VALUES ('$nombre','$precio','$stock');");
             header("Location: " . base_url());
         }
 
-        $query = $this->db->query("DELETE FROM detallefactura WHERE idproducto='$id'");
-        $query = $this->db->query("DELETE FROM producto WHERE idproducto='$id'");
+        $this->Papelera->eliminar(array(
+            array('detallefactura', array('idproducto' => $id)),
+            array('producto', array('idproducto' => $id)),
+        ), 'Producto #'.$id);
         header("Location: ".base_url().'Productos');
     }
 }

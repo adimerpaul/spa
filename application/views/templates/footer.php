@@ -37,7 +37,9 @@
 <?=$js?>
 </body>
 <script !src="">
+<?php if (isset($tipo, $msg)): ?>
     Command: toastr['<?=$tipo?>']('<?=$msg?>');
+<?php endif; ?>
 </script>
 
 </html>

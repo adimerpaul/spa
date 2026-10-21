@@ -70,7 +70,7 @@ class Dosificacion extends CI_Controller
         if ($_SESSION['tipo'] == "") {
             header("Location: " . base_url());
         }
-        $query = $this->db->query("DELETE FROM dosificacion WHERE iddosificacion='$id'");
+        $this->Papelera->eliminar('dosificacion', array('iddosificacion' => $id), 'Dosificación #'.$id);
         header("Location: ".base_url().'Dosificacion');
     }
     function insert()

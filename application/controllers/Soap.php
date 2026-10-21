@@ -67,7 +67,7 @@ VALUES('$repocicion','".$_SESSION['idusuario']."','$idtratamiento')");
         $pdf = new FPDF('P','mm','Letter');
         $pdf->AddPage();
 
-        $pdf->Image('assets/img/spa.png',0,0,216);
+        $this->Configuracion->logoPdf($pdf, 0, 4, 216, 22);
 
         $pdf->Ln(19);
         $query=$this->db->query("SELECT * FROM soap WHERE idcotizacion='$idcotizacion'");
@@ -91,7 +91,7 @@ VALUES('$repocicion','".$_SESSION['idusuario']."','$idtratamiento')");
 
     }
     function delete($id,$c){
-$this->db->query("DELETE FROM soap WHERE idsoap='$id'");
+$this->Papelera->eliminar('soap', array('idsoap' => $id), 'SOAP #'.$id);
     header("location: " .base_url()."Soap/index/".$c);
     }
 }

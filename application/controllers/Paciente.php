@@ -167,6 +167,85 @@ class Paciente extends CI_Controller {
         echo json_encode($query->result_array());
     }
 
+    // ---- API JSON para la interfaz Vue ----
+    private function json($data, $status = 200){
+        http_response_code($status);
+        header('Content-Type: application/json');
+        echo json_encode($data);
+        exit;
+    }
+    private function requiereSesion(){
+        if (empty($_SESSION['tipo'])){
+            $this->json(array('error' => 'Sesión expirada'), 401);
+        }
+    }
+
+    function lista(){
+        $this->requiereSesion();
+        $search = trim((string)$this->input->get('search'));
+        $page = max(1, (int)$this->input->get('page'));
+        $per = min(100, max(5, (int)$this->input->get('per') ?: 15));
+        $orden = $this->input->get('desc') === '0' ? 'ASC' : 'DESC';
+        $columnas = array('idpaciente' => 'idpaciente', 'nombre' => 'nombres', 'edad' => 'fechanac', 'zona' => 'zona');
+        $sort = isset($columnas[$this->input->get('sort')]) ? $columnas[$this->input->get('sort')] : 'idpaciente';
+        if ($sort == 'fechanac') $orden = $orden == 'ASC' ? 'DESC' : 'ASC';
+
+        $where = '';
+        $params = array();
+        if ($search !== ''){
+            $like = '%'.$this->db->escape_like_str($search).'%';
+            $where = "WHERE CONCAT(nombres,' ',apellidos) LIKE ? OR ci LIKE ? OR celular LIKE ? OR telefono LIKE ? OR zona LIKE ? OR direccion LIKE ? OR idpaciente = ?";
+            $params = array($like, $like, $like, $like, $like, $like, $search);
+        }
+
+        $total = $this->db->query("SELECT COUNT(*) c FROM paciente $where", $params)->row()->c;
+        $offset = ($page - 1) * $per;
+        $rows = $this->db->query("SELECT idpaciente, ci, nombres, apellidos, zona, direccion, fechanac, celular, telefono, referencia,
+            TIMESTAMPDIFF(YEAR, fechanac, CURDATE()) edad
+            FROM paciente $where ORDER BY $sort $orden LIMIT $offset, $per", $params)->result();
+
+        $this->json(array('rows' => $rows, 'total' => (int)$total, 'puedeEliminar' => $_SESSION['idusuario'] == 8));
+    }
+
+    function guardar(){
+        $this->requiereSesion();
+        $campos = array('ci', 'nombres', 'apellidos', 'zona', 'direccion', 'fechanac', 'celular', 'telefono', 'referencia');
+        $datos = array();
+        foreach ($campos as $c){
+            $datos[$c] = trim((string)$this->input->post($c));
+        }
+        $datos['nombres'] = mb_strtoupper($datos['nombres']);
+        $datos['apellidos'] = mb_strtoupper($datos['apellidos']);
+        if ($datos['nombres'] === ''){
+            $this->json(array('error' => 'El nombre es obligatorio'), 422);
+        }
+
+        $id = (int)$this->input->post('idpaciente');
+        if ($id){
+            $this->db->update('paciente', $datos, array('idpaciente' => $id));
+        }else{
+            $datos['idusuario'] = $_SESSION['idusuario'];
+            $this->db->insert('paciente', $datos);
+            $id = $this->db->insert_id();
+        }
+        $this->json(array('idpaciente' => $id));
+    }
+
+    function eliminar(){
+        $this->requiereSesion();
+        if ($_SESSION['idusuario'] != 8){
+            $this->json(array('error' => 'No autorizado'), 403);
+        }
+        $id = (int)$this->input->post('idpaciente');
+        $r = $this->Papelera->eliminar('paciente', array('idpaciente' => $id), $this->descripcionPaciente($id));
+        if ($r !== true) $this->json(array('error' => $r), 422);
+        $this->json(array('ok' => true));
+    }
+    private function descripcionPaciente($id){
+        $p = $this->db->query("SELECT nombres, apellidos FROM paciente WHERE idpaciente = ?", array((int)$id))->row();
+        return 'Paciente #'.(int)$id.($p ? ' - '.trim($p->nombres.' '.$p->apellidos) : '');
+    }
+
     function regtratamiento($idpaciente="",$idhistorial="",$idcotizacion=""){
         if ($_SESSION['nombre']=="" ){
             header("Location: ".base_url());
@@ -199,11 +278,11 @@ class Paciente extends CI_Controller {
         echo json_encode($query->result_array());
     }
     function delete($id){
-        $this->db->query("DELETE FROM paciente WHERE idpaciente='$id'");
+        $this->Papelera->eliminar('paciente', array('idpaciente' => (int)$id), $this->descripcionPaciente($id));
         header("Location: ".base_url()."Paciente");
     }
     function elihistorial($idp,$id){
-        $this->db->query("DELETE FROM historial WHERE idhistorial='$id'");
+        $this->Papelera->eliminar('historial', array('idhistorial' => (int)$id), 'Historial #'.(int)$id.' de '.$this->descripcionPaciente($idp));
         header("Location: ".base_url()."Paciente/escoger/$idp");
     }
 
@@ -341,7 +420,7 @@ WHERE idhistorial='$idhitorial'
 
         $pdf->AddPage();
 
-        $pdf->Image('assets/img/spa.png',0,0,216);
+        $this->Configuracion->logoPdf($pdf, 0, 4, 216, 22);
         $pdf->Ln(19);
 
         $pdf->SetFont('Times','B',12);
@@ -693,7 +772,7 @@ WHERE idhistorial='$idhitorial'
         $this->load->view('templates/footer',$data);
     }
     function eliconcentimiento($idcotizacion="",$idtratamiento="",$idpaciente="",$idhistorial=""){
-        $this->db->query("DELETE FROM cotizacionconsetimeinto WHERE idconsetimiento = $idcotizacion AND idcotizacion = $idtratamiento");
+        $this->Papelera->eliminar('cotizacionconsetimeinto', array('idconsetimiento' => (int)$idcotizacion, 'idcotizacion' => (int)$idtratamiento), 'Consentimiento de la cotización #'.(int)$idtratamiento);
         header("Location: ".base_url()."Paciente/cotizacion/$idpaciente/$idhistorial");
     }
     function historialinsert(){
@@ -1080,20 +1159,19 @@ VALUES('$idcotizacion','".$row->idtratamiento."','$n','$tiempo','$costo')");
     }
     function elicotizacion($idcotizacion="",$idpaciente,$idhistorial){
 
-        $query=$this->db->query("SELECT * FROM montos WHERE idcotizacion='$idcotizacion'");
+        // Todo lo de la cotización va a la papelera como una sola entrada (se restaura junto)
+        $idcotizacion = (int)$idcotizacion;
+        $pasos = array();
+        $query=$this->db->query("SELECT idmonto FROM montos WHERE idcotizacion = ?", array($idcotizacion));
         foreach ($query->result() as $row){
-            $this->db->query("DELETE FROM consulta WHERE idmonto='$row->idmonto'");
-            $this->db->query("DELETE FROM facial WHERE idmonto='$row->idmonto'");
-            $this->db->query("DELETE FROM corporal WHERE idmonto='$row->idmonto'");
+            $pasos[] = array('consulta', array('idmonto' => $row->idmonto));
+            $pasos[] = array('facial', array('idmonto' => $row->idmonto));
+            $pasos[] = array('corporal', array('idmonto' => $row->idmonto));
         }
-        $query=$this->db->query("DELETE FROM cotizaciontratamiento WHERE idcotizacion='$idcotizacion'");
-        $query=$this->db->query("DELETE FROM medida WHERE idcotizacion='$idcotizacion'");
-        $query=$this->db->query("DELETE FROM montos WHERE idcotizacion='$idcotizacion'");
-        $query=$this->db->query("DELETE FROM soap WHERE idcotizacion='$idcotizacion'");
-        $query=$this->db->query("DELETE FROM receta WHERE idcotizacion='$idcotizacion'");
-        $query=$this->db->query("DELETE FROM cotizacionconsetimeinto WHERE idcotizacion='$idcotizacion'");
-        $query=$this->db->query("DELETE FROM cotizacionlaboratorio WHERE idcotizacion='$idcotizacion'");
-        $query=$this->db->query("DELETE FROM cotizacion WHERE idcotizacion='$idcotizacion'");
+        foreach (array('cotizaciontratamiento', 'medida', 'montos', 'soap', 'receta', 'cotizacionconsetimeinto', 'cotizacionlaboratorio', 'cotizacion') as $t){
+            $pasos[] = array($t, array('idcotizacion' => $idcotizacion));
+        }
+        $this->Papelera->eliminar($pasos, 'Cotización #'.$idcotizacion.' de '.$this->descripcionPaciente($idpaciente));
         header("Location: ".base_url()."Paciente/cotizacion/$idpaciente/$idhistorial");
     }
     function consentimientoinsert(){
@@ -1116,7 +1194,7 @@ VALUES('$idcotizacion','".$row->idtratamiento."','$n','$tiempo','$costo')");
 
         $texto= htmlspecialchars_decode($contenido, ENT_NOQUOTES);
         $pdf->AddPage();
-        $pdf->Image('assets/img/spa.png',0,0,216);
+        $this->Configuracion->logoPdf($pdf, 0, 4, 216, 22);
         $pdf->Ln(19);
         $pdf->SetFont('Times','B',10);
         $pdf->Cell(5);
@@ -1159,7 +1237,7 @@ function laboratorioinsert(){
 
     $pdf = new FPDF('L','mm','Letter');
     $pdf->AddPage();
-    $pdf->Image('assets/img/spa.png',280/2,3,280 /2);
+    $this->Configuracion->logoPdf($pdf, 140, 3, 140, 18);
     $pdf->Ln(15);
  foreach ($query->result() as $row){
      if (isset($_POST['l'.$row->idlaboratorio])){

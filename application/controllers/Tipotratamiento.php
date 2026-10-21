@@ -59,7 +59,7 @@ WHERE idtipotratamiento='$idtipotratamiento';");
             header("Location: " . base_url());
         }
 
-        $query = $this->db->query("DELETE FROM tipotratamiento WHERE idtipotratamiento='$id'");
+        $this->Papelera->eliminar('tipotratamiento', array('idtipotratamiento' => $id), 'Tipo de tratamiento #'.$id);
         header("Location: ".base_url().'Tipotratamiento');
     }
 }

@@ -41,7 +41,7 @@ class Consentimientos extends CI_Controller{
     }
     function delete($id){
 
-        $this->db->query("DELETE FROM consentimiento WHERE idconsentimiento='$id' ");
+        $this->Papelera->eliminar('consentimiento', array('idconsentimiento' => $id), 'Consentimiento #'.$id);
 
         header("Location: ".base_url()."Consentimientos");
     }
@@ -77,7 +77,7 @@ class Consentimientos extends CI_Controller{
 
         $texto= htmlspecialchars_decode($contenido, ENT_NOQUOTES);
         $pdf->AddPage();
-        $pdf->Image('assets/img/spa.png',0,0,216);
+        $this->Configuracion->logoPdf($pdf, 0, 4, 216, 22);
         $pdf->Ln(19);
             $pdf->SetFont('Times','B',10);
             $pdf->Cell(5);

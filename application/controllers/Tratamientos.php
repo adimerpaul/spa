@@ -82,7 +82,7 @@ VALUES ('$nombre','$idtipotratamiento','$caracteristica','$sesiones','$costo','$
             header("Location: " . base_url());
         }
 
-        $query = $this->db->query("DELETE FROM tratamiento WHERE idtratamiento='$id'");
+        $this->Papelera->eliminar('tratamiento', array('idtratamiento' => $id), 'Tratamiento #'.$id);
         header("Location: ".base_url().'Tratamientos');
     }
     function reactivos($idtratamiento){
@@ -118,7 +118,7 @@ VALUES ('$nombre','$idtipotratamiento','$caracteristica','$sesiones','$costo','$
         header("Location: ".base_url()."Tratamientos/reactivos/$idtratamiento");
     }
     function eliminarreactivo($idtratamiento,$idreactivo){
-        $this->db->query("DELETE FROM tratamientoreactivo WHERE idtratamiento='$idtratamiento' AND idreactivo='$idreactivo'");
+        $this->Papelera->eliminar('tratamientoreactivo', array('idtratamiento' => $idtratamiento, 'idreactivo' => $idreactivo), 'Reactivo #'.$idreactivo.' del tratamiento #'.$idtratamiento);
         header("Location: ".base_url()."Tratamientos/reactivos/$idtratamiento");
     }
 }

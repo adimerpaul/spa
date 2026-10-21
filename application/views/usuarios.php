@@ -51,7 +51,9 @@
             <td>$estado</td>
             <td> 
             <button  class='btn btn-sm btn-warning text-white sinespaciotexto' data-idusuario='$row->idusuario' data-toggle=\"modal\" data-target=\"#modificar\" ><i class='fa fa-pencil'></i> Actualizar</button>
-            <a href='".base_url()."Usuarios/delete/$row->idusuario' class='btn btn-sm btn-danger sinespaciotexto eli' ><i class='fa fa-trash-o'></i> Eliminar</a>
+            ".($row->estado=="ACTIVO"
+                ? "<a href='".base_url()."Usuarios/estado/$row->idusuario' class='btn btn-sm btn-secondary sinespaciotexto eli' data-msg='¿Desactivar a $row->nombre? Ya no podrá ingresar al sistema.'><i class='fa fa-ban'></i> Desactivar</a>"
+                : "<a href='".base_url()."Usuarios/estado/$row->idusuario' class='btn btn-sm btn-success sinespaciotexto eli' data-msg='¿Reactivar a $row->nombre?'><i class='fa fa-check'></i> Activar</a>")."
             </td>
         </tr>";
     }
@@ -62,7 +64,7 @@
     var eli=document.getElementsByClassName("eli");
     for (var i=0;i<eli.length;i++){
         eli[i].addEventListener('click',function (e) {
-            if (!confirm("Seguro de eliminar?")){
+            if (!confirm(this.getAttribute('data-msg'))){
                 e.preventDefault();
             }
         })

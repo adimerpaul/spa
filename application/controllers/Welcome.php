@@ -26,7 +26,7 @@ class Welcome extends CI_Controller {
         }else{
             $data['tipo']='error';
             $data['msg']='Error en nombre o contraseña';
-            header("Location: ".base_url());
+            header("Location: ".base_url()."?error=1");
         }
     }
     function logout(){

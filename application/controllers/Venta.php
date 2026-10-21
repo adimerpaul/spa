@@ -72,7 +72,7 @@ VALUES ('$nombre','$tipo');");
             header("Location: " . base_url());
         }
 
-        $query = $this->db->query("DELETE FROM tratamiento WHERE idtratamiento='$id'");
+        $this->Papelera->eliminar('tratamiento', array('idtratamiento' => $id), 'Tratamiento #'.$id);
         header("Location: ".base_url().'Tratamientos');
     }
     function imprimir(){

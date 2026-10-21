@@ -65,12 +65,19 @@ VALUES ('$nombre','$email','$tipo','$password');");
 ");
         header("Location: ".base_url().'Usuarios');
     }
-    function delete($id){
-        if ($_SESSION['tipo'] == "") {
+    // Los usuarios no se eliminan (tienen ventas, reservas e ingresos asociados): se activan o desactivan
+    function estado($id){
+        if (empty($_SESSION['tipo']) || $_SESSION['tipo'] != 'ADMIN') {
             header("Location: " . base_url());
+            exit;
         }
-
-        $query = $this->db->query("DELETE FROM usuario WHERE idusuario='$id'");
+        $id = (int)$id;
+        if ($id == $_SESSION['idusuario']) {
+            // No desactivarse a uno mismo
+            header("Location: ".base_url().'Usuarios');
+            exit;
+        }
+        $this->db->query("UPDATE usuario SET estado = IF(estado = 'ACTIVO', 'INACTIVO', 'ACTIVO') WHERE idusuario = ?", array($id));
         header("Location: ".base_url().'Usuarios');
     }
 }

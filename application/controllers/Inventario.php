@@ -71,7 +71,7 @@ VALUES ('$nombre','$cantidad','$presentacion','$stock','$unidadesporpaciente');"
         if ($_SESSION['tipo'] == "") {
             header("Location: " . base_url());
         }
-        $query = $this->db->query("DELETE FROM reactivo WHERE idreactivo='$id'");
+        $this->Papelera->eliminar('reactivo', array('idreactivo' => $id), 'Reactivo #'.$id);
         header("Location: ".base_url().'Inventario');
     }
 }
