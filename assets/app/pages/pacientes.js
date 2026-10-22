@@ -262,7 +262,8 @@ Pages.Pacientes = {
                 vm.dialogo = false;
                 vm.recargar();
             }).catch(function (e) {
-                vm.$q.notify({ type: 'negative', message: e.message });
+                var msg = /^Error \d+$/.test(e.message) ? 'No se pudo registrar los datos (' + e.message + ')' : e.message;
+                vm.$q.notify({ type: 'negative', message: msg });
             }).finally(function () {
                 vm.guardando = false;
             });

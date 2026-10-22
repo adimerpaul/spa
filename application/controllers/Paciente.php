@@ -168,6 +168,9 @@ class Paciente extends CI_Controller {
     }
 
     // ---- API JSON para la interfaz Vue ----
+    private function mayus($s){
+        return function_exists('mb_strtoupper') ? mb_strtoupper($s, 'UTF-8') : strtoupper($s);
+    }
     private function json($data, $status = 200){
         http_response_code($status);
         header('Content-Type: application/json');
@@ -214,17 +217,19 @@ class Paciente extends CI_Controller {
         foreach ($campos as $c){
             $datos[$c] = trim((string)$this->input->post($c));
         }
-        $datos['nombres'] = mb_strtoupper($datos['nombres']);
-        $datos['apellidos'] = mb_strtoupper($datos['apellidos']);
+        $datos['nombres'] = $this->mayus($datos['nombres']);
+        $datos['apellidos'] = $this->mayus($datos['apellidos']);
         if ($datos['nombres'] === ''){
             $this->json(array('error' => 'El nombre es obligatorio'), 422);
         }
+        if ($datos['fechanac'] === '') $datos['fechanac'] = null;
 
         $id = (int)$this->input->post('idpaciente');
         if ($id){
             $this->db->update('paciente', $datos, array('idpaciente' => $id));
         }else{
             $datos['idusuario'] = $_SESSION['idusuario'];
+            $datos['exp'] = '';
             $this->db->insert('paciente', $datos);
             $id = $this->db->insert_id();
         }

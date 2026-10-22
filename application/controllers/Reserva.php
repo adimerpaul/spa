@@ -7,6 +7,10 @@
  */
 require('fpdf.php');
 class Reserva extends CI_Controller{
+    private function mayus($s){
+        return function_exists('mb_strtoupper') ? mb_strtoupper($s, 'UTF-8') : strtoupper($s);
+    }
+
     function index(){
         if ($_SESSION['tipo']==""){
             header("Location: ".base_url());
@@ -168,15 +172,18 @@ class Reserva extends CI_Controller{
         $idpaciente = (int)$this->input->post('idpaciente');
         if (!$idpaciente){
             // Paciente nuevo creado desde la reserva
-            $nombres = mb_strtoupper(trim((string)$this->input->post('nombres')));
+            $nombres = $this->mayus(trim((string)$this->input->post('nombres')));
             if ($nombres === ''){
                 $this->json(array('error' => 'Selecciona o registra un paciente'), 422);
             }
             $this->db->insert('paciente', array(
                 'nombres' => $nombres,
-                'apellidos' => mb_strtoupper(trim((string)$this->input->post('apellidos'))),
+                'apellidos' => $this->mayus(trim((string)$this->input->post('apellidos'))),
                 'celular' => trim((string)$this->input->post('celular')),
                 'idusuario' => $_SESSION['idusuario'],
+                'ci' => '',
+                'exp' => '',
+                'referencia' => '',
             ));
             $idpaciente = $this->db->insert_id();
         }
